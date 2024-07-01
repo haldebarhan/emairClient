@@ -1,0 +1,132 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-8 col-lg-8">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Nouvelle Recette</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="form">
+              <div class="row">
+                <div class="form-group col-lg-12">
+                  <label for="email">Nom de la recette:</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email1"
+                    formControlName="nomRecette"
+                  />
+                </div>
+              </div>
+              <form [formGroup]="ingForm">
+                <div class="row">
+                  <div class="form-group col-lg-5">
+                    <label for="pwd">Denrees:</label>
+                    <select class="form-control" formControlName="denree">
+                      <option value="" disabled selected>Choisir</option>
+                      <option
+                        *ngFor="let item of denrees"
+                        [ngValue]="item"
+                        value="{{ item.product }}"
+                      >
+                        {{ item.product }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-lg-2">
+                    <label for="pwd">Ration:</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email1"
+                      name="ration"
+                      formControlName="ration"
+                    />
+                  </div>
+                  <div class="form-group col-lg-3">
+                    <label for="pwd">Mesure:</label>
+                    <select
+                      class="form-control"
+                      name="denree"
+                      formControlName="mesure"
+                    >
+                      <option value="">Choisir</option>
+                      <option *ngFor="let unit of units" [value]="unit">
+                        {{ unit }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <button
+                      class="btn btn-success mt-4"
+                      (click)="saveIngForm()"
+                      [disabled]="!ingForm.valid"
+                    >
+                      <i class="">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          width="18"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
+                          />
+                        </svg>
+                      </i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <button
+                type="submit"
+                class="btn btn-primary mr-2"
+                [disabled]="recettes.length == 0 || !form.valid"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-8">
+        <div class="card card-block card-stretch card-height">
+          <div
+            class="card-header card-header-border d-flex justify-content-between"
+          >
+            <div class="header-title">
+              <h4 class="card-title">Ingredients</h4>
+            </div>
+          </div>
+          <div class="card-body-list">
+            <ul class="list-style-3 mb-0">
+              <li
+                *ngFor="let item of recettes"
+                class="p-3 list-item d-flex justify-content-start align-items-center"
+              >
+                <div class="list-style-detail ml-3 mr-2">
+                  <p class="mb-0">{{ item.produit }}</p>
+                </div>
+                <div
+                  class="list-style-action d-flex justify-content-end ml-auto"
+                >
+                  <h6 class="font-weight-bold">
+                    {{ item.ration }}{{ item.mesure }}
+                  </h6>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
