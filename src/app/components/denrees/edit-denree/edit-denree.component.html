@@ -1,0 +1,69 @@
+<div class="content-page">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2 col-lg-2 mt-4"></div>
+        <div class="col-sm-8 col-lg-8 mt-4">
+          <div class="card">
+            <div
+              class="alert alert-success alert-dismissible collapse mt-20"
+              role="alert"
+              id="alert"
+            >
+              <strong>Felicitations!</strong> Recette enregistrée.
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="card-header d-flex justify-content-between">
+              <div class="header-title">
+                <h4 class="card-title">Nouvelle Denrée</h4>
+              </div>
+            </div>
+            <div class="card-body">
+              <form [formGroup]="denreeForm" (ngSubmit)="saveForm()">
+                <div class="form-group">
+                  <label for="email">Denree:</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email1"
+                    formControlName="denree"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="pwd">Mesure:</label>
+                  <select
+                    name=""
+                    id=""
+                    class="form-control"
+                    formControlName="mesure"
+                  >
+                    <option value="" selected disabled>choisir</option>
+                    <option
+                      *ngFor="let mesure of mesures"
+                      value="{{ mesure.mesure }}"
+                    >
+                      {{ mesure.mesure }}
+                    </option>
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary mr-2"
+                  [disabled]="!denreeForm.valid"
+                >
+                  Créer
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

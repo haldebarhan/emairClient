@@ -9,7 +9,7 @@ import { FooterComponent } from "./footer/footer.component";
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
-    imports: [RouterOutlet, SideBarComponent, NavBarComponent, FooterComponent]
+    imports: [SideBarComponent, NavBarComponent, FooterComponent]
 })
 export class AppComponent {
   title = 'angTest';

@@ -35,7 +35,7 @@
     <nav class="iq-sidebar-menu">
       <ul id="iq-sidebar-toggle" class="side-menu">
         <li class="active sidebar-layout">
-          <a href="../backend/index.html" class="svg-icon">
+          <a routerLink="/" class="svg-icon">
             <i class="">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -302,7 +302,7 @@
             data-parent="#iq-sidebar-toggle"
           >
             <li class="sidebar-layout">
-              <a href="../backend/pages-error.html" class="svg-icon">
+              <a routerLink="/denree-list" class="svg-icon">
                 <i class="">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -323,7 +323,7 @@
               </a>
             </li>
             <li class="sidebar-layout">
-              <a href="../backend/pages-error-500.html" class="svg-icon">
+              <a routerLink="/denree-add" class="svg-icon">
                 <i class="">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -391,7 +391,7 @@
             data-parent="#iq-sidebar-toggle"
           >
             <li class="sidebar-layout">
-              <a href="../backend/pages-error.html" class="svg-icon">
+              <a routerLink="/recette-list" class="svg-icon" routerLinkActive="active">
                 <i class="">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -412,7 +412,7 @@
               </a>
             </li>
             <li class="sidebar-layout">
-              <a href="../backend/pages-error-500.html" class="svg-icon">
+              <a routerLink="/recette-new" class="svg-icon" routerLinkActive="active">
                 <i class="">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -439,3 +439,4 @@
     <div class="pt-5 pb-5"></div>
   </div>
 </div>
+<router-outlet></router-outlet>

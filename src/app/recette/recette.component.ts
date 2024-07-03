@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -18,6 +10,8 @@ import { RecetteService } from './recette.service';
 import { CommonModule } from '@angular/common';
 import { getOption } from '../../helpers/getOptions.helper';
 import { numericValidator } from '../../shared/number-validator.directive';
+import { recette } from '../models/recette';
+import * as $ from 'jquery';
 @Component({
   selector: 'app-recette',
   standalone: true,
@@ -46,16 +40,17 @@ export class RecetteComponent implements OnInit {
       if (selectedDenree) {
         var options = getOption(selectedDenree.mesure);
         this.units = options;
-        // this.ingForm.get('mesure')?.setValue(options);
       }
     });
   }
   denrees: any = [];
-  recettes: any = [];
+  recettes: any[] = [];
   units: any[] = [];
   selectedUnit: string = '';
   form: FormGroup;
   ingForm: FormGroup;
+  isSubmit: boolean = false;
+  message: string = '';
 
   ngOnInit(): void {
     this.getDenree();
@@ -85,5 +80,30 @@ export class RecetteComponent implements OnInit {
     this.ingForm.reset();
   }
 
-  saveForm() {}
+  removeIngredient(index: number) {
+    this.recettes.splice(index, 1);
+  }
+  saveForm() {
+    this.isSubmit = true;
+    const nomRecette = this.form.value.nomRecette;
+    const ingredients = this.recettes.map((ingredient) => {
+      return {
+        denree: ingredient.id,
+        ration: ingredient.ration,
+        unite: ingredient.mesure,
+      };
+    });
+    const formData: recette = { nomRecette, ingredients };
+
+    this.recetteService.createRecette(formData).subscribe((res: any) => {
+      $.default('#alert').show();
+      setTimeout(() => {
+        $.default('#alert').hide();
+      }, 3000);
+      this.recettes = [];
+      this.form.reset();
+      this.ingForm.reset();
+      this.isSubmit = false;
+    });
+  }
 }
