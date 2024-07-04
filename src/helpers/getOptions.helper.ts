@@ -17,7 +17,7 @@ export const getOption = (mesure: string): string[] => {
       options = ['BOTTE', 'DEMI BOTTE', 'QUART BOTTE'];
       break;
     case 'BAGUETTE':
-      options = ['BAGUETTE', 'BAGUETTE', 'BAGUETTE'];
+      options = ['BAGUETTE', 'DEMI BAGUETTE', 'QUART BAGUETTE'];
       break;
     case 'NOMBRE':
       options = ['NOMBRE'];

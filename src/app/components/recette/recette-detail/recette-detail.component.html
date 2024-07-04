@@ -1,0 +1,57 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2 col-lg-2 mt-4"></div>
+      <div class="col-sm-8 col-lg-8 mt-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Details de la recette</h4>
+            </div>
+            <div class="header-action">
+              <button type="button" class="btn btn-link btn-with-icon" (click)="goBack()" style="cursor: pointer;">
+                <i data-toggle="collapse" data-target="#list-group-2">
+                  <svg
+                    width="30"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                    />
+                  </svg>
+                </i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <p>
+              Ces données ci-dessous représentent les ingredients et la ration
+              d'un individu pour la recette <br /><strong>{{
+                recette.nom
+              }}</strong>
+            </p>
+            <ul class="list-group">
+              <li
+                class="list-group-item d-flex justify-content-between lh-sm"
+                *ngFor="let ingredient of recette.ingredients"
+              >
+                <div>
+                  {{ ingredient.denree.produit }}
+                </div>
+                <span class="text-body-secondary"
+                  >{{ ingredient.ration }}{{ ingredient.unite }}</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

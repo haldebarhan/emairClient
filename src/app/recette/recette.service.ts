@@ -13,12 +13,23 @@ export class RecetteService {
     return this.http.get(`${API_URL}/denree`);
   }
 
-
-  createRecette(data: recette){
-    return this.http.post(`${API_URL}/recette`, data)
+  createRecette(data: recette) {
+    return this.http.post(`${API_URL}/recette`, data);
   }
 
-  getAllRecette(){
-    return this.http.get(`${API_URL}/recette`)
+  getAllRecette() {
+    return this.http.get(`${API_URL}/recette`);
+  }
+
+  getOneRecette(id: string) {
+    return this.http.get(`${API_URL}/recette/${id}`);
+  }
+
+  updateRecette(id: string, data: recette) {
+    return this.http.patch(`${API_URL}/recette/${id}`, data);
+  }
+
+  deleteRecette(id: string) {
+    return this.http.delete(`${API_URL}/recette/${id}`);
   }
 }
