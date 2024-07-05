@@ -7,30 +7,53 @@ import { AddDenreeComponent } from './components/denrees/add-denree/add-denree.c
 import { EditDenreeComponent } from './components/denrees/edit-denree/edit-denree.component';
 import { RecetteDetailComponent } from './components/recette/recette-detail/recette-detail.component';
 import { RecetteEditComponent } from './components/recette/recette-edit/recette-edit.component';
+import { MenuListComponent } from './components/menu/menu-list/menu-list.component';
+import { MenuFormComponent } from './components/menu/menu-form/menu-form.component';
 
 export const routes: Routes = [
-    {
-        path: '', component: DashboardComponent, pathMatch: 'full'
-    },
-    {
-        path: 'recette-new', component: RecetteComponent
-    },
-    {
-        path: 'recette-list', component: RecetteListComponent
-    },
-    {
-        path: 'recette-detail/:id', component: RecetteDetailComponent
-    },
-    {
-        path: 'recette-edit/:id', component: RecetteEditComponent
-    },
-    {
-        path: 'denree-list', component: DenreeListComponent
-    },
-    {
-        path: 'denree-add', component: AddDenreeComponent
-    },
-    {
-        path: 'denree-edit/:id', component: EditDenreeComponent
-    }
+  {
+    path: '',
+    component: DashboardComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'recette-new',
+    component: RecetteComponent,
+  },
+  {
+    path: 'recette-list',
+    component: RecetteListComponent,
+  },
+  {
+    path: 'recette-detail/:id',
+    component: RecetteDetailComponent,
+  },
+  {
+    path: 'recette-edit/:id',
+    component: RecetteEditComponent,
+  },
+  {
+    path: 'denree-list',
+    component: DenreeListComponent,
+  },
+  {
+    path: 'denree-add',
+    component: AddDenreeComponent,
+  },
+  {
+    path: 'denree-edit/:id',
+    component: EditDenreeComponent,
+  },
+  {
+    path: 'menu-list',
+    component: MenuListComponent,
+  },
+  {
+    path: 'menu-add',
+    component: MenuFormComponent,
+  },
+  {
+    path: 'menu-edit/:id',
+    component: MenuFormComponent,
+  },
 ];

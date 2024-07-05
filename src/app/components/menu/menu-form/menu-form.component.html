@@ -1,0 +1,118 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-lg-12 mt-4">
+        <div class="card">
+          <div
+            class="alert alert-success alert-dismissible collapse mt-20"
+            role="alert"
+            id="alert"
+          >
+            <strong>Felicitations!</strong> Recette enregistrée.
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">{{message}}</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="menuForm">
+              <div class="row">
+                <div class="form-group col-lg-6">
+                  <label for="email">Jour:</label>
+                  <select
+                    name=""
+                    id=""
+                    class="form-control"
+                    formControlName="jour"
+                  >
+                    <option value="" disabled selected>Choisir</option>
+                    <option value="Lundi">Lundi</option>
+                    <option value="Mardi">Mardi</option>
+                    <option value="Mercredi">Mercredi</option>
+                    <option value="Jeudi">Jeudi</option>
+                    <option value="Vendredi">Vendredi</option>
+                    <option value="Samedi">Samedi</option>
+                    <option value="Dimanche">Dimanche</option>
+                  </select>
+                </div>
+                <div class="form-group col-lg-6">
+                  <app-auto-complete
+                    [control]="petit_dejeuner"
+                    [options]="recettes"
+                    [label]="'Petit Déjeuner:'"
+                    (optionSelected)="
+                      onOptionSelected($event, 'petit_dejeuner')
+                    "
+                  ></app-auto-complete>
+                </div>
+                <div class="form-group col-lg-6">
+                  <app-auto-complete
+                    [control]="hors_doeuvre"
+                    [options]="recettes"
+                    [label]="'Hors d\'Oeuvre:'"
+                    (optionSelected)="onOptionSelected($event, 'hors_doeuvre')"
+                  ></app-auto-complete>
+                </div>
+                <div class="form-group col-lg-6">
+                  <app-auto-complete
+                    [control]="dejeuner"
+                    [options]="recettes"
+                    [label]="'Déjeuner:'"
+                    (optionSelected)="onOptionSelected($event, 'dejeuner')"
+                  ></app-auto-complete>
+                </div>
+                <div class="form-group col-lg-6">
+                  <app-auto-complete
+                    [control]="dessert"
+                    [options]="recettes"
+                    [label]="'Dessert:'"
+                    (optionSelected)="onOptionSelected($event, 'dessert')"
+                  ></app-auto-complete>
+                </div>
+                <div class="form-group col-lg-6">
+                  <app-auto-complete
+                    [control]="diner"
+                    [options]="recettes"
+                    [label]="'Diner:'"
+                    (optionSelected)="onOptionSelected($event, 'diner')"
+                  ></app-auto-complete>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary mr-2"
+                (click)="Submit()"
+                [disabled]="!menuForm.valid"
+                *ngIf="!isSumitted"
+              >
+              {{submitLabel}}
+              </button>
+              <button
+                class="btn btn-primary"
+                type="button"
+                disabled
+                *ngIf="isSumitted"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Envoi...</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

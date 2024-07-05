@@ -3,12 +3,21 @@
     <div class="row">
       <div class="col-sm-8 col-lg-8">
         <div class="card">
-          <div class="alert alert-success alert-dismissible collapse mt-20" role="alert" id="alert">
+          <div
+            class="alert alert-success alert-dismissible collapse mt-20"
+            role="alert"
+            id="alert"
+          >
             <strong>Felicitations!</strong> Recette enregistrée.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
             </button>
-        </div>
+          </div>
           <div class="card-header d-flex justify-content-between">
             <div class="header-title">
               <h4 class="card-title">Nouvelle Recette</h4>
@@ -29,9 +38,9 @@
               </div>
               <form [formGroup]="ingForm">
                 <div class="row">
-                  <div class="form-group col-lg-5">
+                  <div class="form-group col-lg-5 position-relative">
                     <label for="pwd">Denrees:</label>
-                    <select class="form-control" formControlName="denree">
+                    <!-- <select class="form-control" formControlName="denree">
                       <option value="" disabled selected>Choisir</option>
                       <option
                         *ngFor="let item of denrees"
@@ -40,7 +49,27 @@
                       >
                         {{ item.product }}
                       </option>
-                    </select>
+                    </select> -->
+                    <input
+                      type="text"
+                      class="form-control"
+                      [formControl]="queryField"
+                      placeholder="Tapez pour rechercher"
+                      aria-label="Search"
+                      (input)="onUserInput()"
+                    />
+                    <ul
+                      *ngIf="filteredOptions.length > 0 && userHasTyped"
+                      class="list-group"
+                    >
+                      <li
+                        class="list-group-item"
+                        *ngFor="let option of filteredOptions"
+                        (click)="selectOption(option.product)"
+                      >
+                        {{ option.product }}
+                      </li>
+                    </ul>
                   </div>
                   <div class="form-group col-lg-2">
                     <label for="pwd">Ration:</label>
@@ -91,16 +120,26 @@
                   </div>
                 </div>
               </form>
-              <button *ngIf="!isSubmit"
+              <button
+                *ngIf="!isSubmit"
                 type="submit"
                 class="btn btn-primary mr-2"
                 [disabled]="!form.valid || recettes.length == 0"
               >
-                Soumettre
+                Créer
               </button>
-              <button class="btn btn-primary" type="button" disabled *ngIf="isSubmit">
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                <span class="sr-only">Loading...</span>
+              <button
+                class="btn btn-primary"
+                type="button"
+                disabled
+                *ngIf="isSubmit"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Envoi...</span>
               </button>
             </form>
           </div>

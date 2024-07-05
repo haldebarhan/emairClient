@@ -12,6 +12,7 @@ import { getOption } from '../../helpers/getOptions.helper';
 import { numericValidator } from '../../shared/number-validator.directive';
 import { recette } from '../models/recette';
 import * as $ from 'jquery';
+import { map, startWith } from 'rxjs';
 @Component({
   selector: 'app-recette',
   standalone: true,
@@ -20,6 +21,18 @@ import * as $ from 'jquery';
   styleUrl: './recette.component.css',
 })
 export class RecetteComponent implements OnInit {
+  denrees: any = [];
+  recettes: any[] = [];
+  units: any[] = [];
+  selectedUnit: string = '';
+  form: FormGroup;
+  ingForm: FormGroup;
+  queryField: FormControl = new FormControl('', [Validators.required]);
+  filteredOptions: any[] = [];
+  isSubmit: boolean = false;
+  message: string = '';
+  userHasTyped = false;
+
   constructor(
     private readonly recetteService: RecetteService,
     private fb: FormBuilder
@@ -31,29 +44,15 @@ export class RecetteComponent implements OnInit {
       ]),
     });
     this.ingForm = this.fb.group({
-      denree: new FormControl('', [Validators.required]),
+      denree: this.queryField,
       ration: new FormControl('', [Validators.required, numericValidator()]),
       mesure: new FormControl('', [Validators.required]),
     });
-
-    this.ingForm.get('denree')?.valueChanges.subscribe((selectedDenree) => {
-      if (selectedDenree) {
-        var options = getOption(selectedDenree.mesure);
-        this.units = options;
-      }
-    });
   }
-  denrees: any = [];
-  recettes: any[] = [];
-  units: any[] = [];
-  selectedUnit: string = '';
-  form: FormGroup;
-  ingForm: FormGroup;
-  isSubmit: boolean = false;
-  message: string = '';
 
   ngOnInit(): void {
     this.getDenree();
+    this.reaload();
   }
   getDenree() {
     this.recetteService.getAllDenrees().subscribe((res) => {
@@ -61,23 +60,24 @@ export class RecetteComponent implements OnInit {
     });
   }
 
-  getSelectMesure(selected: any): string {
+  getSelectMesure(selected: string): any {
     const result = this.denrees.find((item: any) => item.product == selected);
-
-    return result.mesure;
+    return result;
   }
 
   saveIngForm() {
     const formData = { ...this.ingForm.value };
+    const denree = this.getSelectMesure(formData.denree);
+
     const formatted = {
-      id: formData.denree.id,
-      produit: formData.denree.product,
+      id: denree.id,
+      produit: formData.denree,
       ration: formData.ration,
       mesure: formData.mesure,
     };
 
     this.recettes.push(formatted);
-    this.ingForm.reset();
+    this.resetForm();
   }
 
   removeIngredient(index: number) {
@@ -102,8 +102,40 @@ export class RecetteComponent implements OnInit {
       }, 3000);
       this.recettes = [];
       this.form.reset();
-      this.ingForm.reset();
+      this.resetForm()
       this.isSubmit = false;
     });
+  }
+
+  onUserInput() {
+    this.userHasTyped = true;
+  }
+  filter(query: string): any[] {
+    return this.denrees.filter((option: any) =>
+      option.product.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+  selectOption(option: string) {
+    this.queryField.setValue(option);
+    const denree = this.getSelectMesure(option);
+    var options = getOption(denree.mesure);
+    this.units = options;
+    this.filteredOptions = [];
+  }
+
+  reaload() {
+    this.queryField.valueChanges
+      .pipe(
+        startWith(''),
+        map((value) => this.filter(value))
+      )
+      .subscribe((filteredOptions) => (this.filteredOptions = filteredOptions));
+  }
+
+  resetForm() {
+    this.queryField.setValue('');
+    this.ingForm.get('ration')?.setValue('');
+    this.ingForm.get('mesure')?.setValue('');
+    this.userHasTyped = false;
   }
 }

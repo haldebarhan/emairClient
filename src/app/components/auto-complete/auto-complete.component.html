@@ -1,0 +1,22 @@
+<label for="email">{{label}}</label>
+<input
+  type="text"
+  class="form-control"
+  id="email1"
+  [formControl]="control"
+  placeholder="Rechercher..."
+  aria-label="Search"
+  (input)="onUserInput()"
+/>
+<ul
+  *ngIf="filteredOptions.length > 0 && userHasTyped"
+  class="list-group mt-20"
+>
+  <li
+    class="list-group-item"
+    *ngFor="let option of filteredOptions"
+    (click)="selectOption(option)"
+  >
+    {{ option.nomRecette }}
+  </li>
+</ul>
