@@ -9,6 +9,8 @@ import { RecetteDetailComponent } from './components/recette/recette-detail/rece
 import { RecetteEditComponent } from './components/recette/recette-edit/recette-edit.component';
 import { MenuListComponent } from './components/menu/menu-list/menu-list.component';
 import { MenuFormComponent } from './components/menu/menu-form/menu-form.component';
+import { UniteComponent } from './components/unite/unite/unite.component';
+import { UniteFormComponent } from './components/unite/unite-form/unite-form.component';
 
 export const routes: Routes = [
   {
@@ -55,5 +57,17 @@ export const routes: Routes = [
   {
     path: 'menu-edit/:id',
     component: MenuFormComponent,
+  },
+  {
+    path: 'unite',
+    component: UniteComponent,
+  },
+  {
+    path: 'unite-new',
+    component: UniteFormComponent,
+  },
+  {
+    path: 'unite-edit/:id',
+    component: UniteFormComponent,
   },
 ];

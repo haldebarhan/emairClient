@@ -1,0 +1,25 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2 col-lg-2 mt-4"></div>
+      <div class="col-sm-8 col-lg-8 mt-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">{{message}}</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="unitForm" (ngSubmit)="saveForm()">
+              <div class="form-group">
+                <label for="email">Nom:</label>
+                <input type="text" class="form-control" id="email1" formControlName="nom"/>
+              </div>
+              <button type="submit" class="btn btn-primary mr-2">{{buttonLabel}}</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
