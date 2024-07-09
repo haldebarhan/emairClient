@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DenreeService } from '../denree.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Sw } from '../../../../helpers/sw.helper';
 
 export interface DataElement {
   id: string;
@@ -57,9 +58,29 @@ export class DenreeListComponent implements OnInit {
     }
   }
 
-  deleteDenree(id: string) {
-    this.denreeService.deleteDenree(id).subscribe((response) => {
-      this.getDenree();
+  deleteDenree(data: DataElement) {
+    Sw.fire({
+      title: 'Etes-vous sure ?',
+      text: `vous allez supprimer la denree ${data.product}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Non',
+      confirmButtonText: 'Oui, je confirme!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.denreeService.deleteDenree(data.id).subscribe((response) => {
+          Sw.fire({
+            title: 'Supprimé',
+            icon: 'success',
+            text: `${data.product} a bien été supprimé`,
+            timer: 1500,
+            timerProgressBar: true,
+            didClose: () => this.getDenree(),
+          });
+        });
+      }
     });
   }
 

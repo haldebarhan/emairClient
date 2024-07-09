@@ -8,8 +8,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { getOption } from '../../../../helpers/getOptions.helper';
 import { Denree } from '../../../models/denree';
-import * as $ from 'jquery';
+import { Toast } from '../../../../helpers/toast.helper';
 
 @Component({
   selector: 'app-add-denree',
@@ -21,17 +23,53 @@ import * as $ from 'jquery';
 export class AddDenreeComponent implements OnInit {
   mesures: any = [];
   denreeForm: FormGroup;
+  isSubmited: boolean = false;
+  conversionUnit: any = [];
+  options: string[] = [];
+  denreeId: string | null = null;
+  message: string = 'Nouvelle denrée';
+  buttonLabel: string = 'Créer';
   constructor(
     private readonly denreeService: DenreeService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.denreeForm = this.fb.group({
       denree: new FormControl('', [Validators.required]),
       mesure: new FormControl('', Validators.required),
+      uc: new FormControl('', [Validators.required]),
+      equivalence: new FormControl('', [Validators.required]),
+      valeur: new FormControl('', [Validators.required]),
+      pu: new FormControl('', Validators.required),
+    });
+
+    this.denreeForm.get('uc')?.valueChanges.subscribe((selected) => {
+      this.options = getOption(selected);
     });
   }
   ngOnInit(): void {
     this.getMesure();
+    this.getConversionUinit();
+    this.route.paramMap.subscribe((params) => {
+      this.denreeId = params.get('id');
+      if (this.denreeId) {
+        this.message = 'Modifier la denrée';
+        this.buttonLabel = 'Modifier';
+        this.denreeService
+          .getOneDenree(this.denreeId)
+          .subscribe((response: any) => {
+            this.denreeForm.patchValue({
+              denree: response.product,
+              mesure: response.mesure,
+              uc: response.uc,
+              equivalence: response.equivalence,
+              valeur: response.valeur,
+              pu: response.pu,
+            });
+          });
+      }
+    });
   }
 
   getMesure() {
@@ -40,17 +78,50 @@ export class AddDenreeComponent implements OnInit {
     });
   }
 
-  saveForm() {
-    const result = this.getSelectedMesureId(this.denreeForm.value.mesure);
-    const denree = this.denreeForm.value.denree;
-    const data: Denree = { produit: denree, mesure: result.id };
-    this.denreeService.createDenree(data).subscribe((response) => {
-      $.default('#alert').show();
-      setTimeout(() => {
-        $.default('#alert').hide();
-      }, 3000);
-      this.denreeForm.reset();
+  getConversionUinit() {
+    this.denreeService.getConversionUnit().subscribe((response) => {
+      this.conversionUnit = response;
     });
+  }
+
+  saveForm() {
+    this.isSubmited = true;
+    const result = this.getSelectedMesureId(this.denreeForm.value.mesure);
+    const denree: string = this.denreeForm.value.denree;
+    const uc = this.getSelectedConversionUnitId(this.denreeForm.value.uc);
+    const data: Denree = {
+      produit: denree.toUpperCase(),
+      mesure: result.id,
+      uc: uc.id,
+      equivalence: this.denreeForm.value.equivalence,
+      pu: this.denreeForm.value.pu,
+      valeur: this.denreeForm.value.valeur,
+    };
+    if (this.denreeId) {
+      this.denreeService.updateDenree(this.denreeId, data).subscribe(() => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Modification effectuée',
+          didClose: () => {
+            this.denreeForm.reset();
+            this.isSubmited = false;
+            this.router.navigate(['/denree-list']);
+          },
+        });
+      });
+    } else {
+      this.denreeService.createDenree(data).subscribe(() => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Enregistrement effectué',
+          didClose: () => {
+            this.denreeForm.reset();
+            this.isSubmited = false;
+            // this.router.navigate(['/denree-list']);
+          },
+        });
+      });
+    }
   }
 
   getSelectedMesureId(selected: string) {
@@ -58,5 +129,10 @@ export class AddDenreeComponent implements OnInit {
       (item: any) => item.mesure == selected
     );
     return searchedMesure;
+  }
+
+  getSelectedConversionUnitId(selected: string) {
+    const find = this.conversionUnit.find((item: any) => item.uc == selected);
+    return find;
   }
 }

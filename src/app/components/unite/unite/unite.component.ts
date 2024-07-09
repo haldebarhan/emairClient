@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UniteService } from '../unite.service';
 import { Router, RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-unite',
@@ -36,9 +37,40 @@ export class UniteComponent implements OnInit {
     this.router.navigate(['/unite-edit', uniteId]);
   }
 
-  delete(id: string){
-    this.uniteService.delete(id).subscribe((response)=> {
-      console.log('ok')
-    })
+  delete(id: string) {
+    const uniteName = this.getUniteById(id);
+    Swal.fire({
+      title: 'Etes-vous sure ?',
+      text: `Vous allez supprimer ${uniteName}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Non',
+      confirmButtonText: 'Oui, je confirme!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.uniteService.delete(id).subscribe((response) => {
+          Swal.fire({
+            title: 'Supprimé',
+            text: `${uniteName} a été supprimé`,
+            icon: 'success',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            timer: 1500,
+            didClose: ()=> {
+              this.laodData()
+            }
+          });
+        });
+      }
+    });
+  }
+
+  getUniteById(id: string): string {
+    const unite = this.unites.find((unite: any) => unite.id == id);
+    return unite.nom;
   }
 }

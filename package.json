@@ -20,12 +20,10 @@
     "@angular/platform-browser": "^18.0.0",
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
-    "@selectize/selectize": "^0.15.2",
     "bootstrap": "^5.3.3",
     "jquery": "^3.7.1",
     "rxjs": "~7.8.0",
-    "select2": "^4.1.0-rc.0",
-    "ts-select2": "^0.2.5",
+    "sweetalert2": "^11.12.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

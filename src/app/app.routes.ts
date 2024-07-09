@@ -11,6 +11,7 @@ import { MenuListComponent } from './components/menu/menu-list/menu-list.compone
 import { MenuFormComponent } from './components/menu/menu-form/menu-form.component';
 import { UniteComponent } from './components/unite/unite/unite.component';
 import { UniteFormComponent } from './components/unite/unite-form/unite-form.component';
+import { FourOhFourComponent } from './components/error/four-oh-four/four-oh-four.component';
 
 export const routes: Routes = [
   {
@@ -44,7 +45,7 @@ export const routes: Routes = [
   },
   {
     path: 'denree-edit/:id',
-    component: EditDenreeComponent,
+    component: AddDenreeComponent,
   },
   {
     path: 'menu-list',
@@ -69,5 +70,9 @@ export const routes: Routes = [
   {
     path: 'unite-edit/:id',
     component: UniteFormComponent,
+  },
+  {
+    path: '**',
+    component: FourOhFourComponent,
   },
 ];

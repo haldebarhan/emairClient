@@ -2,10 +2,10 @@ export const getOption = (mesure: string): string[] => {
   let options: string[] = [];
   switch (mesure) {
     case 'KG':
-      options = ['KG', 'g'];
+      options = ['KG', 'g', 'mg'];
       break;
-    case 'L':
-      options = ['L', 'ml'];
+    case 'LITRE':
+      options = ['LITRE', 'cl', 'ml'];
       break;
     case 'PCE':
       options = ['PCE', 'DEMI PCE', 'QUART PCE'];
@@ -20,7 +20,7 @@ export const getOption = (mesure: string): string[] => {
       options = ['BAGUETTE', 'DEMI BAGUETTE', 'QUART BAGUETTE'];
       break;
     case 'NOMBRE':
-      options = ['NOMBRE'];
+      options = ['NOMBRE', 'DEMI', 'QUART'];
       break;
     case 'SACHET':
       options = ['SACHET', 'DEMI SACHET', ' QUART SACHET'];
@@ -36,6 +36,10 @@ export const getOption = (mesure: string): string[] => {
       break;
     case 'ROULEAU':
       options = ['ROULEAU', ' DEMI ROULEAU', 'FEUILLE'];
+      break;
+
+    case 'UNITE':
+      options = ['UNITE'];
       break;
   }
 

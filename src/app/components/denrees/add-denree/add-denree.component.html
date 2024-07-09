@@ -4,24 +4,9 @@
       <div class="col-sm-2 col-lg-2 mt-4"></div>
       <div class="col-sm-8 col-lg-8 mt-4">
         <div class="card">
-          <div
-            class="alert alert-success alert-dismissible collapse mt-20"
-            role="alert"
-            id="alert"
-          >
-            <strong>Felicitations!</strong> Recette enregistrée.
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
           <div class="card-header d-flex justify-content-between">
             <div class="header-title">
-              <h4 class="card-title">Nouvelle Denrée</h4>
+              <h4 class="card-title">{{message}}</h4>
             </div>
           </div>
           <div class="card-body">
@@ -35,29 +20,74 @@
                   formControlName="denree"
                 />
               </div>
-              <div class="form-group">
-                <label for="pwd">Mesure:</label>
-                <select
-                  name=""
-                  id=""
-                  class="form-control"
-                  formControlName="mesure"
-                >
-                  <option value="" selected disabled>choisir</option>
-                  <option
-                    *ngFor="let mesure of mesures"
-                    value="{{ mesure.mesure }}"
+              <div class="row">
+                <div class="form-group col-lg-6">
+                  <label for="pwd">Unité de mésure:</label>
+                  <select
+                    name=""
+                    id=""
+                    class="form-control"
+                    formControlName="mesure"
                   >
-                    {{ mesure.mesure }}
+                    <option value="" selected disabled>Choisir</option>
+                    <option
+                      *ngFor="let mesure of mesures"
+                      value="{{ mesure.mesure }}"
+                    >
+                      {{ mesure.mesure }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-lg-6">
+                  <label for="">Prix unitaire (FCFA)</label>
+                  <input type="number" name="" id="" class="form-control" formControlName="pu">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pwd">Unité de conversion:</label>
+                <select name="" id="" class="form-control" formControlName="uc">
+                  <option value="" selected disabled>Choisir</option>
+                  <option
+                    *ngFor="let unit of conversionUnit"
+                    value="{{ unit.uc }}"
+                  >
+                    {{ unit.uc }}
                   </option>
                 </select>
+              </div>
+              <div class="row">
+                <div class="form-group col-lg-6">
+                  <label for="">Equivalence</label>
+                  <input type="number" name="" id="" formControlName="equivalence" class="form-control">
+                </div>
+                <div class="form-group col-lg-6">
+                  <label for="">Valeur</label>
+                  <select name="" id="" class="form-control" formControlName="valeur">
+                    <option value="" selected disabled>Choisir</option>
+                    <option  *ngFor="let option of options" value="{{option}}">{{option}}</option>
+                  </select>
+                </div>
               </div>
               <button
                 type="submit"
                 class="btn btn-primary mr-2"
                 [disabled]="!denreeForm.valid"
+                *ngIf="!isSubmited"
               >
-                Créer
+                {{buttonLabel}}
+              </button>
+              <button
+                class="btn btn-primary"
+                type="button"
+                disabled
+                *ngIf="isSubmited"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Envoi...</span>
               </button>
             </form>
           </div>

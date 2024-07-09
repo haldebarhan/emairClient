@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RecetteService } from '../../recette/recette.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Sw } from '../../../helpers/sw.helper';
 
 @Component({
   selector: 'app-recette-list',
@@ -35,8 +36,30 @@ export class RecetteListComponent implements OnInit {
   }
 
   delete(id: string) {
-    this.recetteService.deleteRecette(id).subscribe(() => {
-      this.getRecette();
-    });
+      Sw.fire({
+        title: 'Etes-vous sure ?',
+        text: `vous allez supprimer la recette`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Non',
+        confirmButtonText: 'Oui, je confirme!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.recetteService.deleteRecette(id)
+          .subscribe(() => {
+            Sw.fire({
+              title: 'Supprimé',
+              icon: 'success',
+              text: 'La recette a bien été supprimée',
+              timer: 1500,
+              timerProgressBar: true,
+              didClose: () => this.getRecette(),
+            });
+          });
+          
+        }
+      });
   }
 }

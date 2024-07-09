@@ -9,6 +9,8 @@ import {
 } from '@angular/forms';
 import { UniteService } from '../unite.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { Toast } from '../../../../helpers/toast.helper';
 
 @Component({
   selector: 'app-unite-form',
@@ -23,6 +25,7 @@ export class UniteFormComponent implements OnInit {
   message: string = 'Nouvelle Unité';
   buttonLabel: string = 'Créer';
   isEdit: boolean = false;
+  isSubmitted: boolean = false;
   constructor(
     private readonly uniteService: UniteService,
     private router: Router,
@@ -49,16 +52,33 @@ export class UniteFormComponent implements OnInit {
   }
 
   saveForm() {
+    this.isSubmitted = true;
     const formData = { ...this.unitForm.value };
     if (this.unitId) {
       this.uniteService
         .updateUnite(this.unitId, formData)
-        .subscribe((response) => {
-          console.log(response);
+        .subscribe((response: any) => {
+          Toast.fire({
+            icon: 'success',
+            title: 'Modification réussie',
+            didClose: () => {
+              this.unitForm.reset();
+              this.isSubmitted = false;
+              this.router.navigate(['/unite']);
+            },
+          });
         });
     } else {
-      this.uniteService.createUnite(formData).subscribe((response) => {
-        console.log(response);
+      this.uniteService.createUnite(formData).subscribe((response: any) => {
+        Toast.fire({
+          icon: 'success',
+          title: `${response.nom} crée avec success`,
+          didClose: () => {
+            this.unitForm.reset();
+            this.isSubmitted = false;
+            this.router.navigate(['/unite']);
+          },
+        });
       });
     }
   }

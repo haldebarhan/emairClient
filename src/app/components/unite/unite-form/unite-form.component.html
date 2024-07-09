@@ -6,16 +6,36 @@
         <div class="card">
           <div class="card-header d-flex justify-content-between">
             <div class="header-title">
-              <h4 class="card-title">{{message}}</h4>
+              <h4 class="card-title">{{ message }}</h4>
             </div>
           </div>
           <div class="card-body">
             <form [formGroup]="unitForm" (ngSubmit)="saveForm()">
               <div class="form-group">
                 <label for="email">Nom:</label>
-                <input type="text" class="form-control" id="email1" formControlName="nom"/>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="email1"
+                  formControlName="nom"
+                />
               </div>
-              <button type="submit" class="btn btn-primary mr-2">{{buttonLabel}}</button>
+              <button type="submit" class="btn btn-primary mr-2" *ngIf="!isSubmitted">
+                {{ buttonLabel }}
+              </button>
+              <button
+                class="btn btn-primary"
+                type="button"
+                disabled
+                *ngIf="isSubmitted"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Envoi...</span>
+              </button>
             </form>
           </div>
         </div>

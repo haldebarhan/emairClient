@@ -11,8 +11,9 @@ import { CommonModule } from '@angular/common';
 import { getOption } from '../../helpers/getOptions.helper';
 import { numericValidator } from '../../shared/number-validator.directive';
 import { recette } from '../models/recette';
-import * as $ from 'jquery';
 import { map, startWith } from 'rxjs';
+import { Toast } from '../../helpers/toast.helper';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-recette',
   standalone: true,
@@ -31,11 +32,12 @@ export class RecetteComponent implements OnInit {
   filteredOptions: any[] = [];
   isSubmit: boolean = false;
   message: string = '';
-  userHasTyped = false;
+  userHasTyped: boolean = false;
 
   constructor(
     private readonly recetteService: RecetteService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.form = this.fb.group({
       nomRecette: new FormControl('', [
@@ -94,16 +96,18 @@ export class RecetteComponent implements OnInit {
       };
     });
     const formData: recette = { nomRecette, ingredients };
-
     this.recetteService.createRecette(formData).subscribe((res: any) => {
-      $.default('#alert').show();
-      setTimeout(() => {
-        $.default('#alert').hide();
-      }, 3000);
-      this.recettes = [];
-      this.form.reset();
-      this.resetForm()
-      this.isSubmit = false;
+      Toast.fire({
+        icon: 'success',
+        title: 'Enregistrement réussie',
+        didClose: () => {
+          this.recettes = [];
+          this.form.reset();
+          this.resetForm();
+          this.isSubmit = false;
+          this.router.navigate(['/recette-list']);
+        },
+      });
     });
   }
 

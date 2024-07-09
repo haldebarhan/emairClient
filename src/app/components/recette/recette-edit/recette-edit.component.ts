@@ -12,7 +12,9 @@ import { numericValidator } from '../../../../shared/number-validator.directive'
 import { ActivatedRoute, Router } from '@angular/router';
 import { getOption } from '../../../../helpers/getOptions.helper';
 import { recette } from '../../../models/recette';
-import * as $ from 'jquery'
+import * as $ from 'jquery';
+import { Toast } from '../../../../helpers/toast.helper';
+import { map, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-recette-edit',
@@ -31,6 +33,9 @@ export class RecetteEditComponent implements OnInit {
   isSubmit: boolean = false;
   dataId: string;
   isSubmitted = false;
+  queryField: FormControl = new FormControl('', [Validators.required]);
+  filteredOptions: any[] = [];
+  userHasTyped: boolean = false;
   constructor(
     private readonly recetteService: RecetteService,
     private fb: FormBuilder,
@@ -44,7 +49,7 @@ export class RecetteEditComponent implements OnInit {
       ]),
     });
     this.ingForm = this.fb.group({
-      denree: new FormControl('', [Validators.required]),
+      denree: this.queryField,
       ration: new FormControl('', [Validators.required, numericValidator()]),
       mesure: new FormControl('', [Validators.required]),
     });
@@ -60,6 +65,7 @@ export class RecetteEditComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.getDenree();
+    this.reaload()
   }
 
   loadData() {
@@ -81,7 +87,7 @@ export class RecetteEditComponent implements OnInit {
       });
   }
   saveForm() {
-    this.isSubmit = true
+    this.isSubmit = true;
     const nomRecette = this.form.value.nomRecette;
     const ingredients = this.recettes.map((ingredient) => {
       return {
@@ -91,26 +97,30 @@ export class RecetteEditComponent implements OnInit {
       };
     });
     const formData: recette = { nomRecette, ingredients };
-    this.recetteService.updateRecette(this.dataId, formData).subscribe((response)=> {
-      $.default('#alert').show();
-      setTimeout(() => {
-        $.default('#alert').hide();
-      }, 3000);
-      this.isSubmit = false;
-      this.router.navigate(['/recette-list'])
-    })
+    this.recetteService.updateRecette(this.dataId, formData).subscribe(() => {
+      Toast.fire({
+        icon: 'success',
+        title: 'Modification réussie',
+        didClose: () => {
+          this.recettes = [];
+          this.isSubmit = false;
+          this.router.navigate(['/recette-list']);
+        },
+      });
+    });
   }
   saveIngForm() {
     const formData = { ...this.ingForm.value };
+    const denree = this.getSelectMesure(formData.denree);
     const formatted = {
-      id: formData.denree.id,
-      produit: formData.denree.product,
+      id: denree.id,
+      produit: formData.denree,
       ration: formData.ration,
       mesure: formData.mesure,
     };
 
     this.recettes.push(formatted);
-    this.ingForm.reset();
+    this.resetForm()
   }
   removeIngredient(index: number) {
     this.recettes.splice(index, 1);
@@ -120,5 +130,41 @@ export class RecetteEditComponent implements OnInit {
     this.recetteService.getAllDenrees().subscribe((response: any) => {
       this.denrees = response;
     });
+  }
+
+  filter(query: string): any[] {
+    return this.denrees.filter((option: any) =>
+      option.product.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  reaload() {
+    this.queryField.valueChanges
+      .pipe(
+        startWith(''),
+        map((value) => this.filter(value))
+      )
+      .subscribe((filteredOptions) => (this.filteredOptions = filteredOptions));
+  }
+  selectOption(option: string) {
+    this.queryField.setValue(option);
+    const denree = this.getSelectMesure(option);
+    var options = getOption(denree.mesure);
+    this.units = options;
+    this.filteredOptions = [];
+  }
+  resetForm() {
+    this.queryField.setValue('');
+    this.ingForm.get('ration')?.setValue('');
+    this.ingForm.get('mesure')?.setValue('');
+    this.userHasTyped = false;
+  }
+
+  getSelectMesure(selected: string): any {
+    const result = this.denrees.find((item: any) => item.product == selected);
+    return result;
+  }
+  onUserInput() {
+    this.userHasTyped = true;
   }
 }
