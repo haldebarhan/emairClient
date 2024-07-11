@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { getOption } from '../../../../helpers/getOptions.helper';
 import { Denree } from '../../../models/denree';
 import { Toast } from '../../../../helpers/toast.helper';
+import { Sw } from '../../../../helpers/sw.helper';
 
 @Component({
   selector: 'app-add-denree',
@@ -110,16 +111,26 @@ export class AddDenreeComponent implements OnInit {
         });
       });
     } else {
-      this.denreeService.createDenree(data).subscribe(() => {
-        Toast.fire({
-          icon: 'success',
-          title: 'Enregistrement effectué',
-          didClose: () => {
-            this.denreeForm.reset();
-            this.isSubmited = false;
-            // this.router.navigate(['/denree-list']);
-          },
-        });
+      this.denreeService.createDenree(data).subscribe({
+        next: () => {
+          Toast.fire({
+            icon: 'success',
+            title: 'Enregistrement effectué',
+            didClose: () => {
+              this.denreeForm.reset();
+              this.isSubmited = false;
+              // this.router.navigate(['/denree-list']);
+            },
+          });
+        },
+        error: () => {
+          Sw.fire({
+            title: "Erreur",
+            icon: 'error',
+            text: 'L\'élement existe deja',
+            didClose: () => (this.isSubmited = false),
+          });
+        },
       });
     }
   }

@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from '../menu.service';
 import { RecetteService } from '../../../recette/recette.service';
 import { AutoCompleteComponent } from '../../auto-complete/auto-complete.component';
+import { Toast } from '../../../../helpers/toast.helper';
 
 @Component({
   selector: 'app-menu-form',
@@ -86,15 +87,26 @@ export class MenuFormComponent implements OnInit {
     });
     formatedData['jour'] = this.menuForm.value.jour;
     if (this.menuId) {
-      this.menuService
-        .updateMenu(this.menuId, formatedData)
-        .subscribe((response) => {
-          this.router.navigate(['/menu-list']);
+      this.menuService.updateMenu(this.menuId, formatedData).subscribe(() => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Modification réussie',
+          didClose: () => {
+            this.isSumitted = false;
+            this.router.navigate(['/menu-list']);
+          },
         });
+      });
     } else {
-      this.menuService.createMenu(formatedData).subscribe((response) => {
-        this.isSumitted = false;
-        this.router.navigate(['/menu-list']);
+      this.menuService.createMenu(formatedData).subscribe(() => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Enregistrement réussie',
+          didClose: () => {
+            this.isSumitted = false;
+            this.router.navigate(['/menu-list']);
+          },
+        });
       });
     }
   }

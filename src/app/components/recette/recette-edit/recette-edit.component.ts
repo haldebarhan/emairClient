@@ -55,12 +55,12 @@ export class RecetteEditComponent implements OnInit {
     });
 
     this.dataId = this.route.snapshot.paramMap.get('id') ?? '';
-    this.ingForm.get('denree')?.valueChanges.subscribe((selectedDenree) => {
-      if (selectedDenree) {
-        var options = getOption(selectedDenree.mesure);
-        this.units = options;
-      }
-    });
+    // this.ingForm.get('denree')?.valueChanges.subscribe((selectedDenree) => {
+    //   if (selectedDenree) {
+    //     var options = getOption(selectedDenree.mesure);
+    //     this.units = options;
+    //   }
+    // });
   }
   ngOnInit(): void {
     this.loadData();
@@ -149,7 +149,7 @@ export class RecetteEditComponent implements OnInit {
   selectOption(option: string) {
     this.queryField.setValue(option);
     const denree = this.getSelectMesure(option);
-    var options = getOption(denree.mesure);
+    var options = getOption(denree.uc);
     this.units = options;
     this.filteredOptions = [];
   }

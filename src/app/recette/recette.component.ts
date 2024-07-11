@@ -87,7 +87,7 @@ export class RecetteComponent implements OnInit {
   }
   saveForm() {
     this.isSubmit = true;
-    const nomRecette = this.form.value.nomRecette;
+    const nomRecette: string = this.form.value.nomRecette;
     const ingredients = this.recettes.map((ingredient) => {
       return {
         denree: ingredient.id,
@@ -95,8 +95,11 @@ export class RecetteComponent implements OnInit {
         unite: ingredient.mesure,
       };
     });
-    const formData: recette = { nomRecette, ingredients };
-    this.recetteService.createRecette(formData).subscribe((res: any) => {
+    const formData: recette = {
+      nomRecette: nomRecette.toUpperCase(),
+      ingredients: ingredients,
+    };
+    this.recetteService.createRecette(formData).subscribe(() => {
       Toast.fire({
         icon: 'success',
         title: 'Enregistrement réussie',
@@ -122,7 +125,7 @@ export class RecetteComponent implements OnInit {
   selectOption(option: string) {
     this.queryField.setValue(option);
     const denree = this.getSelectMesure(option);
-    var options = getOption(denree.mesure);
+    var options = getOption(denree.uc);
     this.units = options;
     this.filteredOptions = [];
   }

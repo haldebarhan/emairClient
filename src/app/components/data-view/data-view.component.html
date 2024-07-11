@@ -1,0 +1,307 @@
+<div class="row">
+  <div class="col-lg-8 col-md-12">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="">
+                <p class="mb-2 text-secondary">Valeur Magasin</p>
+                <div
+                  class="d-flex flex-wrap justify-content-start align-items-center"
+                >
+                  <h5 class="mb-0 font-weight-bold">
+                    {{ getMagValue() | numberWithSpaces }}F
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="">
+                <p class="mb-2 text-secondary">Total Dépense</p>
+                <div
+                  class="d-flex flex-wrap justify-content-start align-items-center"
+                >
+                  <h5 class="mb-0 font-weight-bold text-danger">
+                    {{ getGlobalExpense() | numberWithSpaces }} F
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="">
+                <p class="mb-2 text-secondary">Total Article</p>
+                <div
+                  class="d-flex flex-wrap justify-content-start align-items-center"
+                >
+                  <h5 class="mb-0 font-weight-bold">{{ getTotalItem() }}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Stock</h4>
+            </div>
+            <div class="card-header-toolbar d-flex align-items-center">
+              <div class="dropdown">
+                <a
+                  href="#"
+                  class="text-muted pl-3"
+                  id="dropdownMenuButton-customer"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                    focusable="false"
+                    style="
+                      -ms-transform: rotate(360deg);
+                      -webkit-transform: rotate(360deg);
+                      transform: rotate(360deg);
+                    "
+                    preserveAspectRatio="xMidYMid meet"
+                    viewBox="0 0 24 24"
+                  >
+                    <g
+                      fill="none"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="19" cy="12" r="1"></circle>
+                      <circle cx="5" cy="12" r="1"></circle>
+                    </g>
+                  </svg>
+                </a>
+                <div
+                  class="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton-customer"
+                >
+                  <a class="dropdown-item" href="#">
+                    <svg
+                      class="svg-icon text-secondary"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      ></path>
+                    </svg>
+                    Edit
+                  </a>
+                  <a class="dropdown-item" href="#">
+                    <svg
+                      class="svg-icon text-secondary"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      ></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      ></path>
+                    </svg>
+                    View
+                  </a>
+                  <a class="dropdown-item" href="#">
+                    <svg
+                      class="svg-icon text-secondary"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                    Delete
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead class="table-color-heading">
+                  <tr class="text-secondary">
+                    <th scope="col">Denrees</th>
+                    <th scope="col">Existant (J1)</th>
+                    <th scope="col">Conso</th>
+                    <th scope="col">Appro</th>
+                    <th scope="col" class="text-right">Balance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="white-space-no-wrap"
+                    *ngFor="let data of stock | limitToFive"
+                  >
+                    <td>{{ data.produit }}</td>
+                    <td>
+                      {{ data.quantite }}
+                    </td>
+                    <td class="text-danger">({{ data.conso }})</td>
+                    <td class="text-success">{{ data.appro }}</td>
+                    <td class="text-right text-primary">{{ data.balance }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                class="d-flex justify-content-end align-items-center border-top-table p-3"
+              >
+                <button class="btn btn-secondary btn-sm" (click)="sendData()">Voir Tout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-8">
+    <div class="card card-block card-stretch card-height">
+      <div
+        class="card-header card-header-border d-flex justify-content-between"
+      >
+        <div class="header-title">
+          <h4 class="card-title">Top Produits Sortis</h4>
+        </div>
+      </div>
+      <div class="card-body-list">
+        <ul class="list-style-3 mb-0">
+          <li
+            class="p-3 list-item d-flex justify-content-start align-items-center"
+          >
+            <div class="avatar">
+              <img
+                class="avatar avatar-img avatar-60 rounded"
+                src="../assets/images/products/1.jpg"
+                alt="1.jpg"
+              />
+            </div>
+            <div class="list-style-detail ml-3 mr-2">
+              <p class="mb-0">Rockerz Bluetooth Headset</p>
+            </div>
+            <div class="list-style-action d-flex justify-content-end ml-auto">
+              <h6 class="font-weight-bold">$1,056</h6>
+            </div>
+          </li>
+          <li
+            class="p-3 list-item d-flex justify-content-start align-items-center"
+          >
+            <div class="avatar">
+              <img
+                class="avatar avatar-img avatar-60 rounded"
+                src="../assets/images/products/2.jpg"
+                alt="2.jpg"
+              />
+            </div>
+            <div class="list-style-detail ml-3 mr-2">
+              <p class="mb-0">Wifi Security Camera</p>
+            </div>
+            <div class="list-style-action d-flex justify-content-end ml-auto">
+              <h6 class="font-weight-bold">$1,799</h6>
+            </div>
+          </li>
+          <li
+            class="p-3 list-item d-flex justify-content-start align-items-center"
+          >
+            <div class="avatar">
+              <img
+                class="avatar avatar-img avatar-60 rounded"
+                src="../assets/images/products/13.jpg"
+                alt="3.jpg"
+              />
+            </div>
+            <div class="list-style-detail ml-3 mr-2">
+              <p class="mb-0">Stone Bluetooth Speaker</p>
+            </div>
+            <div class="list-style-action d-flex justify-content-end ml-auto">
+              <h6 class="font-weight-bold">$1,099</h6>
+            </div>
+          </li>
+          <li
+            class="p-3 list-item d-flex justify-content-start align-items-center"
+          >
+            <div class="avatar">
+              <img
+                class="avatar avatar-img avatar-60 rounded"
+                src="../assets/images/products/4.jpg"
+                alt="4.jpg"
+              />
+            </div>
+            <div class="list-style-detail ml-3 mr-2">
+              <p class="mb-0">Ryzen 5 Hexa Core 5600H</p>
+            </div>
+            <div class="list-style-action d-flex justify-content-end ml-auto">
+              <h6 class="font-weight-bold">$9,999</h6>
+            </div>
+          </li>
+          <li
+            class="p-3 list-item d-flex justify-content-start align-items-center"
+          >
+            <div class="avatar">
+              <img
+                class="avatar avatar-img avatar-60 rounded"
+                src="../assets/images/products/4.jpg"
+                alt="4.jpg"
+              />
+            </div>
+            <div class="list-style-detail ml-3 mr-2">
+              <p class="mb-0">Ryzen 5 Hexa Core 5600H</p>
+            </div>
+            <div class="list-style-action d-flex justify-content-end ml-auto">
+              <h6 class="font-weight-bold">$9,999</h6>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
