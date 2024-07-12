@@ -1,0 +1,148 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-lg-12">
+        <div class="card">
+            <table id="impr"></table>
+          </div>
+        <div class="card" id="testId">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Approvisionnement</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="approForm" (ngSubmit)="submit()">
+              <div class="row">
+                <div class="form-group col-lg-3">
+                  <label for="">Denree:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [formControl]="queryField"
+                    (input)="onUserInput()"
+                  />
+                  <ul
+                    class="list-group mt-20"
+                    *ngIf="filteredOptions.length > 0 && userHasTyped"
+                  >
+                    <li
+                      class="list-group-item"
+                      *ngFor="let option of filteredOptions"
+                      (click)="selectOption(option)"
+                    >
+                      {{ option.produit }}
+                    </li>
+                  </ul>
+                </div>
+                <div class="form-group col-lg-2">
+                  <label for="">Quantite</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="quantite"
+                    min="1"
+                  />
+                </div>
+                <div class="form-group col-lg-2">
+                  <label for="">UM</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="mesure"
+                    formControlName="um"
+                  />
+                </div>
+                <div class="form-group col-lg-2">
+                  <label for="">P.U (FCFA)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="prix"
+                    formControlName="pu"
+                  />
+                </div>
+                <div class="form-group col-lg-2">
+                  <label for="">Decompte (FCFA)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="decompte"
+                    formControlName="decompte"
+                  />
+                </div>
+                <div class="form-group col-lg-3">
+                  <button
+                    class="btn btn-primary mt-4"
+                    [disabled]="!approForm.valid"
+                  >
+                    AJOUTER
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- table-->
+      <div class="col-sm-12 col-lg-12" *ngIf="shoppingCard.length != 0">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Panier</h4>
+            </div>
+            <div>
+              <button class="btn btn-outline-info" (click)="Approvisionner()" *ngIf="!isSubmited">
+                Approvisionnement
+              </button>
+              <button class="btn btn-outline-info" type="button"  *ngIf="isSubmited">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead class="table-color-heading">
+                  <tr class="text-secondary">
+                    <th scope="col">Denrees</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">UM</th>
+                    <th scope="col">PU</th>
+                    <th scope="col" class="text-right">Décompte</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="white-space-no-wrap"
+                    *ngFor="let item of shoppingCard"
+                  >
+                    <td>{{ item.produit }}</td>
+                    <td>{{ item.quantite }}</td>
+                    <td>{{ item.um }}</td>
+                    <td>{{ item.pu }} FCFA</td>
+                    <td class="text-right">{{ item.decompte }} FCFA</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4" class="text-center font-weight-bold">
+                      Total
+                    </td>
+                    <td class="text-right font-weight-bold">
+                      {{ getTotal() | numberWithSpaces }} FCFA
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

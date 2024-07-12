@@ -1,6 +1,7 @@
 export interface Magasin {
   id: string;
   date: string;
+  completed: boolean;
   stock: {
     produit: string;
     quantite: number;
@@ -8,5 +9,6 @@ export interface Magasin {
     appro: number;
     balance: number;
     prix: number;
+    um: string;
   }[];
 }

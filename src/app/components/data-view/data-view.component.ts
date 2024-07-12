@@ -31,18 +31,22 @@ export class DataViewComponent implements OnInit {
 
   getGlobalExpense() {
     var expense = 0;
-    this.stock.map((item) => (expense += item.appro));
+    this.stock.map((item) => (expense += item.appro * item.prix));
     return expense;
   }
 
   getTotalItem() {
     var quantity = 0;
-    this.stock.map((item) => (quantity += item.quantite));
+    this.stock.map((item) => (quantity += item.balance));
     return quantity;
   }
 
   goToDetail() {
     this.router.navigate(['/magasin']);
+  }
+
+  goToAppro() {
+    this.router.navigate(['/appro', this.monthData.id]);
   }
 
   sendData() {

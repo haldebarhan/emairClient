@@ -12,6 +12,7 @@ import { UniteComponent } from './components/unite/unite/unite.component';
 import { UniteFormComponent } from './components/unite/unite-form/unite-form.component';
 import { FourOhFourComponent } from './components/error/four-oh-four/four-oh-four.component';
 import { MagasinComponent } from './components/magasin/magasin.component';
+import { ApproComponent } from './components/appro/appro.component';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,10 @@ export const routes: Routes = [
   {
     path: 'magasin',
     component: MagasinComponent,
+  },
+  {
+    path: 'appro/:id',
+    component: ApproComponent,
   },
   {
     path: '**',

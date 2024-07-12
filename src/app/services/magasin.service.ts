@@ -17,4 +17,8 @@ export class MagasinService {
   findAll(): Observable<Magasin | null> {
     return this.http.get<Magasin>(`${API_URL}/magasin`);
   }
+
+  findOne(id: string): Observable<Magasin> {
+    return this.http.get<Magasin>(`${API_URL}/magasin/${id}`);
+  }
 }
