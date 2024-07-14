@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../../../helpers/api.url';
 import { Menu } from './models/menu';
@@ -33,5 +33,10 @@ export class MenuService {
     return this.http
       .delete(`${API_URL}/menu/${id}`)
       .pipe(catchError(handleError));
+  }
+
+  findMenuByDayName(query: string){
+    let params = new HttpParams().set('query', query)
+    return this.http.get(`${API_URL}/menu/search`, {params})
   }
 }

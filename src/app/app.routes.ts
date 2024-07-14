@@ -13,6 +13,8 @@ import { UniteFormComponent } from './components/unite/unite-form/unite-form.com
 import { FourOhFourComponent } from './components/error/four-oh-four/four-oh-four.component';
 import { MagasinComponent } from './components/magasin/magasin.component';
 import { ApproComponent } from './components/appro/appro.component';
+import { ConsoReportComponent } from './components/conso-report/conso-report.component';
+import { ConsoEditComponent } from './components/conso-edit/conso-edit.component';
 
 export const routes: Routes = [
   {
@@ -79,6 +81,14 @@ export const routes: Routes = [
   {
     path: 'appro/:id',
     component: ApproComponent,
+  },
+  {
+    path: 'report-conso',
+    component: ConsoReportComponent,
+  },
+  {
+    path: 'conso-edit/:id',
+    component: ConsoEditComponent,
   },
   {
     path: '**',

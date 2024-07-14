@@ -6,6 +6,8 @@ import { NumberWithSpacesPipe } from '../../pipes/number-with-spaces.pipe';
 import { Router } from '@angular/router';
 import { DataService } from '../../services/data.service';
 import { Stock } from '../../models/stock';
+import { ConsoService } from '../../services/conso.service';
+import { Rapport } from '../../models/rapport';
 
 @Component({
   selector: 'app-data-view',
@@ -18,9 +20,21 @@ export class DataViewComponent implements OnInit {
   @Input() monthData!: Magasin;
   @Input() magasinId!: string;
   stock!: Stock[];
-  constructor(private router: Router, private dataService: DataService) {}
+  consoReport: Rapport[] = [];
+  constructor(
+    private router: Router,
+    private dataService: DataService,
+    private consoService: ConsoService
+  ) {}
   ngOnInit(): void {
     this.stock = this.monthData.stock;
+    const { year, month } = this.getCurrentMonthAndYear(this.monthData.date);
+    this.consoService.findMonthlyConsumption(year, month).subscribe({
+      next: (value) => {
+        this.consoReport = value;
+      },
+      error: (err) => console.log(err),
+    });
   }
 
   getMagValue() {
@@ -45,6 +59,9 @@ export class DataViewComponent implements OnInit {
     this.router.navigate(['/magasin']);
   }
 
+  consoEdit(id: string) {
+    this.router.navigate(['conso-edit', id]);
+  }
   goToAppro() {
     this.router.navigate(['/appro', this.monthData.id]);
   }
@@ -52,5 +69,47 @@ export class DataViewComponent implements OnInit {
   sendData() {
     this.dataService.setData(this.stock);
     this.goToDetail();
+  }
+
+  goToConsoReport() {
+    this.router.navigate(['/report-conso']);
+  }
+
+  getCurrentMonthAndYear(dateStr: string) {
+    const date = new Date(dateStr);
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return { year, month };
+  }
+
+  getTotalMatin(data: Rapport) {
+    var compt = 0;
+    data.report.map((item) => {
+      compt += item.petit_dejeuner;
+    });
+    return compt;
+  }
+  getTotalMidi(data: Rapport) {
+    var compt = 0;
+    data.report.map((item) => {
+      compt += item.dejeuner;
+    });
+    return compt;
+  }
+  getTotalSoir(data: Rapport) {
+    var compt = 0;
+    data.report.map((item) => {
+      compt += item.diner;
+    });
+    return compt;
+  }
+
+  formatedDate(data: Rapport) {
+    const date = new Date(data.date);
+    const formatedDate = date
+      .toLocaleDateString('en-GB')
+      .replace('/', '-')
+      .replace('/', '-');
+    return formatedDate;
   }
 }

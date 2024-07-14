@@ -1,0 +1,92 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Rapport</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="reportForm" (ngSubmit)="Submit()">
+              <div class="row">
+                <div class="form-group col-lg-6">
+                  <label for="date">Date</label>
+                  <input
+                    type="date"
+                    name="date"
+                    class="form-control"
+                    formControlName="date"
+                    [ngClass]="{'is-invalid': reportForm.get('date')?.invalid && reportForm.get('date')?.touched}"
+                  />
+                  <div class="invalid-feedback" *ngIf="reportForm.get('date')?.invalid && reportForm.get('date')?.touched">La date ne correspond pas au mois du magasin</div>
+                </div>
+              </div>
+              <div formArrayName="units">
+                <table class="table table-light">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Unités</th>
+                      <th>Matin</th>
+                      <th>Midi</th>
+                      <th>Soir</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let unitCtrl of unitsFormArray.controls;
+                        let i = index
+                      "
+                      [formGroupName]="i"
+                    >
+                      <td>{{unites[i].nom}}</td>
+                      <td>
+                        <div class="row">
+                          <div class="col-lg-5">
+                            <input
+                              type="number"
+                              class="form-control"
+                              formControlName="matin"
+                              min="0"
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="row">
+                          <div class="col-lg-5">
+                            <input
+                              type="number"
+                              class="form-control"
+                              formControlName="midi"
+                              min="0"
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="row">
+                          <div class="col-lg-5">
+                            <input
+                              type="number"
+                              class="form-control"
+                              formControlName="soir"
+                              min="0"
+                            />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button type="submit" class="btn btn-primary" [disabled]="!reportForm.valid">Envoyer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
