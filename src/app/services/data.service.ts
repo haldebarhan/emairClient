@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Rapport } from '../models/rapport';
 
 @Injectable({
   providedIn: 'root',
@@ -18,5 +19,9 @@ export class DataService {
     }[]
   ) {
     this.dataSubject.next(data);
+  }
+
+  setReportData(data: Rapport){
+    this.dataSubject.next(data)
   }
 }

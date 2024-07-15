@@ -26,4 +26,16 @@ export class ConsoService {
   updateConsoById(id: string, data: Rapport) {
     return this.http.patch(`${API_URL}/consommation/${id}`, data);
   }
+
+  deleteConso(id: string) {
+    return this.http.delete(`${API_URL}/consommation/${id}`);
+  }
+
+  emitReport(id: string) {
+    return this.http.get(`${API_URL}/consommation/emit/${id}`);
+  }
+
+  dailyReport(id: string){
+    return this.http.get(`${API_URL}/daily-report/${id}`)
+  }
 }

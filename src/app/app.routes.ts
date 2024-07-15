@@ -15,6 +15,7 @@ import { MagasinComponent } from './components/magasin/magasin.component';
 import { ApproComponent } from './components/appro/appro.component';
 import { ConsoReportComponent } from './components/conso-report/conso-report.component';
 import { ConsoEditComponent } from './components/conso-edit/conso-edit.component';
+import { ConsoDetailComponent } from './components/conso-detail/conso-detail.component';
 
 export const routes: Routes = [
   {
@@ -89,6 +90,10 @@ export const routes: Routes = [
   {
     path: 'conso-edit/:id',
     component: ConsoEditComponent,
+  },
+  {
+    path: 'conso-detail',
+    component: ConsoDetailComponent,
   },
   {
     path: '**',

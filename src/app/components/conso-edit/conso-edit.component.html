@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header d-flex justify-content-between">
             <div class="header-title">
-              <h4 class="card-title">Rapport</h4>
+              <h4 class="card-title">Modification du Rapport</h4>
             </div>
           </div>
           <div class="card-body">
@@ -18,9 +18,21 @@
                     name="date"
                     class="form-control"
                     formControlName="date"
-                    [ngClass]="{'is-invalid': reportForm.get('date')?.invalid && reportForm.get('date')?.touched}"
+                    [ngClass]="{
+                      'is-invalid':
+                        reportForm.get('date')?.invalid &&
+                        reportForm.get('date')?.touched
+                    }"
                   />
-                  <div class="invalid-feedback" *ngIf="reportForm.get('date')?.invalid && reportForm.get('date')?.touched">La date ne correspond pas au mois du magasin</div>
+                  <div
+                    class="invalid-feedback"
+                    *ngIf="
+                      reportForm.get('date')?.invalid &&
+                      reportForm.get('date')?.touched
+                    "
+                  >
+                    La date ne correspond pas au mois du magasin
+                  </div>
                 </div>
               </div>
               <div formArrayName="units">
@@ -41,7 +53,7 @@
                       "
                       [formGroupName]="i"
                     >
-                      <td>{{unites[i].nom}}</td>
+                      <td>{{ unites[i].nom }}</td>
                       <td>
                         <div class="row">
                           <div class="col-lg-5">
@@ -82,7 +94,27 @@
                   </tbody>
                 </table>
               </div>
-              <button type="submit" class="btn btn-primary" [disabled]="!reportForm.valid">Envoyer</button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!reportForm.valid"
+                *ngIf="!isSubit"
+              >
+                Envoyer
+              </button>
+              <button
+                class="btn btn-primary"
+                type="button"
+                disabled
+                *ngIf="isSubit"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Envoi...</span>
+              </button>
             </form>
           </div>
         </div>

@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { getMonthAndYear } from '../../../helpers/monthAndYear';
 import { dateInMonthYearValidator } from '../../../shared/date-in-month-year.directive';
 import { getDayName } from '../../../helpers/getDayName';
+import { Toast } from '../../../helpers/toast.helper';
 
 @Component({
   selector: 'app-conso-edit',
@@ -32,13 +33,15 @@ export class ConsoEditComponent implements OnInit {
   reportForm: FormGroup;
   requiredYear: number[] = [];
   menuData: any = [];
+  isSubit: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private uniteService: UniteService,
     private route: ActivatedRoute,
     private consoService: ConsoService,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private router: Router
   ) {
     this.reportForm = this.fb.group({
       date: new FormControl('', [Validators.required]),
@@ -92,6 +95,7 @@ export class ConsoEditComponent implements OnInit {
     });
   }
   Submit() {
+    this.isSubit = true;
     const values: { date: string; units: any[] } = { ...this.reportForm.value };
     const rapport = values.units.map((data) => {
       return {
@@ -113,8 +117,23 @@ export class ConsoEditComponent implements OnInit {
           transmit: false,
         };
         this.consoService.updateConsoById(this.consoId!, data).subscribe({
-          next: (response) => console.log(response),
-          error: (err) => console.log(err),
+          next: () => {
+            Toast.fire({
+              icon: 'success',
+              title: 'Modification effectuée',
+              didClose: () => {
+                this.isSubit = false;
+                this.router.navigate(['/']);
+              },
+            });
+          },
+          error: () => {
+            Toast.fire({
+              icon: 'error',
+              title: 'Erreur rencontrée',
+              didClose: ()=> this.isSubit = false
+            })
+          },
         });
       },
     });

@@ -16,6 +16,8 @@ import { Rapport } from '../../models/rapport';
 import { MenuService } from '../menu/menu.service';
 import { getDayName } from '../../../helpers/getDayName';
 import { ConsoService } from '../../services/conso.service';
+import { Router } from '@angular/router';
+import { Toast } from '../../../helpers/toast.helper';
 
 @Component({
   selector: 'app-conso-report',
@@ -29,6 +31,7 @@ export class ConsoReportComponent implements OnInit {
   monthData: any = [];
   message: string = '';
   menuData: any = [];
+  isSubmit: boolean = false;
   reportForm: FormGroup = this.fb.group({
     date: new FormControl('', Validators.required),
     units: this.fb.array([]),
@@ -39,7 +42,8 @@ export class ConsoReportComponent implements OnInit {
     private fb: FormBuilder,
     private magService: MagasinService,
     private menuService: MenuService,
-    private consoService: ConsoService
+    private consoService: ConsoService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.uniteService.getUnites().subscribe({
@@ -88,6 +92,7 @@ export class ConsoReportComponent implements OnInit {
     });
   }
   Submit() {
+    this.isSubmit = true;
     const values: { date: string; units: any[] } = { ...this.reportForm.value };
     const rapport = values.units.map((data) => {
       return {
@@ -100,23 +105,41 @@ export class ConsoReportComponent implements OnInit {
     const dayName = getDayName(new Date(values.date));
     this.menuService.findMenuByDayName(dayName).subscribe({
       next: (value: any) => {
-        this.menuData = value
+        this.menuData = value;
         const data: Rapport = {
           date: new Date(values.date),
           magasin: this.monthData.id,
           menu: this.menuData._id,
           report: rapport,
           transmit: false,
-        }; 
+        };
         this.consoService.createConso(data).subscribe({
-          next: (value) => console.log(value),
-          error: (err) => console.log(err)
-        })
-        
+          next: () => {
+            Toast.fire({
+              icon: 'success',
+              title: 'Rapport crée',
+              didClose: () => {
+                this.isSubmit = false;
+                this.router.navigate(['/']);
+              },
+            });
+          },
+          error: () => {
+            Toast.fire({
+              icon: 'error',
+              title: 'Erreur rencontrée',
+              didClose: () => (this.isSubmit = true),
+            });
+          },
+        });
       },
-      error: (err) => console.log(err),
+      error: () => {
+        Toast.fire({
+          icon: 'error',
+          title: 'Erreur rencontrée',
+        });
+      },
     });
-
   }
 
   getMonthAndYear(dateStr: string) {
