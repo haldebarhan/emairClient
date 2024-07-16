@@ -1,0 +1,45 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2 col-lg-2 mt-4"></div>
+      <div class="col-sm-8 col-lg-8 mt-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">{{headerLabel}}</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <form [formGroup] = "supForm" (ngSubmit)="Submit()">
+              <div class="form-group">
+                <label for="email">Nom Surprime:</label>
+                <input type="text" class="form-control" id="email1" formControlName="nom"/>
+              </div>
+              <div class="row">
+                <div class="form-group col-lg-6">
+                  <label for="pwd">Date:</label>
+                  <input type="date" name="date" class="form-control" formControlName="date" [ngClass]="{'is-invalid': supForm.get('date')?.invalid && supForm.get('date')?.touched}">
+                  <div class="invalid-feedback" *ngIf="supForm.get('date')?.invalid && supForm.get('date')?.touched">La date doit etre du mois en cours</div>
+                </div>
+                <div class="form-group col-lg-6">
+                  <label for="">Montant (FCFA)</label>
+                  <input type="number" name="Montant" id="" class="form-control" formControlName="montant"/>
+                </div>
+              </div>
+      
+              <button type="submit" class="btn btn-primary mr-2" [disabled]="!supForm.valid" *ngIf="!isSubmit">{{buttonLabel}}</button>
+              <button class="btn btn-primary" type="button" disabled *ngIf="isSubmit">
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Envoi...</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

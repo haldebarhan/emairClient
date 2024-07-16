@@ -16,6 +16,8 @@ import { ApproComponent } from './components/appro/appro.component';
 import { ConsoReportComponent } from './components/conso-report/conso-report.component';
 import { ConsoEditComponent } from './components/conso-edit/conso-edit.component';
 import { ConsoDetailComponent } from './components/conso-detail/conso-detail.component';
+import { SurprimesFormComponent } from './components/surprimes-form/surprimes-form.component';
+import { SurprimesListComponent } from './components/surprimes-list/surprimes-list.component';
 
 export const routes: Routes = [
   {
@@ -94,6 +96,18 @@ export const routes: Routes = [
   {
     path: 'conso-detail',
     component: ConsoDetailComponent,
+  },
+  {
+    path: 'surprime-add',
+    component: SurprimesFormComponent,
+  },
+  {
+    path: 'surprime-edit/:id',
+    component: SurprimesFormComponent,
+  },
+  {
+    path: 'surprime-list',
+    component: SurprimesListComponent
   },
   {
     path: '**',

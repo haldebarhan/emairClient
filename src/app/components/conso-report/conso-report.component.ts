@@ -18,6 +18,8 @@ import { getDayName } from '../../../helpers/getDayName';
 import { ConsoService } from '../../services/conso.service';
 import { Router } from '@angular/router';
 import { Toast } from '../../../helpers/toast.helper';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Sw } from '../../../helpers/sw.helper';
 
 @Component({
   selector: 'app-conso-report',
@@ -124,12 +126,15 @@ export class ConsoReportComponent implements OnInit {
               },
             });
           },
-          error: () => {
-            Toast.fire({
-              icon: 'error',
-              title: 'Erreur rencontrée',
-              didClose: () => (this.isSubmit = true),
-            });
+          error: (err: HttpErrorResponse) => {
+            if (err.status == 409) {
+              Sw.fire({
+                icon: 'error',
+                title: 'Dupplication de rapport',
+                text: 'un rapport existe deja avec cette date',
+                didClose: () => (this.isSubmit = true),
+              });
+            }
           },
         });
       },

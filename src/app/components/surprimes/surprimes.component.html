@@ -1,0 +1,109 @@
+<div class="card card-block card-stretch card-height">
+  <div class="card-header d-flex justify-content-between">
+    <div class="header-title">
+      <h4 class="card-title">Surprimes</h4>
+    </div>
+    <div class="card-header-toolbar d-flex align-items-center">
+      <div class="dropdown">
+        <a
+          href="#"
+          class="text-muted pl-3"
+          id="dropdownMenuButton-event"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+            focusable="false"
+            style="
+              -ms-transform: rotate(360deg);
+              -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+            "
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 24 24"
+          >
+            <g
+              fill="none"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="19" cy="12" r="1"></circle>
+              <circle cx="5" cy="12" r="1"></circle>
+            </g>
+          </svg>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-event">
+          <a class="dropdown-item" (click)="newSurprime()">
+            <svg
+              class="svg-icon text-secondary"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              ></path>
+            </svg>
+            Créer
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-spacing mb-0">
+        <tbody>
+          <tr
+            class="white-space-no-wrap"
+            *ngFor="let surprime of surprimes | limitToFive"
+          >
+            <td>
+              <h6 class="mb-0 text-uppercase text-secondary">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="pr-2"
+                  width="30"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+                {{ formatDate(surprime.date) }}
+              </h6>
+            </td>
+            <td class="pl-0 py-3">{{ surprime.nom }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="d-flex justify-content-end align-items-center border-top-table p-3"
+    >
+      <button class="btn btn-secondary btn-sm" (click)="goToList()">
+        Liste
+      </button>
+    </div>
+  </div>
+</div>

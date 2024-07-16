@@ -14,6 +14,8 @@ import { PdfGeneratorService } from '../../services/pdf-generator.service';
 import { ApproService } from '../../services/appro.service';
 import { LimitToTenPipe } from '../../pipes/limit-to-ten.pipe';
 import { LimitToEightPipe } from '../../pipes/limit-to-eight.pipe';
+import { SurprimesComponent } from '../surprimes/surprimes.component';
+import { DiversComponent } from '../divers/divers.component';
 
 @Component({
   selector: 'app-data-view',
@@ -24,6 +26,8 @@ import { LimitToEightPipe } from '../../pipes/limit-to-eight.pipe';
     NumberWithSpacesPipe,
     LimitToTenPipe,
     LimitToEightPipe,
+    SurprimesComponent,
+    DiversComponent
   ],
   templateUrl: './data-view.component.html',
   styleUrl: './data-view.component.css',
@@ -52,6 +56,8 @@ export class DataViewComponent implements OnInit {
     this.consoService.findMonthlyConsumption(year, month).subscribe({
       next: (value) => {
         this.consoReport = value;
+        // console.log(this.allTrue(this.consoReport));
+        // console.log(this.getDayInMonth(month, year))
         this.approService.filterSupplies(month, year).subscribe({
           next: (value) => {
             this.supplies = value;
@@ -234,10 +240,21 @@ export class DataViewComponent implements OnInit {
         quantite: item.quantite,
         um: item.denree.mesure.unite,
         pu: item.denree.pu,
-        decompte: item.quantite * item.denree.pu
+        decompte: item.quantite * item.denree.pu,
       };
     });
 
-    this.pdfService.generateSupplySheet(article, this.britishDate(data.date))
+    this.pdfService.generateSupplySheet(article, this.britishDate(data.date));
+  }
+  allTrue(data: any) {
+    return data.every((element: any) => element.transmit == true);
+  }
+
+  getDayInMonth(month: number, year: number): number {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  onElementDelete(){
+    this.loadData()
   }
 }
