@@ -18,6 +18,8 @@ import { ConsoEditComponent } from './components/conso-edit/conso-edit.component
 import { ConsoDetailComponent } from './components/conso-detail/conso-detail.component';
 import { SurprimesFormComponent } from './components/surprimes-form/surprimes-form.component';
 import { SurprimesListComponent } from './components/surprimes-list/surprimes-list.component';
+import { DiversFormComponent } from './components/divers-form/divers-form.component';
+import { DiversListComponent } from './components/divers-list/divers-list.component';
 
 export const routes: Routes = [
   {
@@ -107,7 +109,13 @@ export const routes: Routes = [
   },
   {
     path: 'surprime-list',
-    component: SurprimesListComponent
+    component: SurprimesListComponent,
+  },
+  { path: 'divers-add', component: DiversFormComponent },
+  { path: 'divers-edit/:id', component: DiversFormComponent },
+  {
+    path: 'divers-list',
+    component: DiversListComponent
   },
   {
     path: '**',
