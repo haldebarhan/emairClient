@@ -45,7 +45,7 @@ export class PdfGeneratorService {
     doc.save('fiche-suivie.pdf');
   }
 
-  generateSupplySheet(articles: Article[]) {
+  generateSupplySheet(articles: Article[], date: string) {
     var total = 0;
     const data = articles.map((article) => {
       total += article.decompte;
@@ -58,7 +58,6 @@ export class PdfGeneratorService {
       ];
     });
     const doc = new jsPDF();
-    const date = this.formatDate();
     const text = "FICHE D'APPROVISIONNEMENT";
     const datePositionX = 105;
     const datePositionY = 10;
@@ -82,13 +81,9 @@ export class PdfGeneratorService {
       columnStyles: { 4: { halign: 'right', fontStyle: 'bold' } },
       foot: [['', '', '', 'Total', `${total} FCFA`]],
       footStyles: { halign: 'right', fontStyle: 'bold' },
-      theme: 'grid',
+      theme: 'striped',
       showFoot: 'lastPage',
       showHead: 'firstPage',
-    });
-
-    autoTable(doc, {
-      html: '#impr',
     });
 
     doc.save('fiche-appro.pdf');

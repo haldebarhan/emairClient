@@ -9,9 +9,11 @@ import { API_URL } from '../../helpers/api.url';
 export class ApproService {
   constructor(private http: HttpClient) {}
 
+  makeAppro(data: Appro) {
+    return this.http.post(`${API_URL}/appro`, data);
+  }
 
-
-  makeAppro(data: Appro){
-    return this.http.post(`${API_URL}/appro`, data)
+  filterSupplies(month: number, year: number) {
+    return this.http.get(`${API_URL}/appro/data/${year}/${month}`);
   }
 }

@@ -11,11 +11,20 @@ import { Rapport } from '../../models/rapport';
 import { Toast } from '../../../helpers/toast.helper';
 import { Sw } from '../../../helpers/sw.helper';
 import { PdfGeneratorService } from '../../services/pdf-generator.service';
+import { ApproService } from '../../services/appro.service';
+import { LimitToTenPipe } from '../../pipes/limit-to-ten.pipe';
+import { LimitToEightPipe } from '../../pipes/limit-to-eight.pipe';
 
 @Component({
   selector: 'app-data-view',
   standalone: true,
-  imports: [CommonModule, LimitToFivePipe, NumberWithSpacesPipe],
+  imports: [
+    CommonModule,
+    LimitToFivePipe,
+    NumberWithSpacesPipe,
+    LimitToTenPipe,
+    LimitToEightPipe,
+  ],
   templateUrl: './data-view.component.html',
   styleUrl: './data-view.component.css',
 })
@@ -25,11 +34,13 @@ export class DataViewComponent implements OnInit {
   stock!: Stock[];
   reportSheet: any = [];
   consoReport: Rapport[] = [];
+  supplies: any = [];
   constructor(
     private router: Router,
     private dataService: DataService,
     private consoService: ConsoService,
-    private pdfService: PdfGeneratorService
+    private pdfService: PdfGeneratorService,
+    private approService: ApproService
   ) {}
   ngOnInit(): void {
     this.loadData();
@@ -41,6 +52,12 @@ export class DataViewComponent implements OnInit {
     this.consoService.findMonthlyConsumption(year, month).subscribe({
       next: (value) => {
         this.consoReport = value;
+        this.approService.filterSupplies(month, year).subscribe({
+          next: (value) => {
+            this.supplies = value;
+          },
+          error: (err) => console.log(err),
+        });
       },
       error: (err) => console.log(err),
     });
@@ -193,8 +210,34 @@ export class DataViewComponent implements OnInit {
     this.consoService.dailyReport(reportId).subscribe({
       next: (value) => {
         this.reportSheet = value;
-        this.pdfService.generateDailySheet(this.reportSheet)
+        this.pdfService.generateDailySheet(this.reportSheet);
       },
     });
+  }
+
+  britishDate(dateStr: string) {
+    const date = new Date(dateStr);
+    const britishFormat = date.toLocaleDateString('en-GB');
+    return britishFormat;
+  }
+
+  getDecompte(data: any) {
+    var sum = 0;
+    data.produits.map((item: any) => (sum += item.quantite * item.denree.pu));
+    return sum;
+  }
+
+  printSupplySheet(data: any) {
+    const article = data.produits.map((item: any) => {
+      return {
+        produit: item.denreeName,
+        quantite: item.quantite,
+        um: item.denree.mesure.unite,
+        pu: item.denree.pu,
+        decompte: item.quantite * item.denree.pu
+      };
+    });
+
+    this.pdfService.generateSupplySheet(article, this.britishDate(data.date))
   }
 }

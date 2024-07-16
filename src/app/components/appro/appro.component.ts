@@ -158,7 +158,7 @@ export class ApproComponent implements OnInit {
     const items = this.shoppingCard.map((item) => {
       const find = this.findShoppingCardItemsInfo(item);
       return {
-        denreeId: find.id,
+        denree: find.id,
         quantite: item.quantite,
         denreeName: item.produit,
       };
@@ -176,15 +176,8 @@ export class ApproComponent implements OnInit {
             title: 'Action reussie',
             didClose: () => {
               this.isSubmited = false;
-              Sw.fire({
-                text: "Une fiche d'approvisionnement a été générée",
-                icon: 'success',
-                didClose: () => {
-                  this.pdfGenerator.generateSupplySheet(this.shoppingCard);
-                  this.shoppingCard = [];
-                  this.router.navigate(['/']);
-                },
-              });
+              this.shoppingCard = [];
+              this.router.navigate(['/']);
             },
           });
         },
