@@ -13,6 +13,8 @@ import { Sw } from '../../helpers/sw.helper';
 import { DataViewComponent } from '../components/data-view/data-view.component';
 import { Magasin } from '../models/magasin';
 import { search } from '../../helpers/month.helper';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +30,11 @@ export class DashboardComponent implements OnInit {
   dataCreated: boolean = false;
   monthData!: Magasin;
   message: string = '';
-  constructor(private magService: MagasinService, private fb: FormBuilder) {
+  constructor(
+    private magService: MagasinService,
+    private fb: FormBuilder,
+    private router:Router
+  ) {
     this.magForm = this.fb.group({
       date: new FormControl('', [Validators.required]),
     });
@@ -84,7 +90,7 @@ export class DashboardComponent implements OnInit {
   reload() {
     this.magService.findAll().subscribe({
       next: (data: Magasin | null) => {
-        if (data != null && !this.isObjectEmpty(data)) {
+        if (data != null) {
           this.monthData = data;
           this.getMonth(this.monthData.date);
           this.dataCreated = true;
@@ -100,5 +106,12 @@ export class DashboardComponent implements OnInit {
     const year = date.getFullYear();
     const monthName = search(month);
     this.message = `${monthName} ${year}`;
+  }
+
+  onCompleted(magasinId: any) {
+    this.magService.nextMonth(magasinId, '').subscribe({
+      next: () => window.location.reload(),
+      error: (err: HttpErrorResponse) => console.log(err),
+    });
   }
 }

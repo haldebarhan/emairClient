@@ -10,5 +10,6 @@ export interface Magasin {
     balance: number;
     prix: number;
     um: string;
+    id?: string
   }[];
 }

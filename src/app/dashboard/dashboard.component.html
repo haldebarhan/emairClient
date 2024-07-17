@@ -124,6 +124,7 @@
     <app-data-view
       [monthData]="monthData"
       [magasinId]="monthData.id"
+      (completed)="onCompleted($event)"
     ></app-data-view>
   </div>
 </div>

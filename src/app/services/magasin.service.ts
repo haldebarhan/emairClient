@@ -21,4 +21,8 @@ export class MagasinService {
   findOne(id: string): Observable<Magasin> {
     return this.http.get<Magasin>(`${API_URL}/magasin/${id}`);
   }
+
+  nextMonth(id: string, blank: any) {
+    return this.http.post(`${API_URL}/magasin/${id}`, blank);
+  }
 }

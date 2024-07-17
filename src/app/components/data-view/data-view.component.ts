@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Magasin } from '../../models/magasin';
 import { CommonModule } from '@angular/common';
 import { LimitToFivePipe } from '../../pipes/limit-to-five.pipe';
@@ -16,6 +16,7 @@ import { LimitToTenPipe } from '../../pipes/limit-to-ten.pipe';
 import { LimitToEightPipe } from '../../pipes/limit-to-eight.pipe';
 import { SurprimesComponent } from '../surprimes/surprimes.component';
 import { DiversComponent } from '../divers/divers.component';
+import { MagasinService } from '../../services/magasin.service';
 
 @Component({
   selector: 'app-data-view',
@@ -35,6 +36,7 @@ import { DiversComponent } from '../divers/divers.component';
 export class DataViewComponent implements OnInit {
   @Input() monthData!: Magasin;
   @Input() magasinId!: string;
+  @Output() completed = new EventEmitter<any>()
   stock!: Stock[];
   reportSheet: any = [];
   consoReport: Rapport[] = [];
@@ -44,7 +46,8 @@ export class DataViewComponent implements OnInit {
     private dataService: DataService,
     private consoService: ConsoService,
     private pdfService: PdfGeneratorService,
-    private approService: ApproService
+    private approService: ApproService,
+    private magasinService: MagasinService
   ) {}
   ngOnInit(): void {
     this.loadData();
@@ -61,6 +64,10 @@ export class DataViewComponent implements OnInit {
         this.approService.filterSupplies(month, year).subscribe({
           next: (value) => {
             this.supplies = value;
+            // console.log(this.consoReport.length)
+            if(this.allTrue(this.consoReport) && this.consoReport.length == this.getDayInMonth(year,month)){
+              this.completedMonth()
+            }
           },
           error: (err) => console.log(err),
         });
@@ -70,6 +77,12 @@ export class DataViewComponent implements OnInit {
   }
 
   getMagValue() {
+    var sum = 0;
+    this.stock.map((item) => (sum += item.prix * item.balance));
+    return sum;
+  }
+
+  getFirsdayMagValue(){
     var sum = 0;
     this.stock.map((item) => (sum += item.prix * item.quantite));
     return sum;
@@ -246,7 +259,7 @@ export class DataViewComponent implements OnInit {
 
     this.pdfService.generateSupplySheet(article, this.britishDate(data.date));
   }
-  allTrue(data: any) {
+  allTrue(data: Rapport[]) {
     return data.every((element: any) => element.transmit == true);
   }
 
@@ -254,7 +267,13 @@ export class DataViewComponent implements OnInit {
     return new Date(year, month + 1, 0).getDate();
   }
 
-  onElementDelete(){
-    this.loadData()
+  completedMonth(){
+    Sw.fire({
+      title: 'Mois terminé',
+      text: 'tout les rapports de consommation ont été transmit le mois est donc terminé',
+      icon: 'info',
+      didClose:() => this.completed.emit(this.magasinId)
+    })
   }
+
 }
