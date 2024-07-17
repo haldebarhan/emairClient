@@ -20,6 +20,7 @@ import { SurprimesFormComponent } from './components/surprimes-form/surprimes-fo
 import { SurprimesListComponent } from './components/surprimes-list/surprimes-list.component';
 import { DiversFormComponent } from './components/divers-form/divers-form.component';
 import { DiversListComponent } from './components/divers-list/divers-list.component';
+import { MonthlyTableComponent } from './components/monthly-table/monthly-table.component';
 
 export const routes: Routes = [
   {
@@ -118,7 +119,13 @@ export const routes: Routes = [
     component: DiversListComponent
   },
   {
+    path: 'monthly', component: MonthlyTableComponent
+  },
+  {
+    path: '404', component: FourOhFourComponent
+  },
+  {
     path: '**',
-    component: FourOhFourComponent,
+    redirectTo: '/404'
   },
 ];
