@@ -21,6 +21,7 @@ import { SurprimesListComponent } from './components/surprimes-list/surprimes-li
 import { DiversFormComponent } from './components/divers-form/divers-form.component';
 import { DiversListComponent } from './components/divers-list/divers-list.component';
 import { MonthlyTableComponent } from './components/monthly-table/monthly-table.component';
+import { MonthlyListComponent } from './components/monthly-list/monthly-list.component';
 
 export const routes: Routes = [
   {
@@ -120,6 +121,9 @@ export const routes: Routes = [
   },
   {
     path: 'monthly', component: MonthlyTableComponent
+  },
+  {
+    path: 'monthly-list', component: MonthlyListComponent
   },
   {
     path: '404', component: FourOhFourComponent

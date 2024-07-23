@@ -24,4 +24,9 @@ export class DataService {
   setReportData(data: Rapport){
     this.dataSubject.next(data)
   }
+
+
+  sendMonthlyDate(data: string){
+    this.dataSubject.next(data)
+  }
 }

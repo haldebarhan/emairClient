@@ -20,7 +20,7 @@
                   formControlName="nom"
                 />
               </div>
-              <button type="submit" class="btn btn-primary mr-2" *ngIf="!isSubmitted">
+              <button type="submit" class="btn btn-primary mr-2" *ngIf="!isSubmitted" [disabled]="!unitForm.valid">
                 {{ buttonLabel }}
               </button>
               <button

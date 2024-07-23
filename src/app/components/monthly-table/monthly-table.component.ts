@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { UniteService } from '../unite/unite.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PdfGeneratorService } from '../../services/pdf-generator.service';
@@ -10,6 +16,8 @@ import { SuprimesService } from '../../services/suprimes.service';
 import { Stock } from '../../models/stock';
 import { MagasinService } from '../../services/magasin.service';
 import { search } from '../../../helpers/month.helper';
+import { DataService } from '../../services/data.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-monthly-table',
@@ -26,7 +34,7 @@ export class MonthlyTableComponent implements OnInit {
   surprimes: any = [];
   consoReport: any = [];
   surprimesList: any = [];
-  @Input() montylyDate: string = '2024-07-01T00:00:00.000+00:00';
+  montylyDate!: string;
   month!: number;
   year!: number;
   dayInMonth!: number;
@@ -38,17 +46,23 @@ export class MonthlyTableComponent implements OnInit {
     private consoSerive: ConsoService,
     private diversService: DiversService,
     private surprimeSerice: SuprimesService,
-    private magasinService: MagasinService
-  ) {
+    private magasinService: MagasinService,
+    private dataService: DataService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
+    this.dataService.data$.subscribe((value) => (this.montylyDate = value));
     const date = this.getCurrentMonthAndYear(this.montylyDate);
     this.month = date[0];
     this.year = date[1];
     this.dayInMonth = this.getDayInMonth(this.month, this.year);
     let monthName = search(this.month);
     this.monthLib = `${monthName} ${this.year}`;
-  }
-
-  ngOnInit(): void {
     this.uniteService.getUnites().subscribe({
       next: (values) => {
         this.unites = values;
@@ -69,10 +83,13 @@ export class MonthlyTableComponent implements OnInit {
                       this.magasinService
                         .finOneByDate(this.montylyDate)
                         .subscribe({
-                          next: (value) => (this.stock = value.stock),
+                          next: (value) => {
+                            this.stock = value.stock;
+                          },
                           error: (err) => console.log(err),
                         });
                     },
+                    error: (err: HttpErrorResponse) => console.log(err),
                   });
                 },
                 error: (err) => console.log(err),
@@ -92,16 +109,17 @@ export class MonthlyTableComponent implements OnInit {
       moyenne_effectif: number;
       effectif_total: number;
       mois: string;
-      valMag: number
+      valMag: number;
     } = {
       recette: this.totalIncome(),
       depense: this.totalExpense(),
       moyenne_effectif: this.moyenneEffectif(),
       effectif_total: this.effectifTotal(),
       mois: this.monthLib,
-      valMag: this.getLastdayMagValue()
+      valMag: this.getLastdayMagValue(),
     };
     this.pdfService.printTest(data);
+    this.router.navigate(['/monthly-list'])
   }
 
   getReport(reports: any) {

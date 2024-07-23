@@ -29,4 +29,8 @@ export class MagasinService {
   nextMonth() {
     return this.http.get(`${API_URL}/monthly-status/create`);
   }
+
+  monthluStatus(){
+    return this.http.get(`${API_URL}/monthly-status`);
+  }
 }
