@@ -25,7 +25,7 @@ export class AddDenreeComponent implements OnInit {
   mesures: any = [];
   denreeForm: FormGroup;
   isSubmited: boolean = false;
-  conversionUnit: any = [];
+  conversionUnit: any = ["KG", "LITRE", "UNITE"];
   options: string[] = [];
   denreeId: string | null = null;
   message: string = 'Nouvelle denrée';

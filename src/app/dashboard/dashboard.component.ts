@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
     Sw.fire({
       title: 'Information',
       icon: 'info',
-      text: 'Vous etes sur le point de créer le premier magasin du système. les denrées seront automatiquement enregistrés avec une quantité initiale de 0.',
+      text: 'Pour le point de depart les quantités des denrées auront comme valeurs initiales 0.',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
