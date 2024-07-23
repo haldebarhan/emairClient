@@ -28,7 +28,7 @@ import { MagasinService } from '../../services/magasin.service';
     LimitToTenPipe,
     LimitToEightPipe,
     SurprimesComponent,
-    DiversComponent
+    DiversComponent,
   ],
   templateUrl: './data-view.component.html',
   styleUrl: './data-view.component.css',
@@ -36,11 +36,12 @@ import { MagasinService } from '../../services/magasin.service';
 export class DataViewComponent implements OnInit {
   @Input() monthData!: Magasin;
   @Input() magasinId!: string;
-  @Output() completed = new EventEmitter<any>()
+  @Output() completed = new EventEmitter<any>();
   stock!: Stock[];
   reportSheet: any = [];
   consoReport: Rapport[] = [];
   supplies: any = [];
+  totalDay: number = 0;
   constructor(
     private router: Router,
     private dataService: DataService,
@@ -56,17 +57,18 @@ export class DataViewComponent implements OnInit {
   loadData() {
     this.stock = this.monthData.stock;
     const { year, month } = this.getCurrentMonthAndYear(this.monthData.date);
+    this.totalDay = this.getDayInMonth(month, year);
     this.consoService.findMonthlyConsumption(year, month).subscribe({
       next: (value) => {
         this.consoReport = value;
-        // console.log(this.allTrue(this.consoReport));
-        // console.log(this.getDayInMonth(month, year))
         this.approService.filterSupplies(month, year).subscribe({
           next: (value) => {
             this.supplies = value;
-            // console.log(this.consoReport.length)
-            if(this.allTrue(this.consoReport) && this.consoReport.length == this.getDayInMonth(year,month)){
-              this.completedMonth()
+            if (
+              this.allTrue(this.consoReport) &&
+              this.consoReport.length == this.totalDay
+            ) {
+              this.completedMonth();
             }
           },
           error: (err) => console.log(err),
@@ -82,7 +84,7 @@ export class DataViewComponent implements OnInit {
     return sum;
   }
 
-  getFirsdayMagValue(){
+  getFirsdayMagValue() {
     var sum = 0;
     this.stock.map((item) => (sum += item.prix * item.quantite));
     return sum;
@@ -264,16 +266,15 @@ export class DataViewComponent implements OnInit {
   }
 
   getDayInMonth(month: number, year: number): number {
-    return new Date(year, month + 1, 0).getDate();
+    return new Date(year, month, 0).getDate();
   }
 
-  completedMonth(){
+  completedMonth() {
     Sw.fire({
       title: 'Mois terminé',
       text: 'tout les rapports de consommation ont été transmit le mois est donc terminé',
       icon: 'info',
-      didClose:() => this.completed.emit(this.magasinId)
-    })
+      didClose: () => this.completed.emit(),
+    });
   }
-
 }

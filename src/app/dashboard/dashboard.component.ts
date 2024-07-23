@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private magService: MagasinService,
     private fb: FormBuilder,
-    private router:Router
+    private router: Router
   ) {
     this.magForm = this.fb.group({
       date: new FormControl('', [Validators.required]),
@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onCompleted(magasinId: any) {
-    this.magService.nextMonth(magasinId, '').subscribe({
+    this.magService.nextMonth().subscribe({
       next: () => window.location.reload(),
       error: (err: HttpErrorResponse) => console.log(err),
     });
