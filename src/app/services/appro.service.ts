@@ -16,4 +16,8 @@ export class ApproService {
   filterSupplies(month: number, year: number) {
     return this.http.get(`${API_URL}/appro/data/${year}/${month}`);
   }
+
+  filterByMagId(magasinId: string){
+    return this.http.get(`${API_URL}/appro/${magasinId}`);
+  }
 }

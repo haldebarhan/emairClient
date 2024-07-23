@@ -61,7 +61,7 @@ export class DataViewComponent implements OnInit {
     this.consoService.findMonthlyConsumption(year, month).subscribe({
       next: (value) => {
         this.consoReport = value;
-        this.approService.filterSupplies(month, year).subscribe({
+        this.approService.filterByMagId(this.monthData.id).subscribe({
           next: (value) => {
             this.supplies = value;
             if (
