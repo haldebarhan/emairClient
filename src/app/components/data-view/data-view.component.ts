@@ -17,12 +17,16 @@ import { LimitToEightPipe } from '../../pipes/limit-to-eight.pipe';
 import { SurprimesComponent } from '../surprimes/surprimes.component';
 import { DiversComponent } from '../divers/divers.component';
 import { MagasinService } from '../../services/magasin.service';
+import { UniteService } from '../unite/unite.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-data-view',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     LimitToFivePipe,
     NumberWithSpacesPipe,
     LimitToTenPipe,
@@ -42,13 +46,23 @@ export class DataViewComponent implements OnInit {
   consoReport: Rapport[] = [];
   supplies: any = [];
   totalDay: number = 0;
+  unites: any;
+  units: any = [];
+  totalMatin!: Array<number>;
+  totalMidi!: Array<number>;
+  totalSoir!: Array<number>;
+  totalRow!: Array<number>;
+  totalMatinSum = 0;
+  totalMidiSum = 0;
+  totalSoirSum = 0;
   constructor(
     private router: Router,
     private dataService: DataService,
     private consoService: ConsoService,
     private pdfService: PdfGeneratorService,
     private approService: ApproService,
-    private magasinService: MagasinService
+    private magasinService: MagasinService,
+    private uniteService: UniteService
   ) {}
   ngOnInit(): void {
     this.loadData();
@@ -64,6 +78,7 @@ export class DataViewComponent implements OnInit {
         this.approService.filterByMagId(this.monthData.id).subscribe({
           next: (value) => {
             this.supplies = value;
+            this.loadUnites();
             if (
               this.allTrue(this.consoReport) &&
               this.consoReport.length == this.totalDay
@@ -78,6 +93,30 @@ export class DataViewComponent implements OnInit {
     });
   }
 
+  loadUnites() {
+    this.uniteService.getUnites().subscribe({
+      next: (value) => {
+        this.unites = value;
+        this.unites.forEach((unite: any) => {
+          const u = {
+            nom: unite.nom,
+            matin: Array(this.totalDay).fill(''),
+            midi: Array(this.totalDay).fill(''),
+            soir: Array(this.totalDay).fill(''),
+            totalMatin: 0,
+            totalMidi: 0,
+            totalSoir: 0,
+          };
+          this.units.push(u);
+          this.totalMatin = Array(this.totalDay).fill(0);
+          this.totalMidi = Array(this.totalDay).fill(0);
+          this.totalSoir = Array(this.totalDay).fill(0);
+          this.totalRow = Array(this.totalDay).fill(0);
+        });
+      },
+      error: (err: HttpErrorResponse) => console.log(err),
+    });
+  }
   getMagValue() {
     var sum = 0;
     this.stock.map((item) => (sum += item.prix * item.balance));
@@ -97,9 +136,7 @@ export class DataViewComponent implements OnInit {
   }
 
   getTotalItem() {
-    var quantity = 0;
-    this.stock.map((item) => (quantity += item.balance));
-    return quantity;
+    return this.stock.length;
   }
 
   goToDetail() {
@@ -267,6 +304,58 @@ export class DataViewComponent implements OnInit {
 
   getDayInMonth(month: number, year: number): number {
     return new Date(year, month, 0).getDate();
+  }
+
+  updateTotals(rowIndex: number, unitIndex: number): void {
+    this.totalMatin[rowIndex] = this.units.reduce((sum: number, unite: any) => {
+      const value = parseFloat(unite.matin[rowIndex]);
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+
+    this.totalMidi[rowIndex] = this.units.reduce((sum: number, unite: any) => {
+      const value = parseFloat(unite.midi[rowIndex]);
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+
+    this.totalSoir[rowIndex] = this.units.reduce((sum: number, unite: any) => {
+      const value = parseFloat(unite.soir[rowIndex]);
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+
+    // Calculer un total général pour la ligne
+    this.totalRow[rowIndex] =
+      this.totalMatin[rowIndex] * 400 +
+      this.totalMidi[rowIndex] * 1000 +
+      this.totalSoir[rowIndex] * 800;
+
+    const unite = this.units[unitIndex];
+    unite.totalMatin = unite.matin.reduce((sum: number, value: string) => {
+      const val = parseFloat(value);
+      return sum + (isNaN(val) ? 0 : val);
+    }, 0);
+
+    unite.totalMatin = unite.matin.reduce((sum: number, value: string) => {
+      const val = parseFloat(value);
+      return sum + (isNaN(val) ? 0 : val);
+    }, 0);
+
+    unite.totalMatin = unite.matin.reduce((sum: number, value: string) => {
+      const val = parseFloat(value);
+      return sum + (isNaN(val) ? 0 : val);
+    }, 0);
+
+    this.totalMatin = this.units.reduce(
+      (sum: number, unite: any) => sum + unite.totalMatin,
+      0
+    );
+    this.totalMidi = this.units.reduce(
+      (sum: number, unite: any) => sum + unite.totalMidi,
+      0
+    );
+    this.totalSoir = this.units.reduce(
+      (sum: number, unite: any) => sum + unite.totalSoir,
+      0
+    );
   }
 
   completedMonth() {

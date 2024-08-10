@@ -11,7 +11,7 @@
                   class="d-flex flex-wrap justify-content-start align-items-center"
                 >
                   <h5 class="mb-0 font-weight-bold text-success">
-                    {{ getMagValue() | numberWithSpaces }} F <br>
+                    {{ getMagValue() | numberWithSpaces }} F <br />
                   </h5>
                 </div>
               </div>
@@ -120,48 +120,6 @@
                     </svg>
                     Approvisionner
                   </a>
-                  <a class="dropdown-item" href="#">
-                    <svg
-                      class="svg-icon text-secondary"
-                      width="20"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      ></path>
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      ></path>
-                    </svg>
-                    View
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg
-                      class="svg-icon text-secondary"
-                      width="20"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      ></path>
-                    </svg>
-                    Delete
-                  </a>
                 </div>
               </div>
             </div>
@@ -267,7 +225,6 @@
       <div class="card-header d-flex justify-content-between">
         <div class="header-title">
           <h4 class="card-title">SITUATION ADMINISTRATIVE</h4>
-          <p> {{consoReport.length}}/{{totalDay}}</p>
         </div>
         <div class="card-header-toolbar d-flex align-items-center">
           <div class="dropdown">
@@ -335,176 +292,83 @@
         </div>
       </div>
       <div class="card-body">
-        <table class="table table-sm">
-          <thead>
+        <div class="table-responsive">
+          <table class="table table-bordered">
             <tr>
-              <th scope="col" class="text-center">Date</th>
-              <th scope="col" class="text-center">P. Dejeuner</th>
-              <th scope="col" class="text-center">Dejeuner</th>
-              <th scope="col" class="text-center">Diner</th>
-              <th scope="col" class="text-center">Status</th>
-              <th scope="col" class="text-center">Actions</th>
+              <th class="text-center">DATES</th>
+              <th colspan="3" class="text-center" *ngFor="let unite of units">
+                {{ unite.nom }}
+              </th>
+              <th colspan="3" class="text-center">TOTAL</th>
+              <th></th>
             </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let report of consoReport">
-              <th scope="row">{{ formatedDate(report) }}</th>
-              <td>{{ getTotalMatin(report) }}</td>
-              <td>{{ getTotalMidi(report) }}</td>
-              <td>{{ getTotalSoir(report) }}</td>
-              <td>
-                <p
-                  class="mb-0 d-flex justify-content-start align-items-center"
-                  [ngClass]="report.transmit ? 'text-success' : 'text-danger'"
-                >
-                  <small
-                    ><svg
-                      class="mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      *ngIf="report.transmit"
-                    >
-                      <circle cx="12" cy="12" r="8" fill="#3cb72c"></circle>
-                    </svg>
-                    <svg
-                      class="mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      *ngIf="!report.transmit"
-                    >
-                      <circle cx="12" cy="12" r="8" fill="#F42B3D"></circle>
-                    </svg>
-                  </small>
-                  {{ report.transmit ? "Envoyé" : "Non Envoyé" }}
-                </p>
+            <tr class="table-active">
+              <td>JOURS</td>
+              <ng-container *ngFor="let unite of units">
+                <td class="text-center">M</td>
+                <td class="text-center">M</td>
+                <td class="text-center">S</td>
+              </ng-container>
+              <td class="text-center">M</td>
+              <td class="text-center">M</td>
+              <td class="text-center">S</td>
+              <td class="text-center">TOTAUX</td>
+            </tr>
+            <tr *ngFor="let _ of [].constructor(totalDay); let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <ng-container *ngFor="let unite of units; let j = index">
+                <td>
+                  <input
+                    type="number"
+                    class="form-control custom"
+                    [(ngModel)]="unite.matin[i]"
+                    (ngModelChange)="updateTotals(i, j)"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control custom"
+                    [(ngModel)]="unite.midi[i]"
+                    (ngModelChange)="updateTotals(i, j)"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control custom"
+                    [(ngModel)]="unite.soir[i]"
+                    (ngModelChange)="updateTotals(i, j)"
+                  />
+                </td>
+              </ng-container>
+              <td class="text-center">
+                {{ totalMatin[i] != 0 ? totalMatin[i] : "-" }}
               </td>
-              <td class="d-flex justify-content-start">
-                <button
-                  class="btn btn-outline-link"
-                  (click)="goToReportDetail(report._id!)"
-                >
-                  <i class="">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      width="22"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
-                  </i>
-                </button>
-                <div *ngIf="!report.transmit">
-                  <button
-                    class="btn btn-outline-link"
-                    (click)="consoEdit(report._id!)"
-                  >
-                    <i class="">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        width="22"
-                        style="color: rgb(5, 209, 66)"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                        />
-                      </svg>
-                    </i>
-                  </button>
-                  <button
-                    class="btn btn-outline-link"
-                    (click)="DeleteConso(report._id!)"
-                  >
-                    <i class="">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        width="22"
-                        style="color: red"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                        />
-                      </svg>
-                    </i>
-                  </button>
-                  <button
-                    class="btn btn-outline-link"
-                    (click)="EmitReport(report._id!)"
-                  >
-                    <i class="">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="#5d78c8"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        width="22"
-                        style="color: rgb(36, 21, 245)"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
-                        />
-                      </svg>
-                    </i>
-                  </button>
-                </div>
-                <div *ngIf="report.transmit">
-                  <button
-                    class="btn btn-outline-link"
-                    (click)="PrintReport(report._id!)"
-                  >
-                    <i class="">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        width="22"
-                        style="color: rgb(5, 209, 66)"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z"
-                        />
-                      </svg>
-                    </i>
-                  </button>
-                </div>
+              <td class="text-center">
+                {{ totalMidi[i] != 0 ? totalMidi[i] : "-" }}
+              </td>
+              <td class="text-center">
+                {{ totalSoir[i] != 0 ? totalSoir[i] : "-" }}
+              </td>
+              <td class="text-center">
+                {{ totalRow[i] | numberWithSpaces }}
               </td>
             </tr>
-          </tbody>
-        </table>
+            <tr>
+              <td>TOTAL</td>
+              <ng-container *ngFor="let unite of units; let i = index">
+                <td class="text-center">-</td>
+                <td class="text-center">-</td>
+                <td class="text-center">-</td>
+              </ng-container>
+              <td class="text-center">-</td>
+              <td class="text-center">-</td>
+              <td class="text-center">-</td>
+              <td class="font-weight-bold text-center">-</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>

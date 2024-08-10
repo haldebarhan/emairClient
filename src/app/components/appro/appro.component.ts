@@ -75,16 +75,16 @@ export class ApproComponent implements OnInit {
   }
 
   filter(query: string): any[] {
-    return this.data.stock.filter((item) =>
-      item.produit.toLowerCase().includes(query.toLowerCase())
+    return this.denrees.filter((item: any) =>
+      item.product.toLowerCase().includes(query.toLowerCase())
     );
   }
 
   selectOption(option: any) {
-    const um = this.getSelectedOptionData(option);
-    this.approForm.get('um')?.setValue(um);
-    this.approForm.get('pu')?.setValue(option.prix);
-    this.queryField.setValue(option.produit);
+    // const um = this.getSelectedOptionData(option);
+    this.approForm.get('um')?.setValue(option.mesure);
+    this.approForm.get('pu')?.setValue(option.pu);
+    this.queryField.setValue(option.product);
     this.filteredOptions = [];
   }
 
