@@ -49,6 +49,7 @@ export class ApproComponent implements OnInit {
   ) {
     this.approForm = this.fb.group({
       denree: this.queryField,
+      date: new FormControl('', [Validators.required]),
       quantite: new FormControl('', [Validators.required]),
       um: new FormControl({ disabled: true, value: '' }, [Validators.required]),
       pu: new FormControl({ disabled: true, value: '' }, [Validators.required]),
@@ -154,7 +155,8 @@ export class ApproComponent implements OnInit {
 
   Approvisionner() {
     this.isSubmited = true;
-    const date = new Date();
+    const form_date = this.approForm.get('date')?.value
+    const date = new Date(form_date);
     const items = this.shoppingCard.map((item) => {
       const find = this.findShoppingCardItemsInfo(item);
       return {

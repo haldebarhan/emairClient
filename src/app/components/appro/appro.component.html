@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-sm-12 col-lg-12">
         <div class="card">
-            <table id="impr"></table>
-          </div>
+          <table id="impr"></table>
+        </div>
         <div class="card" id="testId">
           <div class="card-header d-flex justify-content-between">
             <div class="header-title">
@@ -13,6 +13,16 @@
           </div>
           <div class="card-body">
             <form [formGroup]="approForm" (ngSubmit)="submit()">
+              <div class="row">
+                <div class="form-group col-lg-5">
+                  <label for="">Date:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="date"
+                  />
+                </div>
+              </div>
               <div class="row">
                 <div class="form-group col-lg-3">
                   <label for="">Denree:</label>
@@ -92,10 +102,18 @@
               <h4 class="card-title">Panier</h4>
             </div>
             <div>
-              <button class="btn btn-outline-info" (click)="Approvisionner()" *ngIf="!isSubmited">
+              <button
+                class="btn btn-outline-info"
+                (click)="Approvisionner()"
+                *ngIf="!isSubmited"
+              >
                 Approvisionnement
               </button>
-              <button class="btn btn-outline-info" type="button"  *ngIf="isSubmited">
+              <button
+                class="btn btn-outline-info"
+                type="button"
+                *ngIf="isSubmited"
+              >
                 <span
                   class="spinner-border spinner-border-sm"
                   role="status"

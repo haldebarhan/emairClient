@@ -20,6 +20,7 @@ import { MagasinService } from '../../services/magasin.service';
 import { UniteService } from '../unite/unite.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { MonthlyTableService } from '../../services/monthly-table.service';
 
 @Component({
   selector: 'app-data-view',
@@ -55,6 +56,11 @@ export class DataViewComponent implements OnInit {
   totalMatinSum = 0;
   totalMidiSum = 0;
   totalSoirSum = 0;
+  globalCost = 0;
+  isEdit: boolean = false;
+  tableId!: string;
+  errorMessage!: string;
+
   constructor(
     private router: Router,
     private dataService: DataService,
@@ -62,10 +68,12 @@ export class DataViewComponent implements OnInit {
     private pdfService: PdfGeneratorService,
     private approService: ApproService,
     private magasinService: MagasinService,
-    private uniteService: UniteService
+    private uniteService: UniteService,
+    private monthlyTableService: MonthlyTableService
   ) {}
   ngOnInit(): void {
     this.loadData();
+    this.loadTableData(this.magasinId);
   }
 
   loadData() {
@@ -78,7 +86,6 @@ export class DataViewComponent implements OnInit {
         this.approService.filterByMagId(this.monthData.id).subscribe({
           next: (value) => {
             this.supplies = value;
-            this.loadUnites();
             if (
               this.allTrue(this.consoReport) &&
               this.consoReport.length == this.totalDay
@@ -93,30 +100,6 @@ export class DataViewComponent implements OnInit {
     });
   }
 
-  loadUnites() {
-    this.uniteService.getUnites().subscribe({
-      next: (value) => {
-        this.unites = value;
-        this.unites.forEach((unite: any) => {
-          const u = {
-            nom: unite.nom,
-            matin: Array(this.totalDay).fill(''),
-            midi: Array(this.totalDay).fill(''),
-            soir: Array(this.totalDay).fill(''),
-            totalMatin: 0,
-            totalMidi: 0,
-            totalSoir: 0,
-          };
-          this.units.push(u);
-          this.totalMatin = Array(this.totalDay).fill(0);
-          this.totalMidi = Array(this.totalDay).fill(0);
-          this.totalSoir = Array(this.totalDay).fill(0);
-          this.totalRow = Array(this.totalDay).fill(0);
-        });
-      },
-      error: (err: HttpErrorResponse) => console.log(err),
-    });
-  }
   getMagValue() {
     var sum = 0;
     this.stock.map((item) => (sum += item.prix * item.balance));
@@ -329,33 +312,77 @@ export class DataViewComponent implements OnInit {
       this.totalSoir[rowIndex] * 800;
 
     const unite = this.units[unitIndex];
-    unite.totalMatin = unite.matin.reduce((sum: number, value: string) => {
-      const val = parseFloat(value);
-      return sum + (isNaN(val) ? 0 : val);
-    }, 0);
-
-    unite.totalMatin = unite.matin.reduce((sum: number, value: string) => {
-      const val = parseFloat(value);
-      return sum + (isNaN(val) ? 0 : val);
-    }, 0);
-
-    unite.totalMatin = unite.matin.reduce((sum: number, value: string) => {
-      const val = parseFloat(value);
-      return sum + (isNaN(val) ? 0 : val);
-    }, 0);
-
-    this.totalMatin = this.units.reduce(
-      (sum: number, unite: any) => sum + unite.totalMatin,
-      0
+    unite.totalMatin = unite.matin.reduce(
+      (sum: number, value: number) => sum + +value
     );
-    this.totalMidi = this.units.reduce(
-      (sum: number, unite: any) => sum + unite.totalMidi,
-      0
+    unite.totalMidi = unite.midi.reduce(
+      (sum: number, value: number) => sum + +value
     );
-    this.totalSoir = this.units.reduce(
-      (sum: number, unite: any) => sum + unite.totalSoir,
-      0
+    unite.totalSoir = unite.soir.reduce(
+      (sum: number, value: number) => sum + +value
     );
+    this.totalMatinSum = this.totalMatin.reduce(
+      (acc: number, value: number) => acc + +value
+    );
+    this.totalMidiSum = this.totalMidi.reduce(
+      (acc: number, value: number) => acc + +value
+    );
+    this.totalSoirSum = this.totalSoir.reduce(
+      (acc: number, value: number) => acc + +value
+    );
+
+    this.globalCost = this.totalRow.reduce(
+      (sum: number, value: number) => sum + +value
+    );
+  }
+
+  editTable() {
+    this.isEdit = true;
+  }
+
+  SaveTableData() {
+    this.isEdit = false;
+    const payload = {
+      magasin: this.magasinId,
+      unites: this.units,
+      totalMatin: this.totalMatin,
+      totalMidi: this.totalMidi,
+      totalSoir: this.totalSoir,
+      totalRow: this.totalRow,
+    };
+
+    this.monthlyTableService
+      .updateMonthlyTable(this.tableId, payload)
+      .subscribe({
+        next: () => {
+          Toast.fire({
+            title: 'Sauvegardée',
+            icon: 'success',
+            didClose: () => this.loadTableData(this.magasinId),
+          });
+        },
+        error: (
+          errors: {
+            statusCode: number;
+            message: string;
+            error: string;
+          }[]
+        ) => {
+          let affectedLines: string[] = [];
+          errors.forEach((err) => {
+            affectedLines.push(err.message);
+          });
+          this.errorMessage = `les données de ligne ${affectedLines.join(
+            ', '
+          )} ne seront pas enregistrées car le menu comporte des denrees dont la quantité est insuffisante pour satifaire la conso ou non presentes en stock`;
+          Sw.fire({
+            title: 'Erreur Survenue',
+            text: this.errorMessage,
+            icon: 'error',
+            didClose: () => this.loadTableData(this.magasinId),
+          });
+        },
+      });
   }
 
   completedMonth() {
@@ -364,6 +391,32 @@ export class DataViewComponent implements OnInit {
       text: 'tout les rapports de consommation ont été transmit le mois est donc terminé',
       icon: 'info',
       didClose: () => this.completed.emit(),
+    });
+  }
+
+  loadTableData(magasinId: string) {
+    this.monthlyTableService.getMonthlyTable(magasinId).subscribe({
+      next: (data: any) => {
+        this.units = data.unites;
+        this.totalMatin = data.totalMatin;
+        this.totalMidi = data.totalMidi;
+        this.totalSoir = data.totalSoir;
+        this.totalRow = data.totalRow;
+        this.tableId = data._id;
+        this.globalCost = this.totalRow.reduce(
+          (sum: number, value: number) => sum + value
+        );
+        this.totalMatinSum = this.totalMatin.reduce(
+          (sum: number, value: number) => sum + +value
+        );
+        this.totalMidiSum = this.totalMidi.reduce(
+          (sum: number, value: number) => sum + +value
+        );
+        this.totalSoirSum = this.totalSoir.reduce(
+          (sum: number, value: number) => sum + +value
+        );
+      },
+      error: (err: HttpErrorResponse) => console.error(err),
     });
   }
 }

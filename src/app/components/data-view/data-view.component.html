@@ -226,68 +226,15 @@
         <div class="header-title">
           <h4 class="card-title">SITUATION ADMINISTRATIVE</h4>
         </div>
-        <div class="card-header-toolbar d-flex align-items-center">
-          <div class="dropdown">
-            <a
-              href="#"
-              class="text-muted pl-3"
-              id="dropdownMenuButton-customer"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
-                focusable="false"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  fill="none"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <circle cx="12" cy="12" r="1"></circle>
-                  <circle cx="19" cy="12" r="1"></circle>
-                  <circle cx="5" cy="12" r="1"></circle>
-                </g>
-              </svg>
-            </a>
-            <div
-              class="dropdown-menu"
-              aria-labelledby="dropdownMenuButton-customer"
-            >
-              <a class="dropdown-item" (click)="goToConsoReport()">
-                <svg
-                  class="svg-icon text-secondary"
-                  width="20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  ></path>
-                </svg>
-                Ajouter
-              </a>
-            </div>
+        <div>
+          <button class="btn btn-info" *ngIf="!isEdit" (click)="editTable()">
+            Modifier
+          </button>
+          <div *ngIf="isEdit">
+            <button class="btn btn-info ml-2" (click)="SaveTableData()">
+              Sauvegarder
+            </button>
+            <button class="btn btn-outline-link ml-2">Annuler</button>
           </div>
         </div>
       </div>
@@ -299,11 +246,10 @@
               <th colspan="3" class="text-center" *ngFor="let unite of units">
                 {{ unite.nom }}
               </th>
-              <th colspan="3" class="text-center">TOTAL</th>
-              <th></th>
+              <th colspan="5" class="text-center">TOTAL</th>
             </tr>
             <tr class="table-active">
-              <td>JOURS</td>
+              <td>JOUR</td>
               <ng-container *ngFor="let unite of units">
                 <td class="text-center">M</td>
                 <td class="text-center">M</td>
@@ -323,6 +269,7 @@
                     class="form-control custom"
                     [(ngModel)]="unite.matin[i]"
                     (ngModelChange)="updateTotals(i, j)"
+                    [disabled]="!isEdit"
                   />
                 </td>
                 <td>
@@ -331,6 +278,7 @@
                     class="form-control custom"
                     [(ngModel)]="unite.midi[i]"
                     (ngModelChange)="updateTotals(i, j)"
+                    [disabled]="!isEdit"
                   />
                 </td>
                 <td>
@@ -339,6 +287,7 @@
                     class="form-control custom"
                     [(ngModel)]="unite.soir[i]"
                     (ngModelChange)="updateTotals(i, j)"
+                    [disabled]="!isEdit"
                   />
                 </td>
               </ng-container>
@@ -358,14 +307,30 @@
             <tr>
               <td>TOTAL</td>
               <ng-container *ngFor="let unite of units; let i = index">
-                <td class="text-center">-</td>
-                <td class="text-center">-</td>
-                <td class="text-center">-</td>
+                <td class="text-center">
+                  {{ unite.totalMatin != 0 ? unite.totalMatin : "-" }}
+                </td>
+                <td class="text-center">
+                  {{ unite.totalMidi != 0 ? unite.totalMidi : "-" }}
+                </td>
+                <td class="text-center">
+                  {{ unite.totalSoir != 0 ? unite.totalSoir : "-" }}
+                </td>
               </ng-container>
-              <td class="text-center">-</td>
-              <td class="text-center">-</td>
-              <td class="text-center">-</td>
-              <td class="font-weight-bold text-center">-</td>
+              <td class="text-center">
+                {{ totalMatinSum != 0 ? totalMatinSum : "-" }}
+              </td>
+              <td class="text-center">
+                {{ totalMidiSum != 0 ? totalMidiSum : "-" }}
+              </td>
+              <td class="text-center">
+                {{ totalSoirSum != 0 ? totalSoirSum : "-" }}
+              </td>
+              <td class="font-weight-bold text-center">
+                <div style="width: 120px;">
+                  {{ globalCost | numberWithSpaces }}
+                </div>
+              </td>
             </tr>
           </table>
         </div>
