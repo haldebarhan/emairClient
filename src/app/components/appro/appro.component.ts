@@ -155,7 +155,7 @@ export class ApproComponent implements OnInit {
 
   Approvisionner() {
     this.isSubmited = true;
-    const form_date = this.approForm.get('date')?.value
+    const form_date = this.approForm.get('date')?.value;
     const date = new Date(form_date);
     const items = this.shoppingCard.map((item) => {
       const find = this.findShoppingCardItemsInfo(item);
@@ -183,7 +183,10 @@ export class ApproComponent implements OnInit {
             },
           });
         },
-        error: (err) => console.log(err),
+        error: (err) => {
+          console.log(err);
+          this.isSubmited = false
+        },
       });
     }
   }

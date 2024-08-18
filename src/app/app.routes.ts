@@ -22,6 +22,7 @@ import { DiversFormComponent } from './components/divers-form/divers-form.compon
 import { DiversListComponent } from './components/divers-list/divers-list.component';
 import { MonthlyTableComponent } from './components/monthly-table/monthly-table.component';
 import { MonthlyListComponent } from './components/monthly-list/monthly-list.component';
+import { BookletComponent } from './booklet/booklet.component';
 
 export const routes: Routes = [
   {
@@ -117,19 +118,26 @@ export const routes: Routes = [
   { path: 'divers-edit/:id', component: DiversFormComponent },
   {
     path: 'divers-list',
-    component: DiversListComponent
+    component: DiversListComponent,
   },
   {
-    path: 'monthly', component: MonthlyTableComponent
+    path: 'monthly',
+    component: MonthlyTableComponent,
   },
   {
-    path: 'monthly-list', component: MonthlyListComponent
+    path: 'monthly-list',
+    component: MonthlyListComponent,
   },
   {
-    path: '404', component: FourOhFourComponent
+    path: 'booklet-magasin/:id',
+    component: BookletComponent,
+  },
+  {
+    path: '404',
+    component: FourOhFourComponent,
   },
   {
     path: '**',
-    redirectTo: '/404'
+    redirectTo: '/404',
   },
 ];

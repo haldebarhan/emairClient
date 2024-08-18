@@ -26,10 +26,11 @@ export class DiversListComponent implements OnInit {
   loadData() {
     this.magService.findAll().subscribe({
       next: (values) => {
-        const { year, month } = this.getCurrentMonthAndYear(values?.date!);
-        this.diverService.filter(year, month).subscribe({
-          next: (value) => (this.divers = value),
-        });
+        if(values){
+          this.diverService.filter(values.id).subscribe({
+            next: (value) => (this.divers = value),
+          });
+        }
       },
     });
   }

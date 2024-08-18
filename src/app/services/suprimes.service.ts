@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../../helpers/api.url';
+import { Observable } from 'rxjs';
+import { Surprime } from '../models/surprime';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +26,7 @@ export class SuprimesService {
     return this.http.get(`${API_URL}/surprime/${id}`);
   }
 
-  filter(year: number, month: number) {
-    return this.http.get(`${API_URL}/surprime/${year}/${month}`);
+  filter(year: number, month: number): Observable<Surprime[]> {
+    return this.http.get<Surprime[]>(`${API_URL}/surprime/${year}/${month}`);
   }
 }

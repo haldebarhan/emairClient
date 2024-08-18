@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 export class AppComponent implements OnInit {
   specialPage: boolean = false;
   constructor(private router: Router) {}
-  title = 'angTest';
+  title = 'Ordi.';
   ngOnInit(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

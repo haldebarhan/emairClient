@@ -4,6 +4,7 @@ import { SuprimesService } from '../../services/suprimes.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LimitToFivePipe } from '../../pipes/limit-to-five.pipe';
+import { Surprime } from '../../models/surprime';
 
 @Component({
   selector: 'app-surprimes',
@@ -14,7 +15,7 @@ import { LimitToFivePipe } from '../../pipes/limit-to-five.pipe';
 })
 export class SurprimesComponent implements OnInit {
   @Input() magasinDate!: string;
-  surprimes: any = [];
+  surprimes: Surprime[] = [];
   constructor(
     private surprimeService: SuprimesService,
     private router: Router

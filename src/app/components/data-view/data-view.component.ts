@@ -21,6 +21,7 @@ import { UniteService } from '../unite/unite.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MonthlyTableService } from '../../services/monthly-table.service';
+import { getCurrentMonthAndYear } from '../../../helpers/currentMonthAndYear';
 
 @Component({
   selector: 'app-data-view',
@@ -78,7 +79,7 @@ export class DataViewComponent implements OnInit {
 
   loadData() {
     this.stock = this.monthData.stock;
-    const { year, month } = this.getCurrentMonthAndYear(this.monthData.date);
+    const { year, month } = getCurrentMonthAndYear(this.monthData.date);
     this.totalDay = this.getDayInMonth(month, year);
     this.consoService.findMonthlyConsumption(year, month).subscribe({
       next: (value) => {
@@ -133,6 +134,10 @@ export class DataViewComponent implements OnInit {
     this.router.navigate(['/appro', this.monthData.id]);
   }
 
+  gotToBook(){
+    this.router.navigate(['/booklet-magasin', this.magasinId])
+  }
+
   goToReportDetail(id: string) {
     this.consoService.getConsoById(id).subscribe({
       next: (value) => {
@@ -156,12 +161,6 @@ export class DataViewComponent implements OnInit {
     this.router.navigate(['/report-conso']);
   }
 
-  getCurrentMonthAndYear(dateStr: string) {
-    const date = new Date(dateStr);
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return { year, month };
-  }
 
   getTotalMatin(data: Rapport) {
     var compt = 0;

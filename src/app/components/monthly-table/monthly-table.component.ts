@@ -73,27 +73,28 @@ export class MonthlyTableComponent implements OnInit {
               this.consoReport = value;
               this.reports = this.getReport(value);
               this.totalUnit = this.TotalByUnit(this.reports);
-              this.diversService.filter(this.year, this.month).subscribe({
+              this.magasinService
+              .finOneByDate(this.montylyDate)
+              .subscribe({
                 next: (value) => {
-                  this.divers = value;
-                  this.surprimeSerice.filter(this.year, this.month).subscribe({
+                  this.stock = value.stock;
+                  this.diversService.filter(value.id.toString()).subscribe({
                     next: (value) => {
-                      this.surprimes = value;
-                      this.surprimesList = this.getSurprimesData();
-                      this.magasinService
-                        .finOneByDate(this.montylyDate)
-                        .subscribe({
-                          next: (value) => {
-                            this.stock = value.stock;
-                          },
-                          error: (err) => console.log(err),
-                        });
+                      this.divers = value;
+                      this.surprimeSerice.filter(this.year, this.month).subscribe({
+                        next: (value) => {
+                          this.surprimes = value;
+                          this.surprimesList = this.getSurprimesData();
+                        },
+                        error: (err: HttpErrorResponse) => console.log(err),
+                      });
                     },
-                    error: (err: HttpErrorResponse) => console.log(err),
+                    error: (err) => console.log(err),
                   });
                 },
                 error: (err) => console.log(err),
               });
+            
             },
             error: (err) => console.log(err),
           });

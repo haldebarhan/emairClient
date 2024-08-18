@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../../helpers/api.url';
+import { Observable } from 'rxjs';
+import { Divers } from '../models/divers';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +30,7 @@ export class DiversService {
     return this.http.delete(`${API_URL}/divers/${id}`);
   }
 
-  filter(year: number, month: number) {
-    return this.http.get(`${API_URL}/divers/filter/${year}/${month}`);
+  filter(magasinId: string): Observable<Divers[]> {
+    return this.http.get<Divers[]>(`${API_URL}/divers/filter/magasin/${magasinId}`);
   }
 }

@@ -3,29 +3,23 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DiversService } from '../../services/divers.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Divers } from '../../models/divers';
+import { NumberWithSpacesPipe } from '../../pipes/number-with-spaces.pipe';
 
 @Component({
   selector: 'app-divers',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NumberWithSpacesPipe],
   templateUrl: './divers.component.html',
   styleUrl: './divers.component.css',
 })
 export class DiversComponent implements OnInit {
-  @Input() magasinDate!: string;
-  divers: any = [];
+  @Input() magasinId!: string;
+  divers: Divers[] = [];
 
   constructor(private diversService: DiversService, private router: Router) {}
   ngOnInit(): void {
     this.loadData()
-  }
-
-
-  getCurrentMonthAndYear(dateStr: string) {
-    const date = new Date(dateStr);
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return { year, month };
   }
 
   newDivers() {
@@ -38,8 +32,7 @@ export class DiversComponent implements OnInit {
   }
 
   loadData(){
-    const { year, month } = this.getCurrentMonthAndYear(this.magasinDate);
-    this.diversService.filter(year, month).subscribe({
+    this.diversService.filter(this.magasinId).subscribe({
       next: (value) => (this.divers = value),
       error: (err: HttpErrorResponse) => console.log(err),
     });

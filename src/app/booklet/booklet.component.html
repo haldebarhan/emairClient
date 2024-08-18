@@ -1,0 +1,165 @@
+<div class="content-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-112 col-lg-12 mt-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+              <h4 class="card-title">Carnet de Sortie</h4>
+            </div>
+            <a routerLink="/" class="btn btn-success">+</a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <th scope="col"></th>
+                  <th scope="col" colspan="3" class="text-center bg-primary">
+                    EFFECTIF
+                  </th>
+                  <th
+                    scope="col"
+                    colspan="3"
+                    class="text-center bg-primary"
+                    *ngFor="let item of pagedData"
+                  >
+                    {{ item.produit }}
+                  </th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <ng-container>
+                      <td class="bg-primary">
+                        <div style="width: 45px">P. DEJ</div>
+                      </td>
+                      <td class="bg-primary">DEJ</td>
+                      <td class="bg-primary">DINER</td>
+                    </ng-container>
+                    <ng-container *ngFor="let item of pagedData">
+                      <td class="bg-primary">Appro</td>
+                      <td class="bg-primary">Conso</td>
+                      <td class="bg-primary">Bal.</td>
+                    </ng-container>
+                  </tr>
+                  <tr>
+                    <td style="background-color: yellow">
+                      <div style="width: 200px; font-weight: bold">
+                        EXISTANT AU 1er JOUR
+                      </div>
+                    </td>
+                    <ng-container>
+                      <td style="background-color: yellow" colspan="3"></td>
+                    </ng-container>
+                    <ng-container *ngFor="let item of pagedData">
+                      <td style="background-color: yellow"></td>
+                      <td style="background-color: yellow"></td>
+                      <td class="text-center" style="background-color: yellow">
+                        {{ item.existant }}
+                      </td>
+                    </ng-container>
+                  </tr>
+                  <tr
+                    *ngFor="let _ of [].constructor(total_Lines); let i = index"
+                  >
+                    <td class="bg-primary text-left">
+                      {{ fullDate(i + 1) | titlecase }}
+                    </td>
+                    <ng-container>
+                      <td class="text-center table-primary">
+                        {{ total_matin[i] != 0 ? total_matin[i] : "-" }}
+                      </td>
+                      <td class="text-center table-primary">
+                        {{ total_midi[i] != 0 ? total_midi[i] : "-" }}
+                      </td>
+                      <td class="text-center table-primary">
+                        {{ total_soir[i] != 0 ? total_soir[i] : "-" }}
+                      </td>
+                    </ng-container>
+                    <ng-container *ngFor="let item of pagedData">
+                      <td class="text-center">
+                        {{ item.appro[i] != 0 ? item.appro[i] : "-" }}
+                      </td>
+                      <td class="text-center">
+                        {{ item.conso[i] != 0 ? item.conso[i] : "-" }}
+                      </td>
+                      <td class="text-center">
+                        {{ item.balance[i] != 0 ? item.balance[i] : "-" }}
+                      </td>
+                    </ng-container>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <ng-container>
+                      <td class="text-center">
+                        <div style="width: 50px">
+                          {{ getSum(total_matin) | numberWithSpaces }}
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div style="width: 50px">
+                          {{ getSum(total_midi) | numberWithSpaces }}
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div style="width: 50px">
+                          {{ getSum(total_soir) | numberWithSpaces }}
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container *ngFor="let item of pagedData">
+                      <td
+                        class="text-center"
+                        style="background-color: orange; color: white"
+                      >
+                        {{ getSum(item.appro) != 0 ? getSum(item.appro) : "-" }}
+                      </td>
+                      <td
+                        class="text-center"
+                        style="background-color: green; color: white"
+                      >
+                        {{ getSum(item.conso) != 0 ? getSum(item.conso) : "-" }}
+                      </td>
+                      <td
+                        class="text-center"
+                        style="background-color: blue; color: white"
+                      >
+                        {{
+                          findLastBalance(item)
+                        }}
+                      </td>
+                    </ng-container>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer">
+            <nav>
+              <ul class="pagination justify-content-end">
+                <li class="page-item" [class.disabled]="currentPage === 0">
+                  <a class="page-link" (click)="previousPage()">Precedent</a>
+                </li>
+                <li
+                  class="page-item"
+                  *ngFor="let page of pages; let i = index"
+                  [class.active]="i === currentPage"
+                >
+                  <a class="page-link" (click)="setPage(i)">{{ i + 1 }}</a>
+                </li>
+                <li
+                  class="page-item"
+                  [class.disabled]="currentPage === pages.length - 1"
+                >
+                  <a class="page-link" (click)="nextPage()">Suivant</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

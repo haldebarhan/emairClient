@@ -120,6 +120,24 @@
                     </svg>
                     Approvisionner
                   </a>
+                  <a class="dropdown-item" (click)="gotToBook()">
+                    <svg
+                      class="svg-icon text-secondary"
+                      width="20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+                      />
+                    </svg>
+                    Carnet
+                  </a>
                 </div>
               </div>
             </div>
@@ -184,7 +202,7 @@
             </div>
             <div class="list-style-action d-flex justify-content-end ml-auto">
               <h6 class="font-weight-bold">
-                {{ getDecompte(value) | numberWithSpaces }} FCFA
+                {{ getDecompte(value) | numberWithSpaces }} F
               </h6>
             </div>
             <button
@@ -218,7 +236,7 @@
     <app-surprimes [magasinDate]="monthData.date"></app-surprimes>
   </div>
   <div class="col-lg-4 col-md-6">
-    <app-divers [magasinDate]="monthData.date"></app-divers>
+    <app-divers [magasinId]="magasinId"></app-divers>
   </div>
   <div class="col-lg-12 col-md-12">
     <div class="card">
@@ -327,7 +345,7 @@
                 {{ totalSoirSum != 0 ? totalSoirSum : "-" }}
               </td>
               <td class="font-weight-bold text-center">
-                <div style="width: 120px;">
+                <div style="width: 120px">
                   {{ globalCost | numberWithSpaces }}
                 </div>
               </td>
