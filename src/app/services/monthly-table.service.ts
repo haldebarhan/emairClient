@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../../helpers/api.url';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { MonthlTable } from '../models/monthly-table';
 
 @Injectable({
   providedIn: 'root',
@@ -9,8 +10,10 @@ import { catchError, throwError } from 'rxjs';
 export class MonthlyTableService {
   constructor(private http: HttpClient) {}
 
-  getMonthlyTable(magasinId: string) {
-    return this.http.get(`${API_URL}/monthly-table/magasin/${magasinId}`);
+  getMonthlyTable(magasinId: string): Observable<MonthlTable> {
+    return this.http.get<MonthlTable>(
+      `${API_URL}/monthly-table/magasin/${magasinId}`
+    );
   }
 
   updateMonthlyTable(tableId: string, data: any) {

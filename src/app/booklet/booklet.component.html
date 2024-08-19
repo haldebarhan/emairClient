@@ -7,7 +7,23 @@
             <div class="header-title">
               <h4 class="card-title">Carnet de Sortie</h4>
             </div>
-            <a routerLink="/" class="btn btn-success">+</a>
+            <a routerLink="/" class="btn btn-link btn-with-icon">
+              <i data-toggle="collapse" data-target="#list-group-2">
+                <svg
+                  width="30"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                  />
+                </svg>
+              </i>
+            </a>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -126,9 +142,7 @@
                         class="text-center"
                         style="background-color: blue; color: white"
                       >
-                        {{
-                          findLastBalance(item)
-                        }}
+                        {{ findLastBalance(item) }}
                       </td>
                     </ng-container>
                   </tr>

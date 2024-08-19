@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Rapport } from '../models/rapport';
 import { API_URL } from '../../helpers/api.url';
+import { Observable } from 'rxjs';
+import { Report } from '../models/report';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +37,13 @@ export class ConsoService {
     return this.http.get(`${API_URL}/consommation/emit/${id}`);
   }
 
-  dailyReport(id: string){
-    return this.http.get(`${API_URL}/daily-report/${id}`)
+  dailyReport(
+    year: number,
+    month: number,
+    index: number
+  ): Observable<Report | null> {
+    return this.http.get<Report | null>(
+      `${API_URL}/daily-report/${year}/${month}/${index}`
+    );
   }
 }

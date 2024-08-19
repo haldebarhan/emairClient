@@ -69,7 +69,6 @@ export class BookletComponent implements OnInit {
               )
                 .fill(0)
                 .map((x, i) => i);
-              console.log(value);
             }
             this.booklet = value;
           },
@@ -84,7 +83,6 @@ export class BookletComponent implements OnInit {
     this.magasinService.findOne(magasinId).subscribe({
       next: (value) => {
         this.magasin_date = value.date;
-        console.log(this.magasin_date);
         const { year, month } = getCurrentMonthAndYear(this.magasin_date);
         this.currentMonth = month;
         this.currentYear = year;

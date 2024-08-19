@@ -22,6 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MonthlyTableService } from '../../services/monthly-table.service';
 import { getCurrentMonthAndYear } from '../../../helpers/currentMonthAndYear';
+import { Unites } from '../../models/unites';
 
 @Component({
   selector: 'app-data-view',
@@ -49,7 +50,7 @@ export class DataViewComponent implements OnInit {
   supplies: any = [];
   totalDay: number = 0;
   unites: any;
-  units: any = [];
+  units: Unites[] = [];
   totalMatin!: Array<number>;
   totalMidi!: Array<number>;
   totalSoir!: Array<number>;
@@ -61,6 +62,8 @@ export class DataViewComponent implements OnInit {
   isEdit: boolean = false;
   tableId!: string;
   errorMessage!: string;
+  currentYear!: number;
+  currentMonth!: number;
 
   constructor(
     private router: Router,
@@ -80,6 +83,8 @@ export class DataViewComponent implements OnInit {
   loadData() {
     this.stock = this.monthData.stock;
     const { year, month } = getCurrentMonthAndYear(this.monthData.date);
+    this.currentMonth = month;
+    this.currentYear = year;
     this.totalDay = this.getDayInMonth(month, year);
     this.consoService.findMonthlyConsumption(year, month).subscribe({
       next: (value) => {
@@ -134,8 +139,8 @@ export class DataViewComponent implements OnInit {
     this.router.navigate(['/appro', this.monthData.id]);
   }
 
-  gotToBook(){
-    this.router.navigate(['/booklet-magasin', this.magasinId])
+  gotToBook() {
+    this.router.navigate(['/booklet-magasin', this.magasinId]);
   }
 
   goToReportDetail(id: string) {
@@ -160,7 +165,6 @@ export class DataViewComponent implements OnInit {
   goToConsoReport() {
     this.router.navigate(['/report-conso']);
   }
-
 
   getTotalMatin(data: Rapport) {
     var compt = 0;
@@ -246,14 +250,14 @@ export class DataViewComponent implements OnInit {
     return formatedDate;
   }
 
-  PrintReport(reportId: string) {
-    this.consoService.dailyReport(reportId).subscribe({
-      next: (value) => {
-        this.reportSheet = value;
-        this.pdfService.generateDailySheet(this.reportSheet);
-      },
-    });
-  }
+  // PrintReport(reportId: string) {
+  //   this.consoService.dailyReport(reportId).subscribe({
+  //     next: (value) => {
+  //       this.reportSheet = value;
+  //       this.pdfService.generateDailySheet(this.reportSheet);
+  //     },
+  //   });
+  // }
 
   britishDate(dateStr: string) {
     const date = new Date(dateStr);
@@ -338,6 +342,10 @@ export class DataViewComponent implements OnInit {
   editTable() {
     this.isEdit = true;
   }
+  cancel(){
+    this.loadTableData(this.magasinId)
+    this.isEdit = false
+  }
 
   SaveTableData() {
     this.isEdit = false;
@@ -384,6 +392,38 @@ export class DataViewComponent implements OnInit {
       });
   }
 
+  ShowPrint(index: number): boolean {
+    if (
+      this.totalMatin[index] != 0 &&
+      this.totalMidi[index] != 0 &&
+      this.totalSoir[index] != 0
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  PrintReport(index: number) {
+    index += 1;
+    this.consoService
+      .dailyReport(this.currentYear, this.currentMonth, index)
+      .subscribe({
+        next: (value) => {
+          if(value){
+            this.pdfService.generateDailySheet(value);
+          }
+          else {
+            Toast.fire({
+              titleText: 'Enregistrez avant',
+              icon: 'warning'
+            })
+          }
+        },
+        error: (err) => console.log(err),
+      });
+    // const date = new Date('2024-2-1')
+  }
+
   completedMonth() {
     Sw.fire({
       title: 'Mois terminé',
@@ -395,7 +435,7 @@ export class DataViewComponent implements OnInit {
 
   loadTableData(magasinId: string) {
     this.monthlyTableService.getMonthlyTable(magasinId).subscribe({
-      next: (data: any) => {
+      next: (data) => {
         this.units = data.unites;
         this.totalMatin = data.totalMatin;
         this.totalMidi = data.totalMidi;

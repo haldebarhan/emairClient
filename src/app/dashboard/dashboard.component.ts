@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   isSubmit: boolean = false;
   magForm: FormGroup;
   dataCreated: boolean = false;
-  monthData!: Magasin;
+  monthData!: Magasin | null;
   message: string = '';
   constructor(
     private magService: MagasinService,
@@ -89,8 +89,8 @@ export class DashboardComponent implements OnInit {
 
   reload() {
     this.magService.findAll().subscribe({
-      next: (data: Magasin | null) => {
-        if (data != null) {
+      next: (data) => {
+        if (data) {
           this.monthData = data;
           this.getMonth(this.monthData.date);
           this.dataCreated = true;

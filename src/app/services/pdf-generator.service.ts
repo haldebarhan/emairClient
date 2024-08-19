@@ -5,6 +5,7 @@ import autoTable from 'jspdf-autotable';
 import { Stock } from '../models/stock';
 import { Article } from '../models/article';
 import { spaceNumber } from '../../helpers/spaceNumber';
+import { formatNumber } from '../../helpers/format-price';
 
 @Injectable({
   providedIn: 'root',
@@ -52,10 +53,10 @@ export class PdfGeneratorService {
       total += article.decompte;
       return [
         article.produit,
-        article.quantite,
+        formatNumber(article.quantite),
         article.um,
-        `${article.pu} FCFA`,
-        `${article.decompte} FCFA`,
+        `${formatNumber(article.pu)} FCFA`,
+        `${formatNumber(article.decompte)} FCFA`,
       ];
     });
     const doc = new jsPDF();
@@ -80,7 +81,7 @@ export class PdfGeneratorService {
       body: data,
       margin: { top: 30 },
       columnStyles: { 4: { halign: 'right', fontStyle: 'bold' } },
-      foot: [['', '', '', 'Total', `${total} FCFA`]],
+      foot: [['', '', '', 'Total', `${formatNumber(total)} FCFA`]],
       footStyles: { halign: 'right', fontStyle: 'bold' },
       theme: 'striped',
       showFoot: 'lastPage',

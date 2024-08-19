@@ -15,7 +15,7 @@ export class MagasinService {
   }
 
   findAll(): Observable<Magasin | null> {
-    return this.http.get<Magasin>(`${API_URL}/magasin`);
+    return this.http.get<Magasin | null>(`${API_URL}/magasin`);
   }
 
   findOne(id: string): Observable<Magasin> {
@@ -30,7 +30,7 @@ export class MagasinService {
     return this.http.get(`${API_URL}/monthly-status/create`);
   }
 
-  monthluStatus(){
+  monthluStatus() {
     return this.http.get(`${API_URL}/monthly-status`);
   }
 }
