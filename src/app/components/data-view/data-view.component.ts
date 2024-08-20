@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { MonthlyTableService } from '../../services/monthly-table.service';
 import { getCurrentMonthAndYear } from '../../../helpers/currentMonthAndYear';
 import { Unites } from '../../models/unites';
+import { MonthlyTable } from '../../models/monthly-table';
 
 @Component({
   selector: 'app-data-view',
@@ -43,7 +44,7 @@ import { Unites } from '../../models/unites';
 export class DataViewComponent implements OnInit {
   @Input() monthData!: Magasin;
   @Input() magasinId!: string;
-  @Output() completed = new EventEmitter<any>();
+  @Output() completed = new EventEmitter<string>();
   stock!: Stock[];
   reportSheet: any = [];
   consoReport: Rapport[] = [];
@@ -64,6 +65,7 @@ export class DataViewComponent implements OnInit {
   errorMessage!: string;
   currentYear!: number;
   currentMonth!: number;
+  monthCompleted: boolean = false;
 
   constructor(
     private router: Router,
@@ -78,6 +80,7 @@ export class DataViewComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.loadTableData(this.magasinId);
+    console.log(this.monthCompleted);
   }
 
   loadData() {
@@ -92,12 +95,6 @@ export class DataViewComponent implements OnInit {
         this.approService.filterByMagId(this.monthData.id).subscribe({
           next: (value) => {
             this.supplies = value;
-            if (
-              this.allTrue(this.consoReport) &&
-              this.consoReport.length == this.totalDay
-            ) {
-              this.completedMonth();
-            }
           },
           error: (err) => console.log(err),
         });
@@ -132,9 +129,6 @@ export class DataViewComponent implements OnInit {
     this.router.navigate(['/magasin']);
   }
 
-  consoEdit(id: string) {
-    this.router.navigate(['conso-edit', id]);
-  }
   goToAppro() {
     this.router.navigate(['/appro', this.monthData.id]);
   }
@@ -143,27 +137,9 @@ export class DataViewComponent implements OnInit {
     this.router.navigate(['/booklet-magasin', this.magasinId]);
   }
 
-  goToReportDetail(id: string) {
-    this.consoService.getConsoById(id).subscribe({
-      next: (value) => {
-        this.dataService.setReportData(value);
-        this.router.navigate(['/conso-detail']);
-      },
-      error: () =>
-        Toast.fire({
-          icon: 'error',
-          title: 'Erreur',
-        }),
-    });
-  }
-
   sendData() {
     this.dataService.setData(this.stock);
     this.goToDetail();
-  }
-
-  goToConsoReport() {
-    this.router.navigate(['/report-conso']);
   }
 
   getTotalMatin(data: Rapport) {
@@ -187,60 +163,7 @@ export class DataViewComponent implements OnInit {
     });
     return compt;
   }
-  EmitReport(id: string) {
-    Sw.fire({
-      icon: 'info',
-      title: 'Information',
-      text: 'Une fois soumit ce rapport ne sera plus éligible ni à la suppression ni à la modification',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Non',
-      confirmButtonText: 'Je soumets',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.consoService.emitReport(id).subscribe({
-          next: () => {
-            Sw.fire({
-              title: 'Effectué',
-              icon: 'success',
-              text: `le rapport a bien été transmit`,
-              timer: 1500,
-              timerProgressBar: true,
-              didClose: () => this.loadData(),
-            });
-          },
-          error: (err) => console.log(err),
-        });
-      }
-    });
-  }
-  DeleteConso(id: string) {
-    Sw.fire({
-      icon: 'question',
-      title: 'Etes-vous sure ?',
-      titleText: 'Supprimer ce rapport?',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Non',
-      confirmButtonText: 'Oui, je confirme!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.consoService.deleteConso(id).subscribe({
-          next: () =>
-            Sw.fire({
-              title: 'Supprimé',
-              icon: 'success',
-              text: `le rapport a bien été supprimé`,
-              timer: 1500,
-              timerProgressBar: true,
-              didClose: () => this.loadData(),
-            }),
-        });
-      }
-    });
-  }
+
   formatedDate(data: Rapport) {
     const date = new Date(data.date);
     const formatedDate = date
@@ -249,15 +172,6 @@ export class DataViewComponent implements OnInit {
       .replace('/', '-');
     return formatedDate;
   }
-
-  // PrintReport(reportId: string) {
-  //   this.consoService.dailyReport(reportId).subscribe({
-  //     next: (value) => {
-  //       this.reportSheet = value;
-  //       this.pdfService.generateDailySheet(this.reportSheet);
-  //     },
-  //   });
-  // }
 
   britishDate(dateStr: string) {
     const date = new Date(dateStr);
@@ -283,9 +197,6 @@ export class DataViewComponent implements OnInit {
     });
 
     this.pdfService.generateSupplySheet(article, this.britishDate(data.date));
-  }
-  allTrue(data: Rapport[]) {
-    return data.every((element: any) => element.transmit == true);
   }
 
   getDayInMonth(month: number, year: number): number {
@@ -342,9 +253,9 @@ export class DataViewComponent implements OnInit {
   editTable() {
     this.isEdit = true;
   }
-  cancel(){
-    this.loadTableData(this.magasinId)
-    this.isEdit = false
+  cancel() {
+    this.loadTableData(this.magasinId);
+    this.isEdit = false;
   }
 
   SaveTableData() {
@@ -409,14 +320,13 @@ export class DataViewComponent implements OnInit {
       .dailyReport(this.currentYear, this.currentMonth, index)
       .subscribe({
         next: (value) => {
-          if(value){
+          if (value) {
             this.pdfService.generateDailySheet(value);
-          }
-          else {
+          } else {
             Toast.fire({
               titleText: 'Enregistrez avant',
-              icon: 'warning'
-            })
+              icon: 'warning',
+            });
           }
         },
         error: (err) => console.log(err),
@@ -426,16 +336,35 @@ export class DataViewComponent implements OnInit {
 
   completedMonth() {
     Sw.fire({
-      title: 'Mois terminé',
-      text: 'tout les rapports de consommation ont été transmit le mois est donc terminé',
-      icon: 'info',
-      didClose: () => this.completed.emit(),
+      icon: 'warning',
+      title: 'Passage au Mois suivant',
+      text: "Etes-vous sure d'avoir verifié toutes les données",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, je comfirme',
+      cancelButtonText: 'Annuler',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Sw.fire({
+          title: 'Progression',
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Sw.showLoading();
+          },
+          didClose: () => {
+            this.completed.emit(this.magasinId);
+          },
+        });
+      }
     });
   }
 
   loadTableData(magasinId: string) {
     this.monthlyTableService.getMonthlyTable(magasinId).subscribe({
       next: (data) => {
+        this.showCompleteButton(data);
         this.units = data.unites;
         this.totalMatin = data.totalMatin;
         this.totalMidi = data.totalMidi;
@@ -457,5 +386,19 @@ export class DataViewComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => console.error(err),
     });
+  }
+
+  showCompleteButton(data: MonthlyTable) {
+    const isfull_totalMatin = data.totalMatin.every((value) => +value !== 0);
+    const isfull_totalMidi = data.totalMidi.every((value) => +value !== 0);
+    const isfull_totalSoir = data.totalSoir.every((value) => +value !== 0);
+
+    if (
+      isfull_totalMatin == true &&
+      isfull_totalMidi == true &&
+      isfull_totalSoir == true
+    ){
+      this.monthCompleted = true;
+    }
   }
 }

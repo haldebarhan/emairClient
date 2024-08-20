@@ -26,8 +26,8 @@ export class MagasinService {
     return this.http.get<Magasin>(`${API_URL}/magasin/find/${dateStr}`);
   }
 
-  nextMonth() {
-    return this.http.get(`${API_URL}/monthly-status/create`);
+  nextMonth(data: {magasin: string}) {
+    return this.http.post(`${API_URL}/magasin/next-month`, data);
   }
 
   monthluStatus() {

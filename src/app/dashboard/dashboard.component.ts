@@ -108,8 +108,9 @@ export class DashboardComponent implements OnInit {
     this.message = `${monthName} ${year}`;
   }
 
-  onCompleted(magasinId: any) {
-    this.magService.nextMonth().subscribe({
+  onCompleted(magasinId: string) {
+    const data = {magasin: magasinId}
+    this.magService.nextMonth(data).subscribe({
       next: () => window.location.reload(),
       error: (err: HttpErrorResponse) => console.log(err),
     });

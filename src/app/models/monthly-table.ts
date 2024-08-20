@@ -1,4 +1,4 @@
-export interface MonthlTable {
+export interface MonthlyTable {
   _id: string;
   magasin: {
     _id: string;
