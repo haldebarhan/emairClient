@@ -205,63 +205,13 @@ export class PdfGeneratorService {
     return pdf;
   }
 
-  printTest(data: {
-    recette: number;
-    depense: number;
-    moyenne_effectif: number;
-    effectif_total: number;
-    mois: string;
-    valMag: number;
-  }) {
+  GenerateFistPage(mois: string) {
     const pdf = new jsPDF({
       orientation: 'landscape',
     });
-    const text1 = "FORCES ARMEES DE COTE D'IVOIRE";
-    const text2 = "ARMEE DE L'AIR";
-    const text3 = "BASE AERIENNE D'ABIDJAN";
-    const text = 'SITUATION ADMINISTRATIVE';
-    const month = `${data.mois.toUpperCase()}`;
-    const datePlace = 'DATE  :';
 
-    const text1Width = pdf.getTextWidth(text1);
-    const text2Width = pdf.getTextWidth(text2);
-    const text3Width = pdf.getTextWidth(text2);
-    const textWidth = pdf.getTextWidth(text);
-
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(11);
-    pdf.text(text1, 15, 18);
-    pdf.text(text2, 34, 25);
-    pdf.text(text3, 24, 32);
-    pdf.text(text, 110, 38);
-    pdf.setFontSize(10);
-    pdf.text(datePlace, 240, 40);
-    pdf.text(month, 130, 44);
-
-    pdf.line(15, 19, text1Width - 15, 19);
-    pdf.line(34, 26, text1Width - 34, 26);
-    pdf.line(24, 33, text1Width - 23, 33);
-
-    autoTable(pdf, {
-      html: '#table',
-      styles: {
-        fontStyle: 'bold', // Style de la police (gras)
-        halign: 'center',
-        valign: 'middle',
-        fontSize: 8,
-        lineWidth: 0.1,
-      },
-      alternateRowStyles: {
-        fillColor: [240, 240, 240], // Couleur de remplissage alternée pour les lignes
-      },
-      margin: { top: 10 },
-      startY: 48,
-      didDrawPage: (data) => {},
-    });
-
-
-    pdf.addPage();
-
+    pdf.addPage()
+    pdf.setPage(2)
     let finalY: number | undefined = 0;
     autoTable(pdf, {
       html: '#recap',
@@ -279,17 +229,18 @@ export class PdfGeneratorService {
       },
     });
 
-    pdf.setPage(3);
     let Tsign = "LE SOUS-OFFICIER D'ORDINAIRE";
     let Tsign1 = 'LE CSAF GFCA';
     let tsWidth1 = pdf.getTextWidth(Tsign1);
     let tsWidth = pdf.getTextWidth(Tsign);
     let pageWidth = pdf.internal.pageSize.getWidth();
     let xPos = pageWidth - tsWidth1 - 50;
+    pdf.setFont('times', 'bold')
+    pdf.setFontSize(10)
     pdf.text(Tsign, 60, finalY + 20);
-    pdf.line(60, finalY + 21, tsWidth + 60, finalY + 21);
+    pdf.line(60, finalY + 21, tsWidth + 28, finalY + 21);
     pdf.text(Tsign1, xPos, finalY + 20);
-    pdf.line(xPos, finalY + 21, xPos + tsWidth1, finalY + 21);
+    pdf.line(xPos, finalY + 21, xPos + 26, finalY + 21);
 
     let lib1 = "Commandant de l'Unité administrative";
     let lib2 = 'La présente situation';
@@ -301,8 +252,61 @@ export class PdfGeneratorService {
     pdf.text(lib2, xPos - 28, 27);
     pdf.text(lib3, xPos - 30, 33);
 
-    pdf.addPage();
-    pdf.setPage(4);
+
+    pdf.setPage(1)
+    const text1 = "FORCES ARMEES DE COTE D'IVOIRE";
+    const text2 = "ARMEE DE L'AIR";
+    const text3 = "BASE AERIENNE D'ABIDJAN";
+    const text = 'SITUATION ADMINISTRATIVE';
+    const month = `${mois.toUpperCase()}`;
+    const datePlace = 'DATE  :';
+
+    const text1Width = pdf.getTextWidth(text1);
+    const text2Width = pdf.getTextWidth(text2)
+    const text3Width = pdf.getTextWidth(text3)
+    const textWidth = pdf.getTextWidth(text)
+    let textPos = pageWidth - textWidth - 129;
+
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(11);
+    pdf.text(text1, 15, 18);
+    pdf.text(text2, 34, 25);
+    pdf.text(text3, 24, 32);
+    pdf.text(text, 110, 38);
+    pdf.setFontSize(10);
+    pdf.text(datePlace, 240, 40);
+    pdf.text(month, 130, 44);
+
+    pdf.line(15, 19, text1Width + 14, 19);
+    pdf.line(34, 26, text2Width + 34, 26);
+    pdf.line(24, 33, text3Width + 22, 33);
+    pdf.line(textPos, 39, textWidth + textPos, 39)
+
+    const tableId = document.getElementById('table');
+    html2canvas(tableId!)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 10, 47, pdfWidth - 15, pdfHeight + 10);
+      })
+      .then(() => pdf.save('situation administrative.pdf'));
+  }
+
+  GenerateSecondPage(data: {
+    recette: number;
+    depense: number;
+    moyenne_effectif: number;
+    effectif_total: number;
+    mois: string;
+    valMag: number;
+  }) {
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+    });
+ 
+    let pageWidth = pdf.internal.pageSize.getWidth();
 
     const libelle = 'SITUATION MENSUELLE DE GESTION';
     const libWidth = pdf.getTextWidth(libelle);
@@ -322,88 +326,83 @@ export class PdfGeneratorService {
     const sum = ' Résumé de la gestion';
     const sumWidth = pdf.getTextWidth(sum);
     const table = document.getElementById('c34');
-      html2canvas(table!)
-        .then((canvas) => {
-          const imgData = canvas.toDataURL('image/png');
-          const imgProps = pdf.getImageProperties(imgData);
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-          pdf.addImage(imgData, 'PNG', 10, 30, pdfWidth - 20, pdfHeight - 10);
-          pdf.text(numb, 15, pdfHeight + 25);
-          pdf.text(sum, 20, pdfHeight + 25);
-          pdf.line(20, pdfHeight + 26, 20 + sumWidth, pdfHeight + 26);
-          pdf.setFont('times', 'normal');
-          pdf.text('Recettes journalières par homme', 15, pdfHeight + 35);
-          pdf.setFont('times', 'bold');
-          pdf.text(`${spaceNumber(data.recette)} F`, 80, pdfHeight + 31);
-          pdf.line(70, pdfHeight + 33, 110, pdfHeight + 33);
-          pdf.text(`${spaceNumber(data.effectif_total)}`, 85, pdfHeight + 37);
-          pdf.text('=', 113, pdfHeight + 34);
-          pdf.text(
-            `${spaceNumber(
-              this.dailyIncomePerPerson(data.recette, data.effectif_total)
-            )} F`,
-            120,
-            pdfHeight + 34
-          );
-          pdf.setFont('times', 'normal');
-          pdf.text('Dépenses journalières par homme', 160, pdfHeight + 35);
-          pdf.setFont('times', 'bold');
-          const depPos = pageWidth - 80;
-          pdf.text(
-            `${spaceNumber(data.depense)} F`,
-            depPos + 5,
-            pdfHeight + 31
-          );
-          pdf.line(depPos, pdfHeight + 33, depPos + 35, pdfHeight + 33);
-          pdf.text(
-            `${spaceNumber(data.effectif_total)}`,
-            depPos + 10,
-            pdfHeight + 37
-          );
-          pdf.text('=', depPos + 37, pdfHeight + 34);
-          pdf.text(
-            `${spaceNumber(
-              this.dailyIncomePerPerson(data.depense, data.effectif_total)
-            )} F`,
-            depPos + 40,
-            pdfHeight + 34
-          );
+    html2canvas(table!)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 10, 30, pdfWidth - 20, pdfHeight - 10);
+        pdf.text(numb, 15, pdfHeight + 25);
+        pdf.text(sum, 20, pdfHeight + 25);
+        pdf.line(20, pdfHeight + 26, 20 + sumWidth, pdfHeight + 26);
+        pdf.setFont('times', 'normal');
+        pdf.text('Recettes journalières par homme', 15, pdfHeight + 35);
+        pdf.setFont('times', 'bold');
+        pdf.text(`${spaceNumber(data.recette)} F`, 80, pdfHeight + 31);
+        pdf.line(70, pdfHeight + 33, 110, pdfHeight + 33);
+        pdf.text(`${spaceNumber(data.effectif_total)}`, 85, pdfHeight + 37);
+        pdf.text('=', 113, pdfHeight + 34);
+        pdf.text(
+          `${spaceNumber(
+            this.dailyIncomePerPerson(data.recette, data.effectif_total)
+          )} F`,
+          120,
+          pdfHeight + 34
+        );
+        pdf.setFont('times', 'normal');
+        pdf.text('Dépenses journalières par homme', 160, pdfHeight + 35);
+        pdf.setFont('times', 'bold');
+        const depPos = pageWidth - 80;
+        pdf.text(`${spaceNumber(data.depense)} F`, depPos + 5, pdfHeight + 31);
+        pdf.line(depPos, pdfHeight + 33, depPos + 35, pdfHeight + 33);
+        pdf.text(
+          `${spaceNumber(data.effectif_total)}`,
+          depPos + 10,
+          pdfHeight + 37
+        );
+        pdf.text('=', depPos + 37, pdfHeight + 34);
+        pdf.text(
+          `${spaceNumber(
+            this.dailyIncomePerPerson(data.depense, data.effectif_total)
+          )} F`,
+          depPos + 40,
+          pdfHeight + 34
+        );
 
-          pdf.text('DIVERS: ', 15, pdfHeight + 50);
-          pdf.setFont('times', 'normal');
-          pdf.text(
-            ' Nombre de journées de vivre en magasin au dernier jour du mois',
-            32,
-            pdfHeight + 50
-          );
-          pdf.setFont('times', 'bold');
-          pdf.text("LE SOUS-OFFICIER D'ORDINAIRE", depPos - 15, pdfHeight + 50);
-          pdf.text(`${spaceNumber(data.valMag)}`, 50, pdfHeight + 60);
-          pdf.line(30, pdfHeight + 62, 90, pdfHeight + 62);
-          pdf.text(
-            `${data.moyenne_effectif} x ${spaceNumber(2200)} F`,
-            50,
-            pdfHeight + 67
-          );
-          pdf.text('=', 92, pdfHeight + 63);
-          pdf.text(
-            `${this.remainingFoodInMag(
-              data.valMag,
-              2200,
-              data.moyenne_effectif
-            )} Jour (s)`,
-            100,
-            pdfHeight + 63
-          );
-          pdf.text(
-            `${this.getBoni(data.recette, data.depense)} %`,
-            115,
-            pdfHeight + 24
-          );
-        })
-        .then(() => pdf.save(`situation mensuelle ${data.mois}.pdf`));
-
+        pdf.text('DIVERS: ', 15, pdfHeight + 50);
+        pdf.setFont('times', 'normal');
+        pdf.text(
+          ' Nombre de journées de vivre en magasin au dernier jour du mois',
+          32,
+          pdfHeight + 50
+        );
+        pdf.setFont('times', 'bold');
+        pdf.text("LE SOUS-OFFICIER D'ORDINAIRE", depPos - 15, pdfHeight + 50);
+        pdf.text(`${spaceNumber(data.valMag)}`, 50, pdfHeight + 60);
+        pdf.line(30, pdfHeight + 62, 90, pdfHeight + 62);
+        pdf.text(
+          `${data.moyenne_effectif} x ${spaceNumber(2200)} F`,
+          50,
+          pdfHeight + 67
+        );
+        pdf.text('=', 92, pdfHeight + 63);
+        pdf.text(
+          `${this.remainingFoodInMag(
+            data.valMag,
+            2200,
+            data.moyenne_effectif
+          )} Jour (s)`,
+          100,
+          pdfHeight + 63
+        );
+        pdf.text(
+          `${this.getBoni(data.recette, data.depense)} %`,
+          115,
+          pdfHeight + 24
+        );
+      })
+      .then(() => pdf.save(`situation mensuelle ${data.mois}.pdf`));
   }
 
   dailyIncomePerPerson(income: number, persNumber: number): number {

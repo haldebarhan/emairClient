@@ -194,7 +194,8 @@ export class MonthlyTableComponent implements OnInit, AfterViewInit {
       mois: this.monthLib,
       valMag: this.getLastdayMagValue(),
     };
-    this.pdfService.printTest(data);
+    this.pdfService.GenerateFistPage(data.mois)
+    this.pdfService.GenerateSecondPage(data);
     this.router.navigate(['/monthly-list']);
   }
 

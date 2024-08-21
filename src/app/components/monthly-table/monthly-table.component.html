@@ -28,7 +28,7 @@
       </td>
     </tr>
     <tr *ngFor="let _ of monthlyTable.totalMatin; let i = index">
-      <td class="text-center">{{ i + 1 }}</td>
+      <td class="text-center font-weight-bold">{{ i + 1 }}</td>
       <ng-container *ngFor="let unite of monthlyTable.unites">
         <td class="text-center">
           {{ unite.matin[i] }}
@@ -54,7 +54,7 @@
       </td>
     </tr>
     <tr>
-      <td class="text-center">TOTAL</td>
+      <td class="text-center font-weight-bold">TOTAL</td>
       <ng-container *ngFor="let unite of units; let i = index">
         <td class="text-center">
           {{ unite.totalMatin != 0 ? unite.totalMatin : "-" }}
