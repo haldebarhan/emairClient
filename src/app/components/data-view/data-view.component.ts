@@ -16,8 +16,6 @@ import { LimitToTenPipe } from '../../pipes/limit-to-ten.pipe';
 import { LimitToEightPipe } from '../../pipes/limit-to-eight.pipe';
 import { SurprimesComponent } from '../surprimes/surprimes.component';
 import { DiversComponent } from '../divers/divers.component';
-import { MagasinService } from '../../services/magasin.service';
-import { UniteService } from '../unite/unite.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MonthlyTableService } from '../../services/monthly-table.service';
@@ -73,8 +71,6 @@ export class DataViewComponent implements OnInit {
     private consoService: ConsoService,
     private pdfService: PdfGeneratorService,
     private approService: ApproService,
-    private magasinService: MagasinService,
-    private uniteService: UniteService,
     private monthlyTableService: MonthlyTableService
   ) {}
   ngOnInit(): void {
@@ -337,7 +333,7 @@ export class DataViewComponent implements OnInit {
     Sw.fire({
       icon: 'warning',
       title: 'Passage au Mois suivant',
-      text: "Etes-vous sure d'avoir verifié toutes les données",
+      text: "Confirmez-vous que toutes les données sont correctes ?",
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',

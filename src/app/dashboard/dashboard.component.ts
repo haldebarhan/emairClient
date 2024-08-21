@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
     Sw.fire({
       title: 'Information',
       icon: 'info',
-      text: 'Pour le point de depart les quantités des denrées auront comme valeurs initiales 0.',
+      text: 'Ceci marque le top départ de l\'application.',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',

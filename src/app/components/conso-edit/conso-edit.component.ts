@@ -8,7 +8,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MenuService } from '../menu/menu.service';
-import { MagasinService } from '../../services/magasin.service';
 import { ConsoService } from '../../services/conso.service';
 import { UniteService } from '../unite/unite.service';
 import { ActivatedRoute, Router } from '@angular/router';

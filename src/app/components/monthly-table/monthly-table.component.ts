@@ -1,23 +1,13 @@
 import { CommonModule } from '@angular/common';
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
-import { UniteService } from '../unite/unite.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PdfGeneratorService } from '../../services/pdf-generator.service';
-import { ConsoService } from '../../services/conso.service';
 import { NumberWithSpacesPipe } from '../../pipes/number-with-spaces.pipe';
 import { DiversService } from '../../services/divers.service';
 import { SuprimesService } from '../../services/suprimes.service';
-import { Stock } from '../../models/stock';
 import { MagasinService } from '../../services/magasin.service';
 import { search } from '../../../helpers/month.helper';
 import { DataService } from '../../services/data.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Magasin } from '../../models/magasin';
 import { MonthlyTableService } from '../../services/monthly-table.service';
 import { Unites } from '../../models/unites';
@@ -61,9 +51,7 @@ export class MonthlyTableComponent implements OnInit, AfterViewInit {
   monthLib: string = '';
   magasin!: Magasin;
   constructor(
-    private uniteService: UniteService,
     private pdfService: PdfGeneratorService,
-    private consoSerive: ConsoService,
     private diversService: DiversService,
     private surprimeSerice: SuprimesService,
     private magasinService: MagasinService,
@@ -159,7 +147,7 @@ export class MonthlyTableComponent implements OnInit, AfterViewInit {
 
   getSurprimeCount(suprime: Surprime): number {
     const index = getDay(suprime.date.toString());
-    return this.monthlyTable.totalMidi[index];
+    return this.monthlyTable.totalMidi[index - 1];
   }
 
   totalDivers() {
