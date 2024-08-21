@@ -80,7 +80,6 @@ export class DataViewComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.loadTableData(this.magasinId);
-    console.log(this.monthCompleted);
   }
 
   loadData() {

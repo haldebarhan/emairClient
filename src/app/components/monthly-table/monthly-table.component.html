@@ -1,55 +1,82 @@
-<button class="btn btn-info ml-5 mb-5 mt-5" (click)="print()">Imprimer</button>
-<div class="table-responsive-md">
+<div class="table-responsive">
   <table class="table table-bordered" id="table">
     <tr>
       <th class="text-center">DATE</th>
-      <th colspan="3" class="text-center" *ngFor="let unite of unites">
-        {{ unite.nom }}
+      <th colspan="3" class="text-center" *ngFor="let u of units">
+        {{ u.nom }}
       </th>
-      <th colspan="3" class="text-center">TOTAL</th>
-      <th></th>
+      <th colspan="5" class="text-center">TOTAL</th>
     </tr>
     <tr class="table-active">
-      <td>J</td>
-      <ng-container *ngFor="let unite of unites">
-        <td>M</td>
-        <td>M</td>
-        <td>S</td>
+      <td class="text-center"><small class="font-weight-bold">JOUR</small></td>
+      <ng-container *ngFor="let unite of units">
+        <td class="text-center">
+          <small class="font-weight-bold">M</small>
+        </td>
+        <td class="text-center">
+          <small class="font-weight-bold">M</small>
+        </td>
+        <td class="text-center">
+          <small class="font-weight-bold">S</small>
+        </td>
       </ng-container>
-      <td>M</td>
-      <td>M</td>
-      <td>S</td>
-      <td>TOTAUX</td>
+      <td class="text-center"><small class="font-weight-bold">M</small></td>
+      <td class="text-center"><small class="font-weight-bold">M</small></td>
+      <td class="text-center"><small class="font-weight-bold">S</small></td>
+      <td class="text-center">
+        <small class="font-weight-bold">TOTAUX</small>
+      </td>
     </tr>
-    <tr *ngFor="let data of reports; let i = index">
-      <td>{{ i + 1 }}</td>
-      <ng-container *ngFor="let item of data">
-        <td>{{ item.matin != 0 ? item.matin : "-" }}</td>
-        <td>{{ item.midi != 0 ? item.midi : "-" }}</td>
-        <td>{{ item.soir != 0 ? item.soir : "-" }}</td>
+    <tr *ngFor="let _ of monthlyTable.totalMatin; let i = index">
+      <td class="text-center">{{ i + 1 }}</td>
+      <ng-container *ngFor="let unite of monthlyTable.unites">
+        <td class="text-center">
+          {{ unite.matin[i] }}
+        </td>
+        <td class="text-center">
+          {{ unite.midi[i] }}
+        </td>
+        <td class="text-center">
+          {{ unite.soir[i] }}
+        </td>
       </ng-container>
-      <td>{{ TotalMatin(data) }}</td>
-      <td>{{ TotalMidi(data) }}</td>
-      <td>{{ TotalSoir(data) }}</td>
-      <td>
-        {{
-          Totaux(TotalMatin(data), TotalMidi(data), TotalSoir(data))
-            | numberWithSpaces
-        }}
+      <td class="text-center">
+        {{ monthlyTable.totalMatin[i] }}
+      </td>
+      <td class="text-center">
+        {{ monthlyTable.totalMidi[i] }}
+      </td>
+      <td class="text-center">
+        {{ monthlyTable.totalSoir[i] }}
+      </td>
+      <td class="text-center">
+        {{ monthlyTable.totalRow[i] | numberWithSpaces }}
       </td>
     </tr>
     <tr>
-      <td>TOTAL</td>
-      <ng-container *ngFor="let item of totalUnit">
-        <td>{{ item.total_matin }}</td>
-        <td>{{ item.total_midi }}</td>
-        <td>{{ item.total_soir }}</td>
+      <td class="text-center">TOTAL</td>
+      <ng-container *ngFor="let unite of units; let i = index">
+        <td class="text-center">
+          {{ unite.totalMatin != 0 ? unite.totalMatin : "-" }}
+        </td>
+        <td class="text-center">
+          {{ unite.totalMidi != 0 ? unite.totalMidi : "-" }}
+        </td>
+        <td class="text-center">
+          {{ unite.totalSoir != 0 ? unite.totalSoir : "-" }}
+        </td>
       </ng-container>
-      <td>{{ recapMatin() }}</td>
-      <td>{{ recapMidi() }}</td>
-      <td>{{ recapSoir() }}</td>
-      <td class="font-weight-bold">
-        {{ Totaux(recapMatin(), recapMidi(), recapSoir()) }}
+      <td class="text-center">
+        {{ totalMatinSum != 0 ? totalMatinSum : "-" }}
+      </td>
+      <td class="text-center">
+        {{ totalMidiSum != 0 ? totalMidiSum : "-" }}
+      </td>
+      <td class="text-center">
+        {{ totalSoirSum != 0 ? totalSoirSum : "-" }}
+      </td>
+      <td class="font-weight-bold text-center">
+          {{ globalCost | numberWithSpaces }}
       </td>
     </tr>
   </table>
@@ -59,43 +86,47 @@
   <table class="table" id="recap">
     <tr>
       <td>PETIT DEJEUNER GRATUIT</td>
-      <td>{{ recapMatin() }}</td>
+      <td>{{ totalMatinSum }}</td>
       <td>400</td>
-      <td>{{ recapMatin() * 400 | numberWithSpaces }}</td>
+      <td class="text-center">{{ totalMatinSum * 400 | numberWithSpaces }}</td>
     </tr>
     <tr>
       <td>DEJEUNER GRATUIT</td>
-      <td>{{ recapMidi() }}</td>
+      <td>{{ totalMidiSum }}</td>
       <td>1000</td>
-      <td>{{ recapMidi() * 1000 | numberWithSpaces }}</td>
+      <td class="text-center">{{ totalMidiSum * 1000 | numberWithSpaces }}</td>
     </tr>
     <tr>
       <td>DINER GRATUIT</td>
-      <td>{{ recapSoir() }}</td>
+      <td>{{ totalSoirSum }}</td>
       <td>800</td>
-      <td>{{ recapSoir() * 800 | numberWithSpaces }}</td>
+      <td class="text-center">{{ totalSoirSum * 800 | numberWithSpaces }}</td>
     </tr>
     <tr>
       <td colspan="3">SOUS - TOTAL</td>
-      <td>{{ sousTotal() | numberWithSpaces }}</td>
+      <td class="text-center">{{ sousTotal() | numberWithSpaces }}</td>
     </tr>
     <tr *ngFor="let d of divers">
       <td colspan="3">{{ d.libelle }}</td>
-      <td>{{ d.montant | numberWithSpaces }}</td>
+      <td class="text-center">{{ d.montant | numberWithSpaces }}</td>
     </tr>
     <tr *ngFor="let surprime of surprimesList">
       <td>{{ surprime.nom }}</td>
-      <td>{{ surprime.effectif }}</td>
+      <td>{{ getSurprimeCount(surprime) }}</td>
       <td>{{ surprime.montant }}</td>
-      <td>{{ surprimeMontant(surprime) | numberWithSpaces }}</td>
+      <td class="text-center">
+        {{ getSurprimeCount(surprime) * surprime.montant | numberWithSpaces }}
+      </td>
     </tr>
     <tr>
       <td colspan="3">TOTAL</td>
-      <td>{{ diversTotal() + sousTotal() | numberWithSpaces }}</td>
+      <td class="text-center">
+        {{ totalDivers() + sousTotal() | numberWithSpaces }}
+      </td>
     </tr>
     <tr>
       <td colspan="3">EFFECTIF MOYEN NOURRI :</td>
-      <td>{{ moyenneEffectif() }}</td>
+      <td class="text-center">{{ moyenneEffectif() }}</td>
     </tr>
   </table>
 </div>
@@ -127,7 +158,9 @@
             </p>
           </td>
           <td class="c13" colspan="1" rowspan="1">
-            <p class="c10 mt-1"><span class="c12 c21 mr-1">{{effectifTotal()}}</span></p>
+            <p class="c10 mt-1">
+              <span class="c12 c21 mr-1">{{ effectifTotal() }}</span>
+            </p>
           </td>
           <td class="c18" colspan="1" rowspan="1">
             <p class="c15 mt-1 ml-2"><span class="c2">NORMALES</span></p>
@@ -160,7 +193,11 @@
             </p>
           </td>
           <td class="c13" colspan="1" rowspan="1">
-            <p class="c10 mt-1"><span class="c2 mr-1">{{averageByEffectif(recapMatin())}}</span></p>
+            <p class="c10 mt-1">
+              <span class="c2 mr-1">{{
+                averageByEffectif(totalMatinSum)
+              }}</span>
+            </p>
           </td>
           <td class="c18" colspan="1" rowspan="7">
             <p class="c0"><span class="c2"></span></p>
@@ -177,7 +214,11 @@
             <p class="c8 c28"><span class="c12 c9"></span></p>
           </td>
           <td class="c5" colspan="1" rowspan="2">
-            <p class="c8 mt-1"><span class="c12 c21 ">{{diversTotal() | numberWithSpaces}} F</span></p>
+            <p class="c8 mt-1">
+              <span class="c12 c21"
+                >{{ totalDivers() | numberWithSpaces }} F</span
+              >
+            </p>
           </td>
         </tr>
         <tr class="c23">
@@ -192,7 +233,9 @@
             </p>
           </td>
           <td class="c13" colspan="1" rowspan="1">
-            <p class="c10 mt-1"><span class="c2 mr-1">{{averageByEffectif(recapMidi())}}</span></p>
+            <p class="c10 mt-1">
+              <span class="c2 mr-1">{{ averageByEffectif(totalMidiSum) }}</span>
+            </p>
           </td>
           <td class="c29" colspan="3" rowspan="1">
             <p class="c8 mt-1">
@@ -214,13 +257,15 @@
             </p>
           </td>
           <td class="c13" colspan="1" rowspan="1">
-            <p class="c10 mt-1"><span class="c2 mr-1">{{averageByEffectif(recapSoir())}}</span></p>
+            <p class="c10 mt-1">
+              <span class="c2 mr-1">{{ averageByEffectif(totalSoirSum) }}</span>
+            </p>
           </td>
           <td class="c29" colspan="3" rowspan="1">
             <p class="c8 mt-1">
               <span class="c2 font-weight-bold"
                 >{{ getGlobalExpense() | numberWithSpaces }} -
-                {{ diversTotal() | numberWithSpaces }}</span
+                {{ totalDivers() | numberWithSpaces }}</span
               >
             </p>
           </td>
@@ -256,7 +301,9 @@
             </p>
           </td>
           <td class="c13" colspan="1" rowspan="1">
-            <p class="c10 mt-1"><span class="c12 c21 mr-1">{{moyenneEffectif()}}</span></p>
+            <p class="c10 mt-1">
+              <span class="c12 c21 mr-1">{{ moyenneEffectif() }}</span>
+            </p>
           </td>
           <td class="c29" colspan="3" rowspan="1">
             <p class="c15 ml-2">
@@ -322,12 +369,14 @@
             </p>
           </td>
           <td class="c22" colspan="2" rowspan="1">
-            <p class="c8 mt-1"><span class="c26">{{recapMatin()}} x 400 F</span></p>
+            <p class="c8 mt-1">
+              <span class="c26">{{ totalMatinSum }} x 400 F</span>
+            </p>
           </td>
           <td class="c18" colspan="1" rowspan="1">
             <p class="c8 mt-1">
               <span class="c12 c21"
-                >{{ recapMatin() * 400 | numberWithSpaces }} F</span
+                >{{ totalMatinSum * 400 | numberWithSpaces }} F</span
               >
             </p>
           </td>
@@ -346,12 +395,14 @@
             <p class="c15 mt-1"><span class="c2 ml-2">D&eacute;jeuner</span></p>
           </td>
           <td class="c22" colspan="2" rowspan="1">
-            <p class="c8 mt-1"><span class="c12 c21">{{recapMidi()}} x 1000 F</span></p>
+            <p class="c8 mt-1">
+              <span class="c12 c21">{{ totalMidiSum }} x 1000 F</span>
+            </p>
           </td>
           <td class="c18" colspan="1" rowspan="1">
             <p class="c8 mt-1">
               <span class="c12 c21"
-                >{{ recapMidi() * 1000 | numberWithSpaces }} F</span
+                >{{ totalMidiSum * 1000 | numberWithSpaces }} F</span
               >
             </p>
           </td>
@@ -379,12 +430,14 @@
             <p class="c15 ml-2 mt-1"><span class="c2">D&icirc;ner</span></p>
           </td>
           <td class="c22" colspan="2" rowspan="1">
-            <p class="c8 mt-1"><span class="c12 c21">{{recapSoir()}} x 800 F</span></p>
+            <p class="c8 mt-1">
+              <span class="c12 c21">{{ totalSoirSum }} x 800 F</span>
+            </p>
           </td>
           <td class="c18" colspan="1" rowspan="1">
             <p class="c8 mt-1">
               <span class="c12 c21"
-                >{{ recapSoir() * 800 | numberWithSpaces }} F</span
+                >{{ totalSoirSum * 800 | numberWithSpaces }} F</span
               >
             </p>
           </td>
@@ -467,7 +520,7 @@
             <p class="c15 mt-1">
               <span class="c2 ml-2">{{ sup.nom }}</span>
               <span class="ml-5 font-weight-bold"
-                >{{ sup.effectif }} x {{ sup.montant }}</span
+                >{{ getSurprimeCount(sup) }} x {{ sup.montant }}</span
               >
             </p>
           </td>
@@ -477,7 +530,7 @@
           <td class="c20" colspan="1" rowspan="1">
             <p class="c0 mt-1 ml-4">
               <span class="c2 font-weight-bold"
-                >{{ sup.montant * sup.effectif | numberWithSpaces }} F</span
+                >{{ sup.montant * getSurprimeCount(sup) | numberWithSpaces }} F</span
               >
             </p>
           </td>
@@ -511,7 +564,7 @@
           <td class="c20" colspan="1" rowspan="1">
             <p class="c8 mt-1">
               <span class="c12 c21 mt-1"
-                >{{ diversTotal() | numberWithSpaces }} F</span
+                >{{ totalDivers() | numberWithSpaces }} F</span
               >
             </p>
           </td>
@@ -555,7 +608,7 @@
           <td class="c5" colspan="1" rowspan="1">
             <p class="c8 mt-1">
               <span class="c12 c9 mt-2"
-                >{{ diversTotal() | numberWithSpaces }} F</span
+                >{{ totalDivers() | numberWithSpaces }} F</span
               >
             </p>
           </td>

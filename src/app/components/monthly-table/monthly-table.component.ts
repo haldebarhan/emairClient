@@ -18,6 +18,15 @@ import { MagasinService } from '../../services/magasin.service';
 import { search } from '../../../helpers/month.helper';
 import { DataService } from '../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Magasin } from '../../models/magasin';
+import { MonthlyTableService } from '../../services/monthly-table.service';
+import { Unites } from '../../models/unites';
+import { getCurrentMonthAndYear } from '../../../helpers/currentMonthAndYear';
+import { MonthlyTable } from '../../models/monthly-table';
+import { Divers } from '../../models/divers';
+import { Surprime } from '../../models/surprime';
+import { getDay } from '../../../helpers/get-day';
+import { Sw } from '../../../helpers/sw.helper';
 
 @Component({
   selector: 'app-monthly-table',
@@ -26,20 +35,31 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './monthly-table.component.html',
   styleUrl: './monthly-table.component.css',
 })
-export class MonthlyTableComponent implements OnInit {
-  unites: any = [];
+export class MonthlyTableComponent implements OnInit, AfterViewInit {
+  units: Unites[] = [];
+  totalMatin!: Array<number>;
+  totalMidi!: Array<number>;
+  totalSoir!: Array<number>;
+  totalRow!: Array<number>;
+  totalMatinSum = 0;
+  totalMidiSum = 0;
+  totalSoirSum = 0;
+  globalCost = 0;
+  monthlyTable!: MonthlyTable;
+  surprimesList: Surprime[] = [];
+  divers: Divers[] = [];
+  list: string[] = [];
+  currentYear!: number;
+  currentMonth!: number;
+
   reports: any = [];
   totalUnit: any = [];
-  divers: any = [];
   surprimes: any = [];
   consoReport: any = [];
-  surprimesList: any = [];
-  montylyDate!: string;
-  month!: number;
-  year!: number;
-  dayInMonth!: number;
-  stock!: Stock[];
+  monthlyDate: string | null = null;
+
   monthLib: string = '';
+  magasin!: Magasin;
   constructor(
     private uniteService: UniteService,
     private pdfService: PdfGeneratorService,
@@ -48,61 +68,128 @@ export class MonthlyTableComponent implements OnInit {
     private surprimeSerice: SuprimesService,
     private magasinService: MagasinService,
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    private monthlyTableService: MonthlyTableService
   ) {}
-
-  ngOnInit(): void {
-    this.loadData();
-  }
-
-  loadData() {
-    this.dataService.data$.subscribe((value) => (this.montylyDate = value));
-    const date = this.getCurrentMonthAndYear(this.montylyDate);
-    this.month = date[0];
-    this.year = date[1];
-    this.dayInMonth = this.getDayInMonth(this.month, this.year);
-    let monthName = search(this.month);
-    this.monthLib = `${monthName} ${this.year}`;
-    this.uniteService.getUnites().subscribe({
-      next: (values) => {
-        this.unites = values;
-        this.consoSerive
-          .findMonthlyConsumption(this.year, this.month)
-          .subscribe({
-            next: (value) => {
-              this.consoReport = value;
-              this.reports = this.getReport(value);
-              this.totalUnit = this.TotalByUnit(this.reports);
-              this.magasinService
-              .finOneByDate(this.montylyDate)
-              .subscribe({
-                next: (value) => {
-                  this.stock = value.stock;
-                  this.diversService.filter(value.id.toString()).subscribe({
-                    next: (value) => {
-                      this.divers = value;
-                      this.surprimeSerice.filter(this.year, this.month).subscribe({
-                        next: (value) => {
-                          this.surprimes = value;
-                          this.surprimesList = this.getSurprimesData();
-                        },
-                        error: (err: HttpErrorResponse) => console.log(err),
-                      });
-                    },
-                    error: (err) => console.log(err),
-                  });
-                },
-                error: (err) => console.log(err),
-              });
-            
-            },
-            error: (err) => console.log(err),
-          });
+  ngAfterViewInit(): void {
+    Sw.fire({
+      title: 'Patientez ...',
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Sw.showLoading();
       },
-      error: (err: HttpErrorResponse) => console.log(err),
+      didClose: () => {
+        this.print();
+      },
     });
   }
 
+  ngOnInit(): void {
+    this.dataService.data$.subscribe((value) => (this.monthlyDate = value));
+    if (this.monthlyDate != null) {
+      this.loadData(this.monthlyDate);
+      this.loadTable(this.monthlyDate);
+      this.loadSurprimeList();
+    }
+  }
+
+  loadData(date: string) {
+    const { year, month } = getCurrentMonthAndYear(date);
+    this.currentMonth = month;
+    this.currentYear = year;
+    let monthName = search(month);
+    this.monthLib = `${monthName} ${year}`;
+  }
+
+  loadTable(date: string) {
+    this.magasinService.finOneByDate(date).subscribe({
+      next: (value) => {
+        if (value) {
+          this.magasin = value;
+          this.monthlyTableService.getMonthlyTable(value.id).subscribe({
+            next: (data) => {
+              this.monthlyTable = data;
+              this.units = data.unites;
+              this.list = this.units.map((u) => {
+                return u.nom;
+              });
+              this.totalMatin = data.totalMatin;
+              this.totalMidi = data.totalMidi;
+              this.totalSoir = data.totalSoir;
+              this.totalRow = data.totalRow;
+              this.globalCost = this.totalRow.reduce(
+                (sum: number, value: number) => sum + value
+              );
+              this.totalMatinSum = this.totalMatin.reduce(
+                (sum: number, value: number) => sum + +value
+              );
+              this.totalMidiSum = this.totalMidi.reduce(
+                (sum: number, value: number) => sum + +value
+              );
+              this.totalSoirSum = this.totalSoir.reduce(
+                (sum: number, value: number) => sum + +value
+              );
+
+              this.loadDivers(value.id);
+            },
+          });
+        }
+      },
+    });
+  }
+
+  loadSurprimeList() {
+    this.surprimeSerice.filter(this.currentYear, this.currentMonth).subscribe({
+      next: (values) => {
+        this.surprimesList = values;
+      },
+      error: (err) => console.log(err),
+    });
+  }
+
+  loadDivers(magasinId: string) {
+    this.diversService.filter(magasinId).subscribe({
+      next: (values) => {
+        this.divers = values;
+      },
+      error: (err) => console.log(err),
+    });
+  }
+
+  getSurprimeCount(suprime: Surprime): number {
+    const index = getDay(suprime.date.toString());
+    return this.monthlyTable.totalMidi[index];
+  }
+
+  totalDivers() {
+    const sup = this.surprimesList.map((s) => {
+      const effectif = this.getSurprimeCount(s);
+      return { effectif: effectif, montant: s.montant };
+    });
+
+    let sup_total = 0;
+    sup.map((s) => (sup_total += s.montant * s.effectif));
+    let divers_total = 0;
+    this.divers.map((div) => (divers_total += div.montant));
+
+    return divers_total + sup_total;
+  }
+
+  moyenneEffectif() {
+    let effectif =
+      this.totalMatinSum / this.totalMatin.length +
+      this.totalMidiSum / this.totalMatin.length +
+      this.totalSoirSum / this.totalMatin.length;
+    let moyenne = effectif / 3;
+    moyenne = Math.ceil(moyenne);
+    return moyenne;
+  }
+
+  effectifTotal() {
+    let effectif = this.totalMatinSum + this.totalMidiSum + this.totalSoirSum;
+    return effectif;
+  }
   print() {
     const data: {
       recette: number;
@@ -120,155 +207,19 @@ export class MonthlyTableComponent implements OnInit {
       valMag: this.getLastdayMagValue(),
     };
     this.pdfService.printTest(data);
-    this.router.navigate(['/monthly-list'])
-  }
-
-  getReport(reports: any) {
-    let data: any = [];
-    reports.map((report: any) => {
-      const f = report.report.map((item: any) => {
-        return {
-          matin: item.petit_dejeuner,
-          midi: item.dejeuner,
-          soir: item.diner,
-        };
-      });
-      data.push(f);
-    });
-
-    return data;
-  }
-
-  TotalByUnit(data: any) {
-    const maxLength = Math.max(
-      ...data.map((subArray: string | any[]) => subArray.length)
-    );
-    const totals = Array.from({ length: maxLength }, () => ({
-      total_matin: 0,
-      total_midi: 0,
-      total_soir: 0,
-    }));
-
-    data.forEach((subArray: any[]) => {
-      subArray.forEach((obj, index) => {
-        totals[index].total_matin += obj.matin || 0;
-        totals[index].total_midi += obj.midi || 0;
-        totals[index].total_soir += obj.soir || 0;
-      });
-    });
-
-    return totals;
-  }
-
-  TotalMatin(data: any) {
-    let sum = 0;
-    data.map((item: any) => {
-      sum += item.matin;
-    });
-    return sum;
-  }
-  TotalMidi(data: any) {
-    let sum = 0;
-    data.map((item: any) => {
-      sum += item.midi;
-    });
-    return sum;
-  }
-  TotalSoir(data: any) {
-    let sum = 0;
-    data.map((item: any) => {
-      sum += item.soir;
-    });
-
-    return sum;
-  }
-
-  Totaux(matin: number, midi: number, soir: number) {
-    let total: number = matin * 400 + midi * 1000 + soir * 800;
-    return total;
-  }
-
-  recapMatin() {
-    let total = 0;
-    this.totalUnit.map((item: any) => {
-      total += item.total_matin;
-    });
-    return total;
-  }
-
-  recapMidi() {
-    let total = 0;
-    this.totalUnit.map((item: any) => {
-      total += item.total_midi;
-    });
-    return total;
-  }
-
-  recapSoir() {
-    let total = 0;
-    this.totalUnit.map((item: any) => {
-      total += item.total_soir;
-    });
-    return total;
-  }
-
-  effectifTotal() {
-    const moyenne =
-      (this.recapMatin() + this.recapMidi() + this.recapSoir()) / 3;
-    return Math.ceil(moyenne);
-  }
-
-  getSurprimesData() {
-    let effectif = 0;
-    const data = this.surprimes.map((item: any) => {
-      const report = this.consoReport.find((cr: any) => cr.date == item.date);
-      report.report.map((r: any) => (effectif += r.dejeuner));
-      return { nom: item.nom, montant: item.montant, effectif: effectif };
-    });
-
-    return data;
+    this.router.navigate(['/monthly-list']);
   }
 
   sousTotal() {
     const sous_total =
-      this.recapMatin() * 400 +
-      this.recapMidi() * 1000 +
-      this.recapSoir() * 800;
+      this.totalMatinSum * 400 +
+      this.totalMidiSum * 1000 +
+      this.totalSoirSum * 800;
     return sous_total;
   }
 
-  diversTotal() {
-    let total = 0;
-    this.divers.map((item: any) => {
-      total += item.montant;
-    });
-    this.surprimesList.map(
-      (surprime: any) => (total += this.surprimeMontant(surprime))
-    );
-    return total;
-  }
-
-  surprimeMontant(surprime: any) {
-    return surprime.montant * surprime.effectif;
-  }
-
-  moyenneEffectif() {
-    let effectif =
-      this.recapMatin() / this.dayInMonth +
-      this.recapMidi() / this.dayInMonth +
-      this.recapSoir() / this.dayInMonth;
-    let moyenne = effectif / 3;
-    moyenne = Math.ceil(moyenne);
-    return moyenne;
-  }
   averageByEffectif(effectif: number) {
-    return Math.ceil(effectif / this.dayInMonth);
-  }
-  getCurrentMonthAndYear(dateStr: string) {
-    const date = new Date(dateStr);
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return [month, year];
+    return Math.ceil(effectif / this.totalMatin.length);
   }
 
   getDayInMonth(month: number, year: number): number {
@@ -277,24 +228,24 @@ export class MonthlyTableComponent implements OnInit {
 
   getFirsdayMagValue() {
     var sum = 0;
-    this.stock.map((item) => (sum += item.prix * item.quantite));
+    this.magasin.stock.map((item) => (sum += item.prix * item.quantite));
     return sum;
   }
 
   getGlobalExpense() {
     var expense = 0;
-    this.stock.map((item) => (expense += item.appro * item.prix));
+    this.magasin.stock.map((item) => (expense += item.appro * item.prix));
     return expense;
   }
 
   getLastdayMagValue() {
     var sum = 0;
-    this.stock.map((item) => (sum += item.prix * item.balance));
+    this.magasin.stock.map((item) => (sum += item.prix * item.balance));
     return sum;
   }
 
   orderFormsMinusDivers() {
-    return this.getGlobalExpense() - this.diversTotal();
+    return this.getGlobalExpense() - this.totalDivers();
   }
 
   total1() {
@@ -306,10 +257,10 @@ export class MonthlyTableComponent implements OnInit {
   }
 
   totalExpense() {
-    return this.total2() + this.diversTotal();
+    return this.total2() + this.totalDivers();
   }
 
   totalIncome() {
-    return this.sousTotal() + this.diversTotal();
+    return this.sousTotal() + this.totalDivers();
   }
 }

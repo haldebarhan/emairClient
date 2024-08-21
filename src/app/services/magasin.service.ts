@@ -22,11 +22,11 @@ export class MagasinService {
     return this.http.get<Magasin>(`${API_URL}/magasin/${id}`);
   }
 
-  finOneByDate(dateStr: string): Observable<Magasin> {
-    return this.http.get<Magasin>(`${API_URL}/magasin/find/${dateStr}`);
+  finOneByDate(dateStr: string): Observable<Magasin | null> {
+    return this.http.get<Magasin | null>(`${API_URL}/magasin/find/${dateStr}`);
   }
 
-  nextMonth(data: {magasin: string}) {
+  nextMonth(data: { magasin: string }) {
     return this.http.post(`${API_URL}/magasin/next-month`, data);
   }
 

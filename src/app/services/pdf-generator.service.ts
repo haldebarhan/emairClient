@@ -259,6 +259,7 @@ export class PdfGeneratorService {
       didDrawPage: (data) => {},
     });
 
+
     pdf.addPage();
 
     let finalY: number | undefined = 0;
@@ -321,79 +322,88 @@ export class PdfGeneratorService {
     const sum = ' Résumé de la gestion';
     const sumWidth = pdf.getTextWidth(sum);
     const table = document.getElementById('c34');
-    html2canvas(table!)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 10, 30, pdfWidth - 20, pdfHeight - 10);
-        pdf.text(numb, 15, pdfHeight + 25);
-        pdf.text(sum, 20, pdfHeight + 25);
-        pdf.line(20, pdfHeight + 26, 20 + sumWidth, pdfHeight + 26);
-        pdf.setFont('times', 'normal');
-        pdf.text('Recettes journalières par homme', 15, pdfHeight + 35);
-        pdf.setFont('times', 'bold');
-        pdf.text(`${spaceNumber(data.recette)} F`, 80, pdfHeight + 31);
-        pdf.line(70, pdfHeight + 33, 110, pdfHeight + 33);
-        pdf.text(`${spaceNumber(data.effectif_total)}`, 85, pdfHeight + 37);
-        pdf.text('=', 113, pdfHeight + 34);
-        pdf.text(
-          `${spaceNumber(
-            this.dailyIncomePerPerson(data.recette, data.effectif_total)
-          )} F`,
-          120,
-          pdfHeight + 34
-        );
-        pdf.setFont('times', 'normal');
-        pdf.text('Dépenses journalières par homme', 160, pdfHeight + 35);
-        pdf.setFont('times', 'bold');
-        const depPos = pageWidth - 80;
-        pdf.text(`${spaceNumber(data.depense)} F`, depPos + 5, pdfHeight + 31);
-        pdf.line(depPos, pdfHeight + 33, depPos + 35, pdfHeight + 33);
-        pdf.text(
-          `${spaceNumber(data.effectif_total)}`,
-          depPos + 10,
-          pdfHeight + 37
-        );
-        pdf.text('=', depPos + 37, pdfHeight + 34);
-        pdf.text(
-          `${spaceNumber(
-            this.dailyIncomePerPerson(data.depense, data.effectif_total)
-          )} F`,
-          depPos + 40,
-          pdfHeight + 34
-        );
+      html2canvas(table!)
+        .then((canvas) => {
+          const imgData = canvas.toDataURL('image/png');
+          const imgProps = pdf.getImageProperties(imgData);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          pdf.addImage(imgData, 'PNG', 10, 30, pdfWidth - 20, pdfHeight - 10);
+          pdf.text(numb, 15, pdfHeight + 25);
+          pdf.text(sum, 20, pdfHeight + 25);
+          pdf.line(20, pdfHeight + 26, 20 + sumWidth, pdfHeight + 26);
+          pdf.setFont('times', 'normal');
+          pdf.text('Recettes journalières par homme', 15, pdfHeight + 35);
+          pdf.setFont('times', 'bold');
+          pdf.text(`${spaceNumber(data.recette)} F`, 80, pdfHeight + 31);
+          pdf.line(70, pdfHeight + 33, 110, pdfHeight + 33);
+          pdf.text(`${spaceNumber(data.effectif_total)}`, 85, pdfHeight + 37);
+          pdf.text('=', 113, pdfHeight + 34);
+          pdf.text(
+            `${spaceNumber(
+              this.dailyIncomePerPerson(data.recette, data.effectif_total)
+            )} F`,
+            120,
+            pdfHeight + 34
+          );
+          pdf.setFont('times', 'normal');
+          pdf.text('Dépenses journalières par homme', 160, pdfHeight + 35);
+          pdf.setFont('times', 'bold');
+          const depPos = pageWidth - 80;
+          pdf.text(
+            `${spaceNumber(data.depense)} F`,
+            depPos + 5,
+            pdfHeight + 31
+          );
+          pdf.line(depPos, pdfHeight + 33, depPos + 35, pdfHeight + 33);
+          pdf.text(
+            `${spaceNumber(data.effectif_total)}`,
+            depPos + 10,
+            pdfHeight + 37
+          );
+          pdf.text('=', depPos + 37, pdfHeight + 34);
+          pdf.text(
+            `${spaceNumber(
+              this.dailyIncomePerPerson(data.depense, data.effectif_total)
+            )} F`,
+            depPos + 40,
+            pdfHeight + 34
+          );
 
-        pdf.text('DIVERS: ', 15, pdfHeight + 50);
-        pdf.setFont('times', 'normal');
-        pdf.text(
-          ' Nombre de journées de vivre en magasin au dernier jour du mois',
-          32,
-          pdfHeight + 50
-        );
-        pdf.setFont('times', 'bold');
-        pdf.text("LE SOUS-OFFICIER D'ORDINAIRE", depPos - 15, pdfHeight + 50);
-        pdf.text(`${spaceNumber(data.valMag)}`, 50, pdfHeight + 60);
-        pdf.line(30, pdfHeight + 62, 90, pdfHeight + 62);
-        pdf.text(
-          `${data.moyenne_effectif} x ${spaceNumber(2200)} F`,
-          50,
-          pdfHeight + 67
-        );
-        pdf.text('=', 92, pdfHeight + 63);
-        pdf.text(
-          `${this.remainingFoodInMag(
-            data.valMag,
-            2200,
-            data.moyenne_effectif
-          )} Jour (s)`,
-          100,
-          pdfHeight + 63
-        );
-        pdf.text(`${this.getBoni(data.recette, data.depense)} %`, 115, pdfHeight + 24)
-      })
-      .then(() => pdf.save(`situation mensuelle ${data.mois}.pdf`));
+          pdf.text('DIVERS: ', 15, pdfHeight + 50);
+          pdf.setFont('times', 'normal');
+          pdf.text(
+            ' Nombre de journées de vivre en magasin au dernier jour du mois',
+            32,
+            pdfHeight + 50
+          );
+          pdf.setFont('times', 'bold');
+          pdf.text("LE SOUS-OFFICIER D'ORDINAIRE", depPos - 15, pdfHeight + 50);
+          pdf.text(`${spaceNumber(data.valMag)}`, 50, pdfHeight + 60);
+          pdf.line(30, pdfHeight + 62, 90, pdfHeight + 62);
+          pdf.text(
+            `${data.moyenne_effectif} x ${spaceNumber(2200)} F`,
+            50,
+            pdfHeight + 67
+          );
+          pdf.text('=', 92, pdfHeight + 63);
+          pdf.text(
+            `${this.remainingFoodInMag(
+              data.valMag,
+              2200,
+              data.moyenne_effectif
+            )} Jour (s)`,
+            100,
+            pdfHeight + 63
+          );
+          pdf.text(
+            `${this.getBoni(data.recette, data.depense)} %`,
+            115,
+            pdfHeight + 24
+          );
+        })
+        .then(() => pdf.save(`situation mensuelle ${data.mois}.pdf`));
+
   }
 
   dailyIncomePerPerson(income: number, persNumber: number): number {
