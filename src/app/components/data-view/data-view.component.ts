@@ -74,6 +74,10 @@ export class DataViewComponent implements OnInit {
     private monthlyTableService: MonthlyTableService
   ) {}
   ngOnInit(): void {
+    this.manageData();
+  }
+
+  manageData() {
     this.loadData();
     this.loadTableData(this.magasinId);
   }
@@ -271,7 +275,7 @@ export class DataViewComponent implements OnInit {
           Toast.fire({
             title: 'Sauvegardée',
             icon: 'success',
-            didClose: () => this.loadTableData(this.magasinId),
+            didClose: () => this.manageData(),
           });
         },
         error: (
@@ -333,7 +337,7 @@ export class DataViewComponent implements OnInit {
     Sw.fire({
       icon: 'warning',
       title: 'Passage au Mois suivant',
-      text: "Confirmez-vous que toutes les données sont correctes ?",
+      text: 'Confirmez-vous que toutes les données sont correctes ?',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
@@ -392,7 +396,7 @@ export class DataViewComponent implements OnInit {
       isfull_totalMatin == true &&
       isfull_totalMidi == true &&
       isfull_totalSoir == true
-    ){
+    ) {
       this.monthCompleted = true;
     }
   }
