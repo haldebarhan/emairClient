@@ -1,15 +1,19 @@
-#monthly th {
-  border: 3px solid black;
+#right {
+  margin-left: -32px;
 }
 
-#monthly tr > td {
-  border: 2px solid black;
-  border-right: 3px solid black;
-  border-left: 3px solid black;
-  /* border-top: 1px solid black; */
-  /* border-bottom: 1 px solid black; */
+#right th,
+#right tr > td {
+  border: 1px solid black;
 }
 
-#monthly th:first-child {
-  border: 1px solid #fff;
+#left th,
+#left tr > td {
+  border: 1px solid black;
+}
+
+#left th:first-child {
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
 }
