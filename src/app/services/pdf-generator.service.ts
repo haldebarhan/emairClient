@@ -13,9 +13,22 @@ import { formatNumber } from '../../helpers/format-price';
 export class PdfGeneratorService {
   constructor() {}
 
-  async generatePdfFromDiv(divId: string) {}
+  async printBooklet() {
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+    });
 
-  generatePdfFromTable(tableId: string) {}
+    const tableId = document.getElementById('monthly')!;
+    html2canvas(tableId)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight);
+      })
+      .then(() => pdf.save('test2.pdf'));
+  }
 
   generateTrackingSheet(stock: Stock[]) {
     const data = stock.map((item) => {
@@ -210,8 +223,8 @@ export class PdfGeneratorService {
       orientation: 'landscape',
     });
 
-    pdf.addPage()
-    pdf.setPage(2)
+    pdf.addPage();
+    pdf.setPage(2);
     let finalY: number | undefined = 0;
     autoTable(pdf, {
       html: '#recap',
@@ -235,8 +248,8 @@ export class PdfGeneratorService {
     let tsWidth = pdf.getTextWidth(Tsign);
     let pageWidth = pdf.internal.pageSize.getWidth();
     let xPos = pageWidth - tsWidth1 - 50;
-    pdf.setFont('times', 'bold')
-    pdf.setFontSize(10)
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(10);
     pdf.text(Tsign, 60, finalY + 20);
     pdf.line(60, finalY + 21, tsWidth + 28, finalY + 21);
     pdf.text(Tsign1, xPos, finalY + 20);
@@ -252,8 +265,7 @@ export class PdfGeneratorService {
     pdf.text(lib2, xPos - 28, 27);
     pdf.text(lib3, xPos - 30, 33);
 
-
-    pdf.setPage(1)
+    pdf.setPage(1);
     const text1 = "FORCES ARMEES DE COTE D'IVOIRE";
     const text2 = "ARMEE DE L'AIR";
     const text3 = "BASE AERIENNE D'ABIDJAN";
@@ -262,9 +274,9 @@ export class PdfGeneratorService {
     const datePlace = 'DATE  :';
 
     const text1Width = pdf.getTextWidth(text1);
-    const text2Width = pdf.getTextWidth(text2)
-    const text3Width = pdf.getTextWidth(text3)
-    const textWidth = pdf.getTextWidth(text)
+    const text2Width = pdf.getTextWidth(text2);
+    const text3Width = pdf.getTextWidth(text3);
+    const textWidth = pdf.getTextWidth(text);
     let textPos = pageWidth - textWidth - 129;
 
     pdf.setFont('times', 'bold');
@@ -280,7 +292,7 @@ export class PdfGeneratorService {
     pdf.line(15, 19, text1Width + 14, 19);
     pdf.line(34, 26, text2Width + 34, 26);
     pdf.line(24, 33, text3Width + 22, 33);
-    pdf.line(textPos, 39, textWidth + textPos, 39)
+    pdf.line(textPos, 39, textWidth + textPos, 39);
 
     const tableId = document.getElementById('table');
     html2canvas(tableId!)
@@ -305,7 +317,7 @@ export class PdfGeneratorService {
     const pdf = new jsPDF({
       orientation: 'landscape',
     });
- 
+
     let pageWidth = pdf.internal.pageSize.getWidth();
 
     const libelle = 'SITUATION MENSUELLE DE GESTION';

@@ -1,7 +1,7 @@
 <div class="content-page">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-112 col-lg-12 mt-4">
+      <div class="col-sm-12 col-lg-12 mt-4">
         <div class="card">
           <div class="card-header d-flex justify-content-between">
             <div class="header-title">
@@ -24,10 +24,11 @@
                 </svg>
               </i>
             </a>
+            <!-- <button class="btn btn-outline-success" (click)="print()">P</button> -->
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-bordered">
+              <table class="table table-bordered" id="monthly">
                 <thead>
                   <th scope="col"></th>
                   <th scope="col" colspan="3" class="text-center bg-primary">
@@ -44,7 +45,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td></td>
+                    <td style="border-left: 1px solid #fff; border-top: 1px solid #fff;"></td>
                     <ng-container>
                       <td class="bg-primary">
                         <div style="width: 45px">P. DEJ</div>

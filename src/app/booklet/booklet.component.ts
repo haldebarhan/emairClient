@@ -7,6 +7,7 @@ import { Booklet } from '../models/booklet';
 import { MagasinService } from '../services/magasin.service';
 import { getCurrentMonthAndYear } from '../../helpers/currentMonthAndYear';
 import { NumberWithSpacesPipe } from '../pipes/number-with-spaces.pipe';
+import { PdfGeneratorService } from '../services/pdf-generator.service';
 
 export interface DataElement {
   produit: string;
@@ -43,7 +44,8 @@ export class BookletComponent implements OnInit {
   constructor(
     private readonly bookService: BookletService,
     private readonly magasinService: MagasinService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private pdfService: PdfGeneratorService
   ) {}
 
   ngOnInit(): void {
@@ -131,5 +133,10 @@ export class BookletComponent implements OnInit {
     appro_sum += item.existant
     const last_balance = appro_sum - conso_sum
     return last_balance;
+  }
+
+
+  async print(){
+    await this.pdfService.printBooklet()
   }
 }
