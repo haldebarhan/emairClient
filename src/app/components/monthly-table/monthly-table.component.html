@@ -76,7 +76,7 @@
         {{ totalSoirSum != 0 ? totalSoirSum : "-" }}
       </td>
       <td class="font-weight-bold text-center">
-          {{ globalCost | numberWithSpaces }}
+        {{ globalCost | numberWithSpaces }}
       </td>
     </tr>
   </table>
@@ -152,14 +152,21 @@
           </td>
         </tr>
         <tr class="c25">
-          <td class="c6" colspan="2" rowspan="1">
+          <td
+            class="c6"
+            colspan="2"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 mt-1">
               <span class="c9 c12 ml-2 mt-1">I- Effectif Nourri</span>
             </p>
           </td>
           <td class="c13" colspan="1" rowspan="1">
             <p class="c10 mt-1">
-              <span class="c12 c21 mr-1">{{ effectifTotal() }}</span>
+              <span class="c12 c21 mr-1">{{
+                effectifTotal() | numberWithSpaces
+              }}</span>
             </p>
           </td>
           <td class="c18" colspan="1" rowspan="1">
@@ -168,7 +175,12 @@
           <td class="c20" colspan="1" rowspan="1">
             <p class="c15 mt-1 ml-2"><span class="c2">EXCEPT.</span></p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 ml-2 mt-1">
               <span class="c1">III - D&eacute;penses</span>
             </p>
@@ -181,7 +193,12 @@
           </td>
         </tr>
         <tr class="c23">
-          <td class="c6" colspan="2" rowspan="1">
+          <td
+            class="c6"
+            colspan="2"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15">
               <span class="c9 ml-2 mt-1"
                 >Moyenne petit d&eacute;jeuner &nbsp; </span
@@ -205,12 +222,22 @@
           <td class="c20" colspan="1" rowspan="10">
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c8 mt-1">
               <span class="c1 mt-1">Report Recettes exceptionnelles</span>
             </p>
           </td>
-          <td class="c7" colspan="1" rowspan="2">
+          <td
+            class="c7"
+            colspan="1"
+            rowspan="2"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c8 c28"><span class="c12 c9"></span></p>
           </td>
           <td class="c5" colspan="1" rowspan="2">
@@ -222,7 +249,12 @@
           </td>
         </tr>
         <tr class="c23">
-          <td class="c6" colspan="2" rowspan="1">
+          <td
+            class="c6"
+            colspan="2"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 mt-1">
               <span class="c9 c35 ml-2"
                 >Moyenne d&eacute;jeuner &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -237,7 +269,12 @@
               <span class="c2 mr-1">{{ averageByEffectif(totalMidiSum) }}</span>
             </p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c8 mt-1">
               <span class="c2"
                 >R&eacute;capitulatif des achats de Bons de commande:</span
@@ -246,7 +283,12 @@
           </td>
         </tr>
         <tr class="c16">
-          <td class="c6" colspan="2" rowspan="1">
+          <td
+            class="c6"
+            colspan="2"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 mt-1">
               <span class="c35 c9 ml-2"
                 >Moyenne d&icirc;ner &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -276,7 +318,12 @@
               >
             </p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
@@ -284,13 +331,23 @@
           <td class="c11" colspan="3" rowspan="1">
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
           <td class="c7" colspan="1" rowspan="1">
             <p class="c8 c28"><span class="c12 c9"></span></p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
@@ -305,7 +362,12 @@
               <span class="c12 c21 mr-1">{{ moyenneEffectif() }}</span>
             </p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 ml-2">
               <span class="c26 c9 c33 ml-2">&nbsp;A Ajouter:</span
               ><span class="c12 c9 ml-2"
@@ -320,31 +382,61 @@
               >
             </p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16">
-          <td class="c11" colspan="3" rowspan="1">
+          <td
+            class="c11"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15"><span class="c1 ml-2">II- Recettes</span></p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
           <td class="c7" colspan="1" rowspan="1">
             <p class="c8 c28"><span class="c12 c9"></span></p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16">
-          <td class="c11" colspan="3" rowspan="1">
+          <td
+            class="c11"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 mt-1">
               <span class="c21 c32 ml-2">Prime normale</span>
             </p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 mt-1 ml-5"><span class="c12 c9">Total</span></p>
           </td>
           <td class="c7" colspan="1" rowspan="1">
@@ -352,12 +444,25 @@
               <span class="c12 c9">{{ total1() | numberWithSpaces }} F</span>
             </p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16">
-          <td class="c17" colspan="1" rowspan="1">
+          <td
+            class="c17"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-bottom: 1px solid transparent;
+              border-right: 1px solid transparent;
+            "
+          >
             <p class="c15 ml-2 mt-1">
               <span
                 >Petit d&eacute;jeuner &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -368,7 +473,12 @@
               </span>
             </p>
           </td>
-          <td class="c22" colspan="2" rowspan="1">
+          <td
+            class="c22"
+            colspan="2"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c8 mt-1">
               <span class="c26">{{ totalMatinSum }} x 400 F</span>
             </p>
@@ -380,21 +490,44 @@
               >
             </p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
           <td class="c7" colspan="1" rowspan="1">
             <p class="c8 c28"><span class="c12 c9"></span></p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16">
-          <td class="c17" colspan="1" rowspan="1">
+          <td
+            class="c17"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-bottom: 1px solid transparent;
+              border-right: 1px solid transparent;
+            "
+          >
             <p class="c15 mt-1"><span class="c2 ml-2">D&eacute;jeuner</span></p>
           </td>
-          <td class="c22" colspan="2" rowspan="1">
+          <td
+            class="c22"
+            colspan="2"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c8 mt-1">
               <span class="c12 c21">{{ totalMidiSum }} x 1000 F</span>
             </p>
@@ -406,7 +539,12 @@
               >
             </p>
           </td>
-          <td class="c29" colspan="3" rowspan="1">
+          <td
+            class="c29"
+            colspan="3"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c15 ml-2 mt-1">
               <span class="c33 c26 c9 ml-2">A RETRANCHER:</span
               ><span class="c12 c9 ml-2"
@@ -421,15 +559,25 @@
               >
             </p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16">
-          <td class="c17" colspan="1" rowspan="1">
+          <td
+            class="c17"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent; border-right: 1px solid transparent;"
+          >
             <p class="c15 ml-2 mt-1"><span class="c2">D&icirc;ner</span></p>
           </td>
-          <td class="c22" colspan="2" rowspan="1">
+          <td class="c22" colspan="2" rowspan="1" style="border-bottom:  1px solid transparent;">
             <p class="c8 mt-1">
               <span class="c12 c21">{{ totalSoirSum }} x 800 F</span>
             </p>
@@ -441,55 +589,138 @@
               >
             </p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-bottom: 1px solid transparent;
+              border-right: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-bottom: 1px solid transparent;
+              border-right: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c4" colspan="1" rowspan="1">
+          <td
+            class="c4"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c7" colspan="1" rowspan="1">
+          <td
+            class="c7"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16">
-          <td class="c11" colspan="3" rowspan="1">
+          <td class="c11" colspan="3" rowspan="1" style="border-bottom: 1px solid transparent;">
             <p class="c15 mt-1"><span class="c26 c27 ml-2">DIVERS :</span></p>
           </td>
-          <td class="c18" colspan="1" rowspan="1">
+          <td
+            class="c18"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
           <td class="c20" colspan="1" rowspan="1">
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-right: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-right: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c4" colspan="1" rowspan="1">
+          <td
+            class="c4"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c7" colspan="1" rowspan="1">
+          <td
+            class="c7"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16" *ngFor="let d of divers">
-          <td class="c11" colspan="3" rowspan="1">
+          <td
+            class="c11"
+            colspan="3"
+            rowspan="1"
+            style="
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c15 mt-1">
               <span class="c2 ml-2">{{ d.libelle }}</span>
             </p>
           </td>
-          <td class="c18" colspan="1" rowspan="1">
+          <td
+            class="c18"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
           <td class="c20" colspan="1" rowspan="1">
@@ -499,24 +730,71 @@
               >
             </p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+              border-right: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+              border-right: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c4" colspan="1" rowspan="1">
+          <td
+            class="c4"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c7" colspan="1" rowspan="1">
+          <td
+            class="c7"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-top: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
         <tr class="c16" *ngFor="let sup of surprimesList">
-          <td class="c11" colspan="3" rowspan="1">
+          <td
+            class="c11"
+            colspan="3"
+            rowspan="1"
+            style="border-top: 1px solid transparent"
+          >
             <p class="c15 mt-1">
               <span class="c2 ml-2">{{ sup.nom }}</span>
               <span class="ml-5 font-weight-bold"
@@ -530,27 +808,61 @@
           <td class="c20" colspan="1" rowspan="1">
             <p class="c0 mt-1 ml-4">
               <span class="c2 font-weight-bold"
-                >{{ sup.montant * getSurprimeCount(sup) | numberWithSpaces }} F</span
+                >{{
+                  sup.montant * getSurprimeCount(sup) | numberWithSpaces
+                }}
+                F</span
               >
             </p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-right: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="
+              border-right: 1px solid transparent;
+              border-bottom: 1px solid transparent;
+            "
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c4" colspan="1" rowspan="1">
+          <td
+            class="c4"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c7" colspan="1" rowspan="1">
+          <td
+            class="c7"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c5" colspan="1" rowspan="1">
+          <td
+            class="c5"
+            colspan="1"
+            rowspan="1"
+            style="border-bottom: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
         </tr>
-        <tr class="c16">
+        <tr>
           <td class="c11" colspan="3" rowspan="1">
             <p class="c15 mt-1"><span class="c1 ml-2">Total Partiel:</span></p>
           </td>
@@ -568,13 +880,28 @@
               >
             </p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="border-right: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c14" colspan="1" rowspan="1">
+          <td
+            class="c14"
+            colspan="1"
+            rowspan="1"
+            style="border-right: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
-          <td class="c4" colspan="1" rowspan="1">
+          <td
+            class="c4"
+            colspan="1"
+            rowspan="1"
+            style="border-top: 1px solid transparent"
+          >
             <p class="c0"><span class="c2"></span></p>
           </td>
           <td class="c7" colspan="1" rowspan="1">

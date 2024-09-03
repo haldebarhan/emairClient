@@ -218,7 +218,7 @@ export class PdfGeneratorService {
     return pdf;
   }
 
-  GenerateFistPage(mois: string) {
+  async GenerateFistPage(mois: string) {
     const pdf = new jsPDF({
       orientation: 'landscape',
     });
@@ -306,7 +306,7 @@ export class PdfGeneratorService {
       .then(() => pdf.save('situation administrative.pdf'));
   }
 
-  GenerateSecondPage(data: {
+  async GenerateSecondPage(data: {
     recette: number;
     depense: number;
     moyenne_effectif: number;

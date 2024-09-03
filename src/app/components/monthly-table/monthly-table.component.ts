@@ -60,17 +60,14 @@ export class MonthlyTableComponent implements OnInit, AfterViewInit {
     private monthlyTableService: MonthlyTableService
   ) {}
   ngAfterViewInit(): void {
-    Sw.fire({
-      title: 'Patientez ...',
-      timer: 2000,
-      timerProgressBar: true,
-      didOpen: () => {
-        Sw.showLoading();
-      },
-      didClose: () => {
-        this.print();
-      },
-    });
+    // Sw.fire({
+    //   title: 'Patientez ...',
+    //   timer: 2000,
+    //   didOpen: () => {
+    //     Sw.showLoading();
+    //     this.print();
+    //   },
+    // });
   }
 
   ngOnInit(): void {
@@ -176,9 +173,9 @@ export class MonthlyTableComponent implements OnInit, AfterViewInit {
 
   effectifTotal() {
     let effectif = this.totalMatinSum + this.totalMidiSum + this.totalSoirSum;
-    return effectif;
+    return Math.ceil(effectif / 3);
   }
-  print() {
+  async print() {
     const data: {
       recette: number;
       depense: number;
@@ -194,9 +191,13 @@ export class MonthlyTableComponent implements OnInit, AfterViewInit {
       mois: this.monthLib,
       valMag: this.getLastdayMagValue(),
     };
-    this.pdfService.GenerateFistPage(data.mois)
-    this.pdfService.GenerateSecondPage(data);
-    this.router.navigate(['/monthly-list']);
+    try {
+      await this.pdfService.GenerateFistPage(data.mois);
+      await this.pdfService.GenerateSecondPage(data);
+    } finally {
+      Sw.close(); // Ferme l'alerte SweetAlert2 après que toutes les promesses sont terminées
+      this.router.navigate(['/monthly-list']);
+    }
   }
 
   sousTotal() {
