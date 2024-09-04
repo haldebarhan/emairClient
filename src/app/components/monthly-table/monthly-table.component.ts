@@ -60,14 +60,14 @@ export class MonthlyTableComponent implements OnInit, AfterViewInit {
     private monthlyTableService: MonthlyTableService
   ) {}
   ngAfterViewInit(): void {
-    // Sw.fire({
-    //   title: 'Patientez ...',
-    //   timer: 2000,
-    //   didOpen: () => {
-    //     Sw.showLoading();
-    //     this.print();
-    //   },
-    // });
+    Sw.fire({
+      title: 'Patientez ...',
+      timer: 2000,
+      didOpen: () => {
+        Sw.showLoading();
+        this.print();
+      },
+    });
   }
 
   ngOnInit(): void {
