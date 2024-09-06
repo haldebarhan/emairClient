@@ -5,13 +5,13 @@
         <div class="card">
           <div class="card-header d-flex justify-content-between">
             <div class="header-title">
-              <h4 class="card-title">Nouveau repas</h4>
+              <h4 class="card-title">{{ title }}</h4>
             </div>
           </div>
           <div class="card-body">
             <form [formGroup]="form" (ngSubmit)="saveForm()">
               <div class="row">
-                <div class="form-group col-lg-12">
+                <div class="form-group col-lg-8">
                   <label for="email">Nom du repas:</label>
                   <input
                     type="email"
@@ -20,10 +20,27 @@
                     formControlName="nomRecette"
                   />
                 </div>
+                <div class="formgroup col-lg-4">
+                  <label for="type">Type</label>
+                  <select
+                    name="type"
+                    id="type"
+                    class="form-control"
+                    formControlName="type"
+                  >
+                    <option
+                      *ngFor="let type of recetteType"
+                      value="{{ type._id }}"
+                    >
+                      {{ type.libelle }}
+                    </option>
+                  </select>
+                </div>
+                <div></div>
               </div>
               <form [formGroup]="ingForm">
                 <div class="row">
-                  <div class="form-group col-lg-5 position-relative">
+                  <div class="form-group col-lg-6 position-relative">
                     <label for="pwd">Denrees:</label>
                     <input
                       type="text"
@@ -46,28 +63,20 @@
                       </li>
                     </ul>
                   </div>
-                  <div class="form-group col-lg-2">
-                    <label for="pwd">Ration:</label>
+                  <div class="form-group col-lg-4">
+                    <label for="pwd"
+                      >Ration:
+                      <small class="text-danger font-weight-bold">{{
+                        libelle
+                      }}</small></label
+                    >
                     <input
-                      type="email"
+                      type="number"
                       class="form-control"
                       id="email1"
                       name="ration"
                       formControlName="ration"
                     />
-                  </div>
-                  <div class="form-group col-lg-3">
-                    <label for="pwd">Mesure:</label>
-                    <select
-                      class="form-control"
-                      name="denree"
-                      formControlName="mesure"
-                    >
-                      <option value="">Choisir</option>
-                      <option *ngFor="let unit of units" [value]="unit">
-                        {{ unit }}
-                      </option>
-                    </select>
                   </div>
                   <div class="form-group">
                     <button
@@ -101,7 +110,7 @@
                 class="btn btn-primary mr-2"
                 [disabled]="!form.valid || recettes.length == 0"
               >
-                Créer
+                {{ buttonTitle }}
               </button>
               <button
                 class="btn btn-primary"
@@ -159,7 +168,7 @@
                   class="list-style-action d-flex justify-content-end ml-auto"
                 >
                   <h6 class="font-weight-bold">
-                    {{ item.ration }}{{ item.mesure }}
+                    {{ getOutput(item) }}
                   </h6>
                 </div>
               </li>

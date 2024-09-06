@@ -37,7 +37,7 @@
             <p>
               Ces données ci-dessous représentent les ingredients et la ration
               d'un individu pour la recette <br /><strong>{{
-                recette.nom
+                recette.nomRecette
               }}</strong>
             </p>
             <ul class="list-group">
@@ -46,10 +46,10 @@
                 *ngFor="let ingredient of recette.ingredients"
               >
                 <div>
-                  {{ ingredient.denree.produit }}
+                  {{ ingredient.denree }}
                 </div>
                 <span class="text-body-secondary"
-                  >{{ ingredient.ration }}{{ ingredient.unite }}</span
+                  >{{getOutput(ingredient)}}</span
                 >
               </li>
             </ul>

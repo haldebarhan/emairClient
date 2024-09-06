@@ -9,7 +9,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getOption } from '../../../../helpers/getOptions.helper';
 import { Denree } from '../../../models/denree';
 import { Toast } from '../../../../helpers/toast.helper';
 import { Sw } from '../../../../helpers/sw.helper';
@@ -25,7 +24,7 @@ export class AddDenreeComponent implements OnInit {
   mesures: any = [];
   denreeForm: FormGroup;
   isSubmited: boolean = false;
-  conversionUnit: any = ["KG", "LITRE", "UNITE"];
+  conversionUnit: any = ['KG', 'LITRE', 'UNITE'];
   options: string[] = [];
   denreeId: string | null = null;
   message: string = 'Nouvelle denrée';
@@ -39,14 +38,7 @@ export class AddDenreeComponent implements OnInit {
     this.denreeForm = this.fb.group({
       denree: new FormControl('', [Validators.required]),
       mesure: new FormControl('', Validators.required),
-      uc: new FormControl('', [Validators.required]),
-      equivalence: new FormControl('', [Validators.required]),
-      valeur: new FormControl('', [Validators.required]),
       pu: new FormControl('', Validators.required),
-    });
-
-    this.denreeForm.get('uc')?.valueChanges.subscribe((selected) => {
-      this.options = getOption(selected);
     });
   }
   ngOnInit(): void {
@@ -63,9 +55,6 @@ export class AddDenreeComponent implements OnInit {
             this.denreeForm.patchValue({
               denree: response.product,
               mesure: response.mesure,
-              uc: response.uc,
-              equivalence: response.equivalence,
-              valeur: response.valeur,
               pu: response.pu,
             });
           });
@@ -89,14 +78,10 @@ export class AddDenreeComponent implements OnInit {
     this.isSubmited = true;
     const result = this.getSelectedMesureId(this.denreeForm.value.mesure);
     const denree: string = this.denreeForm.value.denree;
-    const uc = this.getSelectedConversionUnitId(this.denreeForm.value.uc);
     const data: Denree = {
       produit: denree.toUpperCase(),
       mesure: result.id,
-      uc: uc.id,
-      equivalence: this.denreeForm.value.equivalence,
       pu: this.denreeForm.value.pu,
-      valeur: this.denreeForm.value.valeur,
     };
     if (this.denreeId) {
       this.denreeService.updateDenree(this.denreeId, data).subscribe(() => {
@@ -119,15 +104,15 @@ export class AddDenreeComponent implements OnInit {
             didClose: () => {
               this.denreeForm.reset();
               this.isSubmited = false;
-              // this.router.navigate(['/denree-list']);
+              this.router.navigate(['/denree-list']);
             },
           });
         },
         error: () => {
           Sw.fire({
-            title: "Erreur",
+            title: 'Erreur',
             icon: 'error',
-            text: 'L\'élement existe deja',
+            text: "L'élement existe deja",
             didClose: () => (this.isSubmited = false),
           });
         },

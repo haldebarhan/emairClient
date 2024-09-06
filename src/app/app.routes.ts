@@ -5,7 +5,6 @@ import { RecetteListComponent } from './components/recette-list/recette-list.com
 import { DenreeListComponent } from './components/denrees/denree-list/denree-list.component';
 import { AddDenreeComponent } from './components/denrees/add-denree/add-denree.component';
 import { RecetteDetailComponent } from './components/recette/recette-detail/recette-detail.component';
-import { RecetteEditComponent } from './components/recette/recette-edit/recette-edit.component';
 import { MenuListComponent } from './components/menu/menu-list/menu-list.component';
 import { MenuFormComponent } from './components/menu/menu-form/menu-form.component';
 import { UniteComponent } from './components/unite/unite/unite.component';
@@ -41,7 +40,7 @@ export const routes: Routes = [
   },
   {
     path: 'recette-edit/:id',
-    component: RecetteEditComponent,
+    component: RecetteComponent,
   },
   {
     path: 'denree-list',

@@ -12,13 +12,15 @@
           <table class="table">
             <thead class="thead-dark">
               <tr>
-                <th scope="col">Recette</th>
-                <th scope="col">Action</th>
+                <th scope="col">RECETTES</th>
+                <th scope="col">TYPES</th>
+                <th scope="col">ACTIONS</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let recette of recettes">
                 <td>{{recette.nomRecette}}</td>
+                <td>{{recette.type.libelle}}</td>
                 <td>
                   <div
                     class="btn-group align-items-end"

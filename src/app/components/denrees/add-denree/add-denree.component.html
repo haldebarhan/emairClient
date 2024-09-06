@@ -43,31 +43,7 @@
                   <input type="number" name="" id="" class="form-control" formControlName="pu">
                 </div>
               </div>
-              <div class="form-group">
-                <label for="pwd">Unité de conversion:</label>
-                <select name="" id="" class="form-control" formControlName="uc">
-                  <option value="" selected disabled>Choisir</option>
-                  <option
-                    *ngFor="let unit of conversionUnit"
-                    value="{{ unit.uc }}"
-                  >
-                    {{ unit.uc }}
-                  </option>
-                </select>
-              </div>
-              <div class="row">
-                <div class="form-group col-lg-6">
-                  <label for="">Equivalence</label>
-                  <input type="number" name="" id="" formControlName="equivalence" class="form-control">
-                </div>
-                <div class="form-group col-lg-6">
-                  <label for="">Valeur</label>
-                  <select name="" id="" class="form-control" formControlName="valeur">
-                    <option value="" selected disabled>Choisir</option>
-                    <option  *ngFor="let option of options" value="{{option}}">{{option}}</option>
-                  </select>
-                </div>
-              </div>
+       
               <button
                 type="submit"
                 class="btn btn-primary mr-2"

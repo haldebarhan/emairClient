@@ -1,16 +1,20 @@
-export const getOption = (mesure: string): string[] => {
-  let options: string[] = [];
-  switch (mesure) {
+import { Denree } from "../app/models/denree";
+
+export const getOption = (denree: Denree): string => {
+  let option = ""
+  switch (denree.mesure) {
     case 'KG':
-      options = ['g'];
+      option= 'g';
       break;
     case 'LITRE':
-      options = ['cl'];
+      option = 'ml';
       break;
     case 'UNITE':
-      options = ['UNITE'];
+      option = 'UNITE';
       break;
+    default:
+      option = `1 ${denree.mesure} pour`
   }
 
-  return options;
+  return option;
 };

@@ -1,8 +1,6 @@
 export interface Denree {
+  id?: string;
   produit: string;
   mesure: string;
-  uc: string;
-  equivalence: number;
-  pu: number,
-  valeur: string
+  pu: number;
 }

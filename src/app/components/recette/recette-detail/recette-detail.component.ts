@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RecetteService } from '../../../recette/recette.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { recette } from '../../../models/recette';
 
 @Component({
   selector: 'app-recette-detail',
@@ -11,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './recette-detail.component.css',
 })
 export class RecetteDetailComponent implements OnInit {
-  recette: {id: string, nom: string, ingredients: Array<any>};
+  recette!: recette;
   dataId: string;
   constructor(
     private recetteService: RecetteService,
@@ -19,15 +20,35 @@ export class RecetteDetailComponent implements OnInit {
     private router: Router
   ) {
     this.dataId = this.route.snapshot.paramMap.get('id') ?? '';
-    this.recette = {id: '', nom: '', ingredients: []}
   }
   ngOnInit(): void {
     this.loadData();
   }
   loadData() {
-    this.recetteService.getOneRecette(this.dataId).subscribe((response: any) => {
-      this.recette = response;
+    this.recetteService.getOneRecette(this.dataId).subscribe({
+      next: (response) => this.recette = response,
+      error: (err) => console.log(err)
     });
+  }
+
+
+  getOutput(item: {
+    denree: string;
+    ration: number;
+    unite: string;
+  }) {
+    let output = '';
+    switch (item.unite) {
+      case 'KG':
+        output = `${item.ration}g`;
+        break;
+      case 'LITRE':
+        output = `${item.ration}ml`;
+        break;
+      default:
+        output = `1/${item.ration}`;
+    }
+    return output;
   }
 
   goBack(){

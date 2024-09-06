@@ -5,4 +5,5 @@ export interface recette {
     ration: number;
     unite: string;
   }[];
+  type: string;
 }
